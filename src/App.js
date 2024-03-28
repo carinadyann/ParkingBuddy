@@ -1,37 +1,62 @@
+// App.js
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, Text, TouchableOpacity } from 'react-native';
 
-// Define the Navbar component
-function Navbar() {
-  return (
-    <nav style={{ backgroundColor: '#333', color: 'white', padding: '10px 20px' }}>
-      <h1>App Name</h1>
-      <div>
-        <a href="/" style={{ color: 'white', marginLeft: '15px', textDecoration: 'none' }}>Home</a>
-        {/* Add more navigation links as needed */}
-      </div>
-    </nav>
-  );
-}
+const HomeScreen = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Home Screen</Text>
+    </View>
+);
 
-// Define the Home component
-function Home() {
-  return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h2>Welcome to Our App!</h2>
-      <p>This is a simple home screen for your React app.</p>
-      {/* Add more content here as needed */}
-    </div>
-  );
-}
+const MapScreen = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Map Screen</Text>
+    </View>
+);
 
-// Main App component that includes the Navbar and Home components
-function App() {
-  return (
-    <div>
-      <Navbar />
-      <Home />
-    </div>
-  );
-}
+const PaymentScreen = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Payment Screen</Text>
+    </View>
+);
+
+const ProfileScreen = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Profile Screen</Text>
+    </View>
+);
+
+const ChatBox = () => (
+    <TouchableOpacity
+        style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+            backgroundColor: 'blue',
+            padding: 10,
+            borderRadius: 25,
+            zIndex: 999,
+        }}
+    >
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>Chat</Text>
+    </TouchableOpacity>
+);
+
+const Tab = createBottomTabNavigator();
+
+const App = () => (
+    <NavigationContainer>
+        <Tab.Navigator>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Map" component={MapScreen} />
+            <Tab.Screen name="Payment" component={PaymentScreen} />
+            <Tab.Screen name="Profile" component={ProfileScreen} />
+        </Tab.Navigator>
+        <ChatBox />
+    </NavigationContainer>
+);
 
 export default App;
+
