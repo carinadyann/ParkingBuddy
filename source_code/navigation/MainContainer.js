@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text} from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTapNavigator } from "@react-navigation/material-top-tabs"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
@@ -47,10 +48,13 @@ function MainContainer() {
                 },
             })}
             tabBarOptions={{
-                actionTinitColor: 'tomato', // change color
-                inactiveTinitColor: 'grey', // change color
+                activeTintColor: 'white',
+                inactiveTintColor: '#00BD9D',
                 labelStyle: { paddingBottom: 10, fontSize: 10 },
-                style: { padding:10, height: 70 }
+                style: { padding: 10, height: 70 },
+                tabStyle: {
+                    backgroundColor: '#8BD7D2',
+                }
             }}
         >
 
