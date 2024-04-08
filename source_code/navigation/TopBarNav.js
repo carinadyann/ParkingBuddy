@@ -2,6 +2,16 @@ import * as React from 'react';
 import { Text, View, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import MainContainer from './MainContainer';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import SettingsScreen from './screens/SettingsScreen';
+import HomeScreen from './screens/HomeScreen';
+
+const homeName = "Home";
+const settingsName = "Settings";
 
 function Settings() {
     return (
@@ -23,24 +33,33 @@ function Settings() {
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
+        const insets = useSafeAreaInsets();
     return (
         <Tab.Navigator
             //initialRouteName='Home'
+            screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color, size}) => {
+                    let iconName;
+                    let rn = route.name;
+
+                    if (rn == settingsName) {
+                        iconName = focused ? 'list' : 'list-outline'
+                    }
+
+                    return <Ionicons name={iconName} size={size} color={color}/>
+                },
+            })}
+
             tabBarOptions={{
                 activeTintColor: 'white',
                 inactiveTintColor: '#00BD9D',
-                labelStyle: { paddingTap: 10, fontSize: 10 },
-                style: { padding: 10, height: 70 },
-                tabStyle: {
-                    backgroundColor: '#8BD7D2',
-                }
+                labelStyle: { fontSize: 10 },
+                style: { backgroundColor: '#8BD7D2', marginTop: insets.top },
             }}
         >
-        <Tab.Screen
-            name="Settings"
-            component={Settings}
-            options={{ tabBarLabel: "Settings" }}
-        />
+        
+            <Tab.Screen name={homeName} component={HomeScreen}/>
+            <Tab.Screen name={settingsName} component={SettingsScreen}/>
 
         </Tab.Navigator>
     );

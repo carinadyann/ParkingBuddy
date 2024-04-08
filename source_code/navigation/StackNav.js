@@ -16,6 +16,10 @@ function Settings({ navigation }) {
             <Text style={{ fontSize: 20, color: '#00BD9D', fontWeight: "800" }}>
                 Settings is here!
             </Text>
+            <Button 
+                title="Go to Contact"
+                onPress={() => navigation.navigate("Contact")}
+            />
         </View>
     );
 }
