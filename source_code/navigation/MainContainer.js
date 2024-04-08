@@ -11,14 +11,14 @@ import HomeScreen from './screens/HomeScreen';
 import LocatorScreen from './screens/LocatorScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import ProfileScreen from './screens/ProfileScreen';
-// import SettingsScreen from './screens/SettingsScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 // Screen names
 const homeName = "Home";
 const locatorName = "Locator";
 const paymentName = "Payment";
 const profileName = "Profile";
-// const settingsName = "Settings";
+const settingsName = "Settings";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,7 +26,7 @@ function MainContainer() {
     return (
         <NavigationContainer>
             <Tab.Navigator
-            initialRoutName={homeName}
+            initialRouteName={homeName}
             screenOptions={({route}) => ({
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
