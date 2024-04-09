@@ -3,7 +3,7 @@ import { View, Text} from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createMaterialTopTapNavigator } from "@react-navigation/material-top-tabs"
+import TopBarNavigator from './TopBarNav';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
@@ -28,6 +28,7 @@ function MainContainer() {
             <Tab.Navigator
             initialRouteName={homeName}
             screenOptions={({route}) => ({
+                headerShown: false,
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
                     let rn = route.name;
@@ -58,7 +59,7 @@ function MainContainer() {
             }}
         >
 
-            <Tab.Screen name={homeName} component={HomeScreen}/>
+            <Tab.Screen name={homeName} component={TopBarNavigator}/>
             <Tab.Screen name={locatorName} component={LocatorScreen}/>
             <Tab.Screen name={paymentName} component={PaymentScreen}/>
             <Tab.Screen name={profileName} component={ProfileScreen}/>

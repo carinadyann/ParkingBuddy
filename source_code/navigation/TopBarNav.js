@@ -36,14 +36,17 @@ function MyTabs() {
         const insets = useSafeAreaInsets();
     return (
         <Tab.Navigator
+            initialRouteName={homeName}
             //initialRouteName='Home'
             screenOptions={({route}) => ({
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
                     let rn = route.name;
-
-                    if (rn == settingsName) {
-                        iconName = focused ? 'list' : 'list-outline'
+                    
+                    if (rn == homeName) {
+                        iconName = focused ? 'home' : 'home-outline'
+                    } else if (rn == settingsName) {
+                        iconName = focused ? 'settings' : 'settings-outline'
                     }
 
                     return <Ionicons name={iconName} size={size} color={color}/>
@@ -66,9 +69,5 @@ function MyTabs() {
 }
 
 export default function TopBarNavigator() {
-    return (
-        <NavigationContainer>
-            <MyTabs />
-        </NavigationContainer>
-    )
+    return <MyTabs />
 }
