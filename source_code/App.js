@@ -7,7 +7,6 @@ import TopTabNavigator from './navigation/TopBarNav'; // might need to change
 function App() {
   return(
     <SafeAreaProvider>
-      <TopTabNavigator />
       <MainContainer />
     </SafeAreaProvider>
   );
