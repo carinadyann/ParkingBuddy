@@ -9,7 +9,7 @@ export default function HomeScreen({ navigation }) {
     const [time, setTime] = React.useState({ms: 0, s: 0, m: 0, h: 0});
     return (
         <View style={styles.container}>
-            <BoxContainer style={styles.clock}>
+            <BoxContainer style={styles.boxLight}>
                 <BoxContainer style={styles.clockHolder}>
                     <BoxContainer style={styles.stopwatch}>
                         {/* clock held here */}
@@ -28,8 +28,19 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         padding: 20,
     },
-    clock: {
+    boxLight: {
         backgroundColor: "#54DEFD",
+        padding: 10,
+        margin: 10,
+        color: "white",
+        fontFamily: 'Arial Rounded MT Bold',
+        borderRadius: 25,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+    },
+    boxDark: {
+        backgroundColor: "#49C6E5",
         padding: 10,
         margin: 10,
         color: "white",
