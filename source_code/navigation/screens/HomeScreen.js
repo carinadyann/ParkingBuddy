@@ -26,8 +26,8 @@ export default function HomeScreen({ navigation }) {
                 <Text style={styles.text}>Parking Spot: <Text>(Replace With Function)</Text></Text>
                 <Text style={styles.text}>Duration Type: <Text>(Replace With Function)</Text></Text>
                 <Text>{'\n'}</Text>
-                <Pressable style={styles.buttonEdit}>
-                    <Text style={styles.text} onPress={() => alert('This is the "Home" screen.')}>Edit</Text>
+                <Pressable style={styles.buttonEdit} onPress={() => alert('This is the "Home" screen.')}>
+                    <Text style={styles.text}>Edit</Text>
                 </Pressable>
                 <Pressable style={styles.button} onPress={() => alert('This is the "Home" screen.')}>
                     <Text style={styles.text}>Submit</Text>

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import * as Font from 'expo-font';
 import BoxContainer from '../BoxContainer';
-//import DisplayComponent from '../DisplayComponent';
 import {styles} from '../style';
 
 export default function ProfileScreen({navigation}) {
