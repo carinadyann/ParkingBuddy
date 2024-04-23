@@ -50,6 +50,14 @@ export const styles = StyleSheet.create({
         fontFamily: 'Arial Rounded MT Bold',
         padding: 5,
     },
+    textT: {
+        color: "white",
+        fontFamily: 'Arial Rounded MT Bold',
+        padding: 10,
+        fontSize: 20,
+        textDecorationLine: 'underline',
+        textAlign: 'center',
+    },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
