@@ -2,15 +2,15 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: "white",
         padding: 20,
+        height: '100%',
     },
     containerAdjust: {
         paddingTop: 60,
-        flex: 1,
         backgroundColor: "white",
         padding: 20,
+        height: '100%',
     },
     boxLight: {
         backgroundColor: "#54DEFD",
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
         margin: 10,
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
-        borderRadius: 25,
+        borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "#49C6E5",
         padding: 20,
         margin: 10,
-        borderRadius: 25,
+        borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
@@ -51,6 +51,23 @@ export const styles = StyleSheet.create({
         padding: 5,
     },
     textT: {
+        color: "white",
+        fontFamily: 'Arial Rounded MT Bold',
+        padding: 10,
+        fontSize: 20,
+        textDecorationLine: 'underline',
+        textAlign: 'center',
+    },
+    textEnd: {
+        color: "white",
+        fontFamily: 'Arial Rounded MT Bold',
+        padding: 5,
+        textAlign: 'right',
+        marginTop: -26,
+    },
+    textSpace: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
         padding: 10,
@@ -102,5 +119,24 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         backgroundColor: 'white',
         borderRadius: 50,
+    },
+    // modal container
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: 'white',
+        padding: 20,
+        elevation: 5,
+        padding: 20,
+        borderRadius: 10,
+    },
+    modalText: {
+        fontSize: 18,
+        marginBottom: 10,
     },
 });
