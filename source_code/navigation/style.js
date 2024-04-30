@@ -2,11 +2,6 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        backgroundColor: "white",
-        padding: 20,
-        height: '100%',
-    },
-    containerAdjust: {
         paddingTop: 60,
         backgroundColor: "white",
         padding: 20,
@@ -14,7 +9,7 @@ export const styles = StyleSheet.create({
     },
     boxLight: {
         backgroundColor: "#54DEFD",
-        padding: 10,
+        padding: 20,
         margin: 10,
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
@@ -128,11 +123,11 @@ export const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
+        maxHeight: 600,
         width: '80%',
         backgroundColor: 'white',
         padding: 20,
         elevation: 5,
-        padding: 20,
         borderRadius: 10,
     },
     modalText: {
