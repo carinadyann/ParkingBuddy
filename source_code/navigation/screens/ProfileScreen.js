@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Pressable, Image, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
 import BoxContainer from '../BoxContainer';
 import { styles } from '../style';
@@ -8,7 +8,8 @@ export default function ProfileScreen({navigation}) {
     //for modal
     const [modalVisible, setModalVisible] = React.useState(false);
     return (
-        <View style={styles.containerAdjust}>
+        <ScrollView style={styles.container}>
+            <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logoName.png')}/>
             <BoxContainer style={styles.boxDark}>
                 <Image style={styles.profile} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logo.png')}/>
 
@@ -34,17 +35,17 @@ export default function ProfileScreen({navigation}) {
                 >
                     <View style={styles.modalContainer}>
                         {/* Modal Content */}
-                        <View style={styles.modalContent}>
+                        <ScrollView style={styles.modalContent}>
                             <Text style={styles.modalText}>This is a modal</Text>
-                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button}>
+                        </ScrollView>
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button}>
                                 <Text style={styles.text}>Close</Text>
-                            </TouchableOpacity>
-                        </View>
+                        </TouchableOpacity>
                     </View>
 
                 </Modal>
-                
+
             </BoxContainer>
-        </View>
+        </ScrollView>
     );
 }

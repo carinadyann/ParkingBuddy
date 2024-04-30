@@ -42,7 +42,7 @@ function MainContainer() {
                     } else if (rn == profileName) {
                         iconName = focused ? 'person-circle' : 'person-circle-outline'
                     } else if (rn == settingsName) {
-                        iconName = focused ? 'list' : 'list-outline'
+                        iconName = focused ? 'settings' : 'settings-outline'
                     }
 
                     return <Ionicons name={iconName} size={size} color={color}/>
@@ -59,10 +59,12 @@ function MainContainer() {
             }}
         >
 
-            <Tab.Screen name={homeName} component={TopBarNavigator}/>
+            {/* <Tab.Screen name={homeName} component={TopBarNavigator}/> */}
+            <Tab.Screen name={homeName} component={HomeScreen}/>
             <Tab.Screen name={locatorName} component={LocatorScreen}/>
             <Tab.Screen name={paymentName} component={PaymentScreen}/>
             <Tab.Screen name={profileName} component={ProfileScreen}/>
+            <Tab.Screen name={settingsName} component={SettingsScreen}/>
 
             </Tab.Navigator>
         </NavigationContainer>
