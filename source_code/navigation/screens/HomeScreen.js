@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity, Button } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+//import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 import * as Font from 'expo-font';
 import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
@@ -15,14 +16,14 @@ export default function HomeScreen({ navigation }) {
 
     //for form
     const [formData, setFormData] = React.useState({
-        zone: '', // pick random from database
-        parkingSpot: '', // pick random from database
-        durationType: '30 minutes' // Default duration option
+        zone: 'N/A', // pick random from database
+        parkingSpot: 'N/A', // pick random from database
+        durationType: 'N/A' // Default duration option
     });
 
     const handleSubmit = () => {
         // can replace the alert with different action using the form data
-        alert('Zone: ${formData.zone}, Parking Spot: ${formData.parkingSpot}, Duration Type: ${formData.durationType}');
+        // alert('Zone: ${formData.zone}, Parking Spot: ${formData.parkingSpot}, Duration Type: ${formData.durationType}');
         setModalVisible(false);
     };
 
@@ -52,10 +53,9 @@ export default function HomeScreen({ navigation }) {
             </BoxContainer>
 
             <BoxContainer style={styles.boxDark}>
-                <Text style={styles.text}>Zone: <Text>(Replace With Function)</Text></Text>
-                <Text style={styles.text}>Parking Spot: <Text>(Replace With Function)</Text></Text>
-                <Text style={styles.text}>Duration Type: <Text>(Replace With Function)</Text></Text>
-                <Text>{'\n'}</Text>
+                <Text style={styles.text}>Zone: <Text>{formData.zone}</Text></Text>
+                <Text style={styles.text}>Parking Spot: <Text>{formData.parkingSpot}</Text></Text>
+                <Text style={styles.text}>Duration Type: <Text>{formData.durationType}</Text></Text>
 
                 <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible(true)}>
                     <Text style={styles.text}>Edit</Text>
@@ -71,47 +71,113 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.modalContainer}>
                         {/* Modal Content */}
                         <ScrollView style={styles.modalContent}>
-
+                            <Text style={styles.textTDark}>Tap to Change Selection</Text>
+                            <Text>{'\n'}</Text>
+                            
                             {/* Dropdown for Zone */}
                             <Text style={styles.modalText}>Zone: </Text>
-                            <Picker
-                                selectedValue={formData.zone}
-                                style={{ height: 50, width: 150 }}
-                                onValueChange={(itemValue, itemIndex) => handleChange('zone', itemValue)}
-                            >
-                                <Picker.Item label="Zone 1" value="Zone 1"/>
-                                <Picker.Item label="Zone 2" value="Zone 2"/>
-                                {/* add more here */}
-                            </Picker>
+                            <RNPickerSelect
+                                value={formData.zone}
+                                onValueChange={(itemValue) => handleChange('zone', itemValue)}
+                                style={{
+                                    inputIOS: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    inputAndroid: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    iconContainer: {
+                                        top: 10,
+                                        right: 12,
+                                    },
+                                }}
+                            
+                                items={[
+                                    { label: "Zone 1", value: "Zone 1" },
+                                    { label: "Zone 2", value: "Zone 2" },
+                                    // add more here
+                                ]}
+                                
+                            />
+                            <Text>{'\n'}</Text>
 
                             <Text style={styles.modalText}>Parking Spot: </Text>
-                            <Picker
-                                selectedValue={formData.parkingSpot}
-                                style={{ height: 50, width: 150 }}
-                                onValueChange={(itemValue, itemIndex) => handleChange('parkingSpot', itemValue)}
-                            >
-                                <Picker.Item label="A1" value="A1"/>
-                                <Picker.Item label="A2" value="A2"/>
-                                {/* add more here */}
-                            </Picker>
+                            <RNPickerSelect
+                                value={formData.parkingSpot}
+                                onValueChange={(itemValue) => handleChange('parkingSpot', itemValue)}
+                                style={{
+                                    inputIOS: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    inputAndroid: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    iconContainer: {
+                                        top: 10,
+                                        right: 12,
+                                    },
+                                }}
+                            
+                                items={[
+                                    { label: "A1", value: "A1" },
+                                    { label: "A2", value: "A2" },
+                                    // add more here
+                                ]}
 
-                            <Text style={styles.modalText}></Text>
-                            <Picker
-                                selectedValue={formData.durationType}
-                                style={{ height: 50, width: 150 }}
-                                onValueChange={(itemValue, itemIndex) => handleChange('durationType', itemValue)}
-                            >
-                                <Picker.Item label="30 Minutes" value="30 Minutes"/>
-                                <Picker.Item label="1 Hour" value="1 Hour"/>
-                                <Picker.Item label="1 Hour 30 Minutes" value="1 Hour 30 Minutes"/>
-                                {/* add more here */}
-                            </Picker>
-    
-                            <Button title="Submit" onPress={handleSubmit}/>
-                            <Button title="Cancel" onPress={handleCancel}/>
+                            />
+                            <Text>{'\n'}</Text>
+
+                            <Text style={styles.modalText}>Duration Type: </Text>
+                            <RNPickerSelect
+                                value={formData.durationType}
+                                onValueChange={(itemValue) => handleChange('durationType', itemValue)}
+                                style={{
+                                    inputIOS: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    inputAndroid: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    iconContainer: {
+                                        top: 10,
+                                        right: 12,
+                                    },
+                                }}
+                        
+                                items={[
+                                    { label: "30 Minutes", value: "30 Minutes" },
+                                    { label: "1 Hour", value: "1 Hour" },
+                                    { label: "1 Hour 30 Minutes", value: "1 Hour 30 Minutes" },
+                                    // add more here
+                                ]}
+                            />
+                            <Text>{'\n'}</Text>
+                            <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
+                                <Text style={styles.text}>Submit</Text>
+                            </TouchableOpacity>
+
                         </ScrollView>
-                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button}>
-                                <Text style={styles.text}>Close</Text>
+                        
+                        <TouchableOpacity title="Cancel" onPress={handleCancel} style={styles.button}>
+                                <Text style={styles.text}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
 

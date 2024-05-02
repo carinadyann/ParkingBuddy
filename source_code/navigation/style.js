@@ -53,6 +53,12 @@ export const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         textAlign: 'center',
     },
+    textTDark: {
+        color: 'black',
+        fontSize: 20,
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+    },
     textEnd: {
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
@@ -123,12 +129,12 @@ export const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        maxHeight: 600,
         width: '80%',
         backgroundColor: 'white',
         padding: 20,
         elevation: 5,
         borderRadius: 10,
+        maxHeight: 450,
     },
     modalText: {
         fontSize: 18,
