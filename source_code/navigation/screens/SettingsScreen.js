@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity, Button } from 'react-native';
+//import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 import * as Font from 'expo-font';
 import BoxContainer from '../BoxContainer';
+import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 
 export default function SettingsScreen({navigation}) {
@@ -10,6 +13,14 @@ export default function SettingsScreen({navigation}) {
     const [modalVisible2, setModalVisible2] = React.useState(false);
     const [modalVisible3, setModalVisible3] = React.useState(false);
     const [modalVisible4, setModalVisible4] = React.useState(false);
+
+    //for form
+    const [formData, setFormData] = React.useState({
+        zone: '', // pick random from database
+        parkingSpot: '', // pick random from database
+        durationType: '30 minutes' // Default duration option
+    });
+    
     return (
         <ScrollView style={styles.container}>
             <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logoName.png')}/>
@@ -36,6 +47,7 @@ export default function SettingsScreen({navigation}) {
                         <ScrollView style={styles.modalContent}>
                             <Text style={styles.modalText}>This is a modal 1</Text>
                         </ScrollView>
+
                         <TouchableOpacity onPress={() => setModalVisible1(false)} style={styles.button}>
                                 <Text style={styles.text}>Close</Text>
                         </TouchableOpacity>
@@ -59,6 +71,8 @@ export default function SettingsScreen({navigation}) {
                     <View style={styles.modalContainer}>
                         {/* Modal Content */}
                         <ScrollView style={styles.modalContent}>
+                            <Text style={styles.textTDark}>Privacy Policy</Text>
+                            <Text>{'\n'}</Text>
                             <Text style={styles.modalText}>
                             Privacy Policy for Parking Buddy
 
@@ -89,7 +103,9 @@ If you have any questions or concerns about this Privacy Policy or our privacy p
 
                             </Text>
                             <Text>{'\n'}</Text>
+                            
                         </ScrollView>
+
                         <TouchableOpacity onPress={() => setModalVisible2(false)} style={styles.button}>
                                 <Text style={styles.text}>Close</Text>
                         </TouchableOpacity>
@@ -111,6 +127,8 @@ If you have any questions or concerns about this Privacy Policy or our privacy p
                     <View style={styles.modalContainer}>
                         {/* Modal Content */}
                         <ScrollView style={styles.modalContent}>
+                            <Text style={styles.textTDark}>Terms of Service</Text>
+                            <Text>{'\n'}</Text>
                             <Text style={styles.modalText}>
                             Terms of Service
 
@@ -148,6 +166,7 @@ If you have any questions about these Terms, please contact us at carinadyann@cs
                             </Text>
                             <Text>{'\n'}</Text>
                         </ScrollView>
+
                         <TouchableOpacity onPress={() => setModalVisible3(false)} style={styles.button}>
                                 <Text style={styles.text}>Close</Text>
                         </TouchableOpacity>
@@ -172,10 +191,12 @@ If you have any questions about these Terms, please contact us at carinadyann@cs
                             <Text style={styles.modalText}>
                                 This is modal 4
                             </Text>
-                        </ScrollView>
-                        <TouchableOpacity onPress={() => setModalVisible4(false)} style={styles.button}>
+                            <TouchableOpacity onPress={() => setModalVisible4(false)} style={styles.button}>
                                 <Text style={styles.text}>Close</Text>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                            <Text>{'\n'}</Text>
+                        </ScrollView>
+                        
                     </View>
 
             </Modal>
