@@ -44,9 +44,9 @@ export default function ProfileScreen({navigation}) {
 
                 <Text>{'\n'}</Text>
 
-                <Text style={styles.text}>First Name: <Text>{formData.fame}</Text></Text>
+                <Text style={styles.text}>First Name: <Text>{formData.fname}</Text></Text>
                 <Text style={styles.text}>Last Name: <Text>{formData.lname}</Text></Text>
-                <Text style={styles.text}>Preferred Payment: <Text>{formData.payment}</Text></Text>
+                {/* <Text style={styles.text}>Preferred Payment: <Text>{formData.payment}</Text></Text> */}
                 <Text style={styles.text}>Saved School Campus: <Text>{formData.school}</Text></Text>
                 <Text style={styles.text}>Membership: <Text>{formData.membership}</Text></Text>
 
@@ -80,8 +80,22 @@ export default function ProfileScreen({navigation}) {
                                 onChangeText={(text) => handleChange('fname', text)}
                                 placeholder="Enter your first name"
                             />
-
                             <Text>{'\n'}</Text>
+
+                            <Text style={styles.modalText}>Last Name: </Text>
+                            <TextInput
+                                style={{
+                                    backgroundColor: '#A9E2DF',
+                                    color: 'black',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                }}
+                                value={formData.lname}
+                                onChangeText={(text) => handleChange('lname', text)}
+                                placeholder="Enter your last name"
+                            />
+                            <Text>{'\n'}</Text>
+
                             <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
                                 <Text style={styles.text}>Submit</Text>
                             </TouchableOpacity>

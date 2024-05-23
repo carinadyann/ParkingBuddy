@@ -12,6 +12,7 @@ export default function PaymentScreen({navigation}) {
     //for modal
     const [modalVisible1, setModalVisible1] = React.useState(false);
     const [modalVisible2, setModalVisible2] = React.useState(false);
+    const [modalVisible3, setModalVisible3] = React.useState(false);
 
     //for form
     const [formData, setFormData] = React.useState({
@@ -19,9 +20,20 @@ export default function PaymentScreen({navigation}) {
         cardType: 'N/A', // pick random from database
     });
 
+    //for card items
+    const [cardItems, setCardItems] = React.useState([
+        { label: "XXXX XXXX XXXX XXXX", value: "XXXX XXXX XXXX XXXX" },
+        { label: "YYYY YYYY YYYY YYYY", value: "YYYY YYYY YYYY YYYY" },
+    ]);
+
+    const [newCardData, setNewCardData] = React.useState({
+        cardNumber: '',
+        cardType: ''
+    });
+
     const handleSubmit = () => {
         //alert(`Card on File: ${formData.cardFile}, Payment Type: ${formData.cardType}`);
-        setModalVisible(false);
+        setModalVisible2(false);
     };
 
     const handleCancel = () => {
@@ -33,6 +45,24 @@ export default function PaymentScreen({navigation}) {
             ...prevState,
             [field]: value
         }));
+    };
+
+    const handleNewCardChange = (field, value) => {
+        setNewCardData(prevState => ({
+            ...prevState,
+            [field]: value
+        }));
+    };
+
+    const addNewCard = () => {
+        if (newCardData.cardNumber.trim() !== '' && newCardData.cardType.trim() !== '') {
+            setCardItems(prevItems => [
+                ...prevItems,
+                { label: newCardData.cardNumber, value: newCardData.cardNumber }
+            ]);
+            setNewCardData({ cardNumber: '', cardType: '' }); // Clear the form
+            setModalVisible3(false); // Close the add card modal
+        }
     };
 
     return (
