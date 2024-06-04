@@ -23,7 +23,7 @@ export default function SettingsScreen({navigation}) {
     
     return (
         <ScrollView style={styles.container}>
-            <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logoName.png')}/>
+            {/* <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Vehicles</Text>
                 <Text style={styles.text}>License Plate: (Replace With Function)</Text>

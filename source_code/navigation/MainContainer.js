@@ -1,9 +1,6 @@
 import * as React from 'react';
-import { View, Text} from 'react-native';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import TopBarNavigator from './TopBarNav';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
@@ -26,49 +23,51 @@ function MainContainer() {
     return (
         <NavigationContainer>
             <Tab.Navigator
-            initialRouteName={homeName}
-            screenOptions={({route}) => ({
-                headerShown: false,
-                tabBarIcon: ({focused, color, size}) => {
-                    let iconName;
-                    let rn = route.name;
+                initialRouteName={homeName}
+                screenOptions={({ route }) => ({
+                    headerShown: false,
+                    tabBarIcon: ({ focused, color, size }) => {
+                        let iconName;
+                        let rn = route.name;
 
-                    if (rn == homeName) {
-                        iconName = focused ? 'home' : 'home-outline'
-                    } else if (rn == locatorName) {
-                        iconName = focused ? 'compass' : 'compass-outline'
-                    } else if (rn == paymentName) {
-                        iconName = focused ? 'card' : 'card-outline'
-                    } else if (rn == profileName) {
-                        iconName = focused ? 'person-circle' : 'person-circle-outline'
-                    } else if (rn == settingsName) {
-                        iconName = focused ? 'settings' : 'settings-outline'
-                    }
+                        if (rn === homeName) {
+                            iconName = focused ? 'home' : 'home-outline';
+                        } else if (rn === locatorName) {
+                            iconName = focused ? 'compass' : 'compass-outline';
+                        } else if (rn === paymentName) {
+                            iconName = focused ? 'card' : 'card-outline';
+                        } else if (rn === profileName) {
+                            iconName = focused ? 'person-circle' : 'person-circle-outline';
+                        } else if (rn === settingsName) {
+                            iconName = focused ? 'settings' : 'settings-outline';
+                        }
 
-                    return <Ionicons name={iconName} size={size} color={color}/>
-                },
-            })}
-            tabBarOptions={{
-                activeTintColor: 'white',
-                inactiveTintColor: '#00BD9D',
-                labelStyle: { paddingBottom: 10, fontSize: 10 },
-                style: { padding: 10, height: 70 },
-                tabStyle: {
-                    backgroundColor: '#8BD7D2',
-                }
-            }}
-        >
-
-            {/* <Tab.Screen name={homeName} component={TopBarNavigator}/> */}
-            <Tab.Screen name={homeName} component={HomeScreen}/>
-            <Tab.Screen name={locatorName} component={LocatorScreen}/>
-            <Tab.Screen name={paymentName} component={PaymentScreen}/>
-            <Tab.Screen name={profileName} component={ProfileScreen}/>
-            <Tab.Screen name={settingsName} component={SettingsScreen}/>
-
+                        return <Ionicons name={iconName} size={size} color={color} />;
+                    },
+                    tabBarActiveTintColor: 'white',
+                    tabBarInactiveTintColor: '#00BD9D',
+                    tabBarLabelStyle: {
+                        paddingBottom: 0,
+                        fontSize: 10,
+                    },
+                    tabBarItemStyle: {
+                        backgroundColor: '#8BD7D2',
+                    },
+                    tabBarStyle: {
+                        padding: 10,
+                        height: 80,
+                    },
+                })}
+            >
+                {/* <Tab.Screen name={homeName} component={TopBarNavigator}/> */}
+                <Tab.Screen name={homeName} component={HomeScreen} />
+                <Tab.Screen name={locatorName} component={LocatorScreen} />
+                <Tab.Screen name={paymentName} component={PaymentScreen} />
+                <Tab.Screen name={profileName} component={ProfileScreen} />
+                <Tab.Screen name={settingsName} component={SettingsScreen} />
             </Tab.Navigator>
         </NavigationContainer>
-    )
+    );
 }
 
 export default MainContainer;
