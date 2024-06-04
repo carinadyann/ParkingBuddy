@@ -1,4 +1,5 @@
-module.exports = {
-    // Add your custom Metro configuration here
-  };
-  
+const { getDefaultConfig } = require('@expo/metro-config');
+
+const config = getDefaultConfig(__dirname);
+
+module.exports = config;
