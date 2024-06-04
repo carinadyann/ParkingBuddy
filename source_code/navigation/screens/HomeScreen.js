@@ -40,9 +40,9 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-        <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logoName.png')}/>
+        {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxLight}>
-            <Image style={styles.profile} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logo.png')}/>
+            {/* <Image style={styles.profile} source={require('Users/carinaadrianzen/Documents/source_code/assets/logo.png')}/> */}
                 
                 <BoxContainer style={styles.clockHolder}>
                     <BoxContainer style={styles.stopwatch}>
@@ -79,6 +79,11 @@ export default function HomeScreen({ navigation }) {
                             <RNPickerSelect
                                 value={formData.zone}
                                 onValueChange={(itemValue) => handleChange('zone', itemValue)}
+                                placeholder={{
+                                label: "Select a Zone ...",
+                                value: null,
+                                color: 'white', // Customize the placeholder color here
+                                }}
                                 style={{
                                     inputIOS: {
                                         backgroundColor: '#A9E2DF',
@@ -91,6 +96,9 @@ export default function HomeScreen({ navigation }) {
                                         color: 'black',
                                         padding: 10,
                                         borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
                                     },
                                     iconContainer: {
                                         top: 10,
@@ -111,6 +119,11 @@ export default function HomeScreen({ navigation }) {
                             <RNPickerSelect
                                 value={formData.parkingSpot}
                                 onValueChange={(itemValue) => handleChange('parkingSpot', itemValue)}
+                                placeholder={{
+                                label: "Select a Spot ...",
+                                value: null,
+                                color: 'white', // Customize the placeholder color here
+                                }}
                                 style={{
                                     inputIOS: {
                                         backgroundColor: '#A9E2DF',
@@ -123,6 +136,9 @@ export default function HomeScreen({ navigation }) {
                                         color: 'black',
                                         padding: 10,
                                         borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
                                     },
                                     iconContainer: {
                                         top: 10,
@@ -143,6 +159,11 @@ export default function HomeScreen({ navigation }) {
                             <RNPickerSelect
                                 value={formData.durationType}
                                 onValueChange={(itemValue) => handleChange('durationType', itemValue)}
+                                placeholder={{
+                                label: "Select a Duration ...",
+                                value: null,
+                                color: 'white', // Customize the placeholder color here
+                                }}
                                 style={{
                                     inputIOS: {
                                         backgroundColor: '#A9E2DF',
@@ -155,6 +176,9 @@ export default function HomeScreen({ navigation }) {
                                         color: 'black',
                                         padding: 10,
                                         borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
                                     },
                                     iconContainer: {
                                         top: 10,

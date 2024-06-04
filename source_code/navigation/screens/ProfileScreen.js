@@ -20,8 +20,20 @@ export default function ProfileScreen({navigation}) {
         membership: 'N/A', // may not use
     });
 
+        // Temporary state for modal inputs
+        const [tempModalData, setTempModalData] = React.useState({
+        fname: '', // first name
+        lname: '', // last name
+        payment: '', // take from other form
+        school: '', // school campus
+        membership: '', // may not use
+    });
+
     const handleSubmit = () => {
-        //alert(`First Name: ${formData.fname}, Last Name: ${formData.lname}, Preferred Payment: ${formData.payment}, Saved School Campus: ${formData.school}, Membership: ${formData.membership}`);
+        setFormData(prevState => ({
+            ...prevState,
+            ...tempModalData
+        }));
         setModalVisible(false);
     };
 
@@ -38,9 +50,9 @@ export default function ProfileScreen({navigation}) {
 
     return (
         <ScrollView style={styles.container}>
-            <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logoName.png')}/>
+            {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxDark}>
-                <Image style={styles.profile} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logo.png')}/>
+                {/* <Image style={styles.profile} source={require('Users/carinaadrianzen/Documents/source_code/assets/logo.png')}/> */}
 
                 <Text>{'\n'}</Text>
 
@@ -75,6 +87,7 @@ export default function ProfileScreen({navigation}) {
                                     color: 'black',
                                     padding: 10,
                                     borderRadius: 5,
+                                    placeholderTextColor: 'white',
                                 }}
                                 value={formData.fname}
                                 onChangeText={(text) => handleChange('fname', text)}

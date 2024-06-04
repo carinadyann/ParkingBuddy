@@ -67,7 +67,7 @@ export default function PaymentScreen({navigation}) {
 
     return (
         <ScrollView style={styles.container}>
-            <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/GitHub/ParkingBuddy/source_code/assets/logoName.png')}/>
+            {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.text}>Payment Due: <Text>(Replace With Function)</Text></Text>
                 <Text style={styles.text}>Parking Spot: <Text>(Replace With Function)</Text></Text>
@@ -124,6 +124,11 @@ export default function PaymentScreen({navigation}) {
                             <RNPickerSelect
                                 value={formData.cardFile}
                                 onValueChange={(itemValue) => handleChange('cardFile', itemValue)}
+                                placeholder={{
+                                label: "Select a Card ...",
+                                value: null,
+                                color: 'white', // Customize the placeholder color here
+                                }}
                                 style={{
                                     inputIOS: {
                                     backgroundColor: '#A9E2DF',
@@ -136,6 +141,9 @@ export default function PaymentScreen({navigation}) {
                                         color: 'black',
                                         padding: 10,
                                         borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
                                     },
                                     iconContainer: {
                                         top: 10,
@@ -154,6 +162,11 @@ export default function PaymentScreen({navigation}) {
                             <RNPickerSelect
                                 value={formData.cardType}
                                 onValueChange={(itemValue) => handleChange('cardType', itemValue)}
+                                placeholder={{
+                                label: "Select a Type ...",
+                                value: null,
+                                color: 'white', // Customize the placeholder color here
+                                }}
                                 style={{
                                     inputIOS: {
                                         backgroundColor: '#A9E2DF',
@@ -166,6 +179,9 @@ export default function PaymentScreen({navigation}) {
                                         color: 'black',
                                         padding: 10,
                                         borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
                                     },
                                     iconContainer: {
                                         top: 10,
