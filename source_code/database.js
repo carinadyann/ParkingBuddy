@@ -10,12 +10,12 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-async function getParkingLot(){
+export async function getParkingLot(){
     const [rows] = await pool.query("SELECT * FROM ParkingLot")
     return rows
 }
 
-async function getParkingLotWithId(lot_id) {
+export async function getParkingLotWithId(lot_id) {
     const [rows] = await pool.query(`
     SELECT *
     FROM ParkingLot
@@ -25,9 +25,16 @@ async function getParkingLotWithId(lot_id) {
     return rows[0]
 }
 
-async function createParkingLot(location, capacity, available_spaces) {
-    await pool.query(``)
+export async function createParkingLot(location, capacity, available_spaces) {
+    const [result] = await pool.query(`
+    INSERT INTO  ParkingLot (location, capacity, available_spaces)
+    VALUES (?, ?, ?)
+    `, [location, capacity, available_spaces])
+    const lot_id = result.insertId;
+    return getParkingLotWithId(lot_id)
 }
 
-const ParkingLot = await getParkingLotWithId(1)
-console.log(ParkingLot)   
+const result = await createParkingLot('test location', 100, 50)
+console.log(result)
+//const ParkingLot = await getParkingLotWithId(1)
+//console.log(ParkingLot)   
