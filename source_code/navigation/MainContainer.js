@@ -47,14 +47,14 @@ function MainContainer() {
                     tabBarActiveTintColor: 'white',
                     tabBarInactiveTintColor: '#00BD9D',
                     tabBarLabelStyle: {
-                        paddingBottom: 0,
+                        paddingBottom: 3,
                         fontSize: 10,
                     },
                     tabBarItemStyle: {
                         backgroundColor: '#8BD7D2',
                     },
                     tabBarStyle: {
-                        padding: 10,
+                        padding: 0,
                         height: 80,
                     },
                 })}
