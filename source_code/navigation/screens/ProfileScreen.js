@@ -20,8 +20,8 @@ export default function ProfileScreen({navigation}) {
         membership: 'N/A', // may not use
     });
 
-        // Temporary state for modal inputs
-        const [tempModalData, setTempModalData] = React.useState({
+    // Temporary state for modal inputs
+    const [tempModalData, setTempModalData] = React.useState({
         fname: '', // first name
         lname: '', // last name
         payment: '', // take from other form
@@ -52,15 +52,17 @@ export default function ProfileScreen({navigation}) {
         <ScrollView style={styles.container}>
             {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxDark}>
+            <Text style={styles.textT}>My Profile</Text>
                 {/* <Image style={styles.profile} source={require('Users/carinaadrianzen/Documents/source_code/assets/logo.png')}/> */}
 
                 <Text>{'\n'}</Text>
-
-                <Text style={styles.text}>First Name: <Text>{formData.fname}</Text></Text>
-                <Text style={styles.text}>Last Name: <Text>{formData.lname}</Text></Text>
-                {/* <Text style={styles.text}>Preferred Payment: <Text>{formData.payment}</Text></Text> */}
-                <Text style={styles.text}>Saved School Campus: <Text>{formData.school}</Text></Text>
-                <Text style={styles.text}>Membership: <Text>{formData.membership}</Text></Text>
+                <BoxContainer style={styles.infoContainer}>
+                    <Text style={styles.text}>First Name: <Text>{formData.fname}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Last Name: <Text>{formData.lname}</Text>{'\n'}</Text>
+                    {/* <Text style={styles.text}>Preferred Payment: <Text>{formData.payment}</Text></Text> */}
+                    <Text style={styles.text}>Saved School Campus: <Text>{formData.school}</Text>{'\n'}</Text>
+                    {/* <Text style={styles.text}>Membership: <Text>{formData.membership}</Text></Text> */}
+                </BoxContainer>
 
                 <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
                     <Text style={styles.text}>Edit</Text>
@@ -79,7 +81,7 @@ export default function ProfileScreen({navigation}) {
                             <Text style={styles.textTDark}>Profile Details</Text>
                             <Text>{'\n'}</Text>
 
-                            {/* Dropdown for First Name */}
+                            {/* Text Input for First Name */}
                             <Text style={styles.modalText}>First Name: </Text>
                             <TextInput
                                 style={{
@@ -95,6 +97,7 @@ export default function ProfileScreen({navigation}) {
                             />
                             <Text>{'\n'}</Text>
 
+                            {/* Text Input for Last Name */}
                             <Text style={styles.modalText}>Last Name: </Text>
                             <TextInput
                                 style={{
@@ -106,6 +109,47 @@ export default function ProfileScreen({navigation}) {
                                 value={formData.lname}
                                 onChangeText={(text) => handleChange('lname', text)}
                                 placeholder="Enter your last name"
+                            />
+                            <Text>{'\n'}</Text>
+
+                            {/* Dropdown for Saved School Campus */}
+                            <Text style={styles.modalText}>Saved School Campus: </Text>
+                            <RNPickerSelect
+                                value={formData.zone}
+                                onValueChange={(itemValue) => handleChange('school', itemValue)}
+                                placeholder={{
+                                label: "Select a School ...",
+                                value: null,
+                                color: 'white', // Customize the placeholder color here
+                                }}
+                                style={{
+                                    inputIOS: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    inputAndroid: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
+                                    },
+                                    iconContainer: {
+                                        top: 10,
+                                        right: 12,
+                                    },
+                                }}
+                            
+                                items={[
+                                    { label: "California State University Fullerton", value: "CSUF" },
+                                    { label: "San Diego State University", value: "SDSU" },
+                                    // add more here
+                                ]}
+                                
                             />
                             <Text>{'\n'}</Text>
 
@@ -122,6 +166,9 @@ export default function ProfileScreen({navigation}) {
                 </Modal>
 
             </BoxContainer>
+
+            <Text>{'\n'}{'\n'}{'\n'}</Text>
+            
         </ScrollView>
     );
 }

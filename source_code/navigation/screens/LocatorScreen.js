@@ -17,7 +17,7 @@ export default function LocatorScreen({navigation}) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Open Spots (Live)</Text>
                 {dataset.map((item, index) => (
-                    <BoxContainer>
+                    <BoxContainer style={styles.infoContainer}>
                         <Text key={index} style={styles.text}>{item}
                             <Pressable>
                                 <Text style={styles.button}>Claim</Text>
@@ -26,6 +26,9 @@ export default function LocatorScreen({navigation}) {
                     </BoxContainer>
                 ))}
             </BoxContainer>
+
+            <Text>{'\n'}{'\n'}{'\n'}</Text>
+
         </ScrollView>
     );
 }
