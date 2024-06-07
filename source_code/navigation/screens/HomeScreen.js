@@ -53,9 +53,12 @@ export default function HomeScreen({ navigation }) {
             </BoxContainer>
 
             <BoxContainer style={styles.boxDark}>
-                <Text style={styles.text}>Zone: <Text>{formData.zone}</Text></Text>
-                <Text style={styles.text}>Parking Spot: <Text>{formData.parkingSpot}</Text></Text>
-                <Text style={styles.text}>Duration Type: <Text>{formData.durationType}</Text></Text>
+                <Text style={styles.textT}>Setup Parking</Text>
+                <BoxContainer style={styles.infoContainer}>
+                    <Text style={styles.text}>Zone: <Text>{formData.zone}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Parking Spot: <Text>{formData.parkingSpot}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration Type: <Text>{formData.durationType}</Text>{'\n'}</Text>
+                </BoxContainer>
 
                 <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible(true)}>
                     <Text style={styles.text}>Edit</Text>
@@ -211,6 +214,9 @@ export default function HomeScreen({ navigation }) {
                     <Text style={styles.text}>Submit</Text>
                 </Pressable>
             </BoxContainer>
+
+            <Text>{'\n'}{'\n'}{'\n'}</Text>
+
         </ScrollView>
     );
 }

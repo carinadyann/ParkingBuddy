@@ -69,9 +69,12 @@ export default function PaymentScreen({navigation}) {
         <ScrollView style={styles.container}>
             {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxDark}>
-                <Text style={styles.text}>Payment Due: <Text>(Replace With Function)</Text></Text>
-                <Text style={styles.text}>Parking Spot: <Text>(Replace With Function)</Text></Text>
-                <Text style={styles.text}>Duration: <Text>(Ex: 01:00:00)</Text></Text>
+                <Text style={styles.textT}>Make Payment</Text>
+                <BoxContainer style={styles.infoContainer}>
+                    <Text style={styles.text}>Payment Due: <Text>(Replace With Function)</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Parking Spot: <Text>(Replace With Function)</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration: <Text>(Ex: 01:00:00)</Text></Text>
+                </BoxContainer>
 
                 <Pressable style={styles.button} onPress={() => alert('This is the "Payment screen.')}>
                     <Text style={styles.text}>Pay</Text>
@@ -99,8 +102,11 @@ export default function PaymentScreen({navigation}) {
             </BoxContainer>
             
             <BoxContainer style={styles.boxDark}>
-                <Text style={styles.text}>Card on File: <Text>{formData.cardFile}</Text></Text>
-                <Text style={styles.text}>Payment Type: <Text>{formData.cardType}</Text></Text>
+                <Text style={styles.textT}>Card Information</Text>
+                <BoxContainer style={styles.infoContainer}>
+                    <Text style={styles.text}>Card on File: <Text>{formData.cardFile}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Payment Type: <Text>{formData.cardType}</Text>{'\n'}</Text>
+                </BoxContainer>
 
                 <Pressable style={styles.button} onPress={() => setModalVisible2(true)}>
                     <Text style={styles.text}>Change Payment Method</Text>
@@ -210,6 +216,9 @@ export default function PaymentScreen({navigation}) {
                 </Modal>
 
             </BoxContainer>
+
+            <Text>{'\n'}{'\n'}{'\n'}</Text>
+            
         </ScrollView>
     );
 }

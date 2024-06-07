@@ -16,9 +16,10 @@ export default function SettingsScreen({navigation}) {
 
     //for form
     const [formData, setFormData] = React.useState({
-        zone: '', // pick random from database
-        parkingSpot: '', // pick random from database
-        durationType: '30 minutes' // Default duration option
+        plate: 'N/A', // input
+        model: 'N/A', // input
+        year: 'N/A', // input
+        color: 'N/A', // dropdown
     });
     
     return (
@@ -26,10 +27,12 @@ export default function SettingsScreen({navigation}) {
             {/* <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Vehicles</Text>
-                <Text style={styles.text}>License Plate: (Replace With Function)</Text>
-                <Text style={styles.text}>Make/Model: (Replace With Function)</Text>
-                <Text style={styles.text}>Year: (Replace With Function)</Text>
-                <Text style={styles.text}>Color: (Replace With Function)</Text>
+                <BoxContainer style={styles.infoContainer}>
+                    <Text style={styles.text}>License Plate: <Text>{formData.plate}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Make/Model: <Text>{formData.model}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Year: <Text>{formData.year}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Color: <Text>{formData.color}</Text>{'\n'}</Text>
+                </BoxContainer>
                 
                 <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible1(true)}>
                     <Text style={styles.text}>Edit</Text>
@@ -189,14 +192,24 @@ If you have any questions about these Terms, please contact us at carinadyann@cs
                         {/* Modal Content */}
                         <ScrollView style={styles.modalContent}>
                             <Text style={styles.modalText}>
-                                This is modal 4
+                                <Text style={styles.textTDark}>FAQs</Text>
+                                <Text>{'\n'}{'\n'}</Text>
+                                <BoxContainer style={styles.containerFAQ}>
+                                    <Text style={styles.textQ}>Q: What is the Parking Buddy app?{'\n'}</Text>
+                                    <Text style={styles.textA}>A: The Parking Buddy app is designed to help you easily find, claim, and pay for parking spots. It also allows you to manage your profile and app settings seamlessly.{'\n'}</Text>
+                                </BoxContainer>
+                                <BoxContainer style={styles.containerFAQ}>
+                                    <Text style={styles.textQ}>Q: How does the time elapsed feature work?{'\n'}</Text>
+                                    <Text style={styles.textA}>A: The time elapsed feature on the Home screen tracks the duration of your current parking session. It shows how much time you have left until your session expires, helping you manage your parking time effectively.{'\n'}</Text>
+                                </BoxContainer>
                             </Text>
-                            <TouchableOpacity onPress={() => setModalVisible4(false)} style={styles.button}>
-                                <Text style={styles.text}>Close</Text>
-                            </TouchableOpacity>
+                            
                             <Text>{'\n'}</Text>
                         </ScrollView>
-                        
+
+                        <TouchableOpacity onPress={() => setModalVisible4(false)} style={styles.button}>
+                            <Text style={styles.text}>Close</Text>
+                        </TouchableOpacity>
                     </View>
 
             </Modal>
@@ -205,6 +218,9 @@ If you have any questions about these Terms, please contact us at carinadyann@cs
             <Pressable style={styles.button} onPress={() => alert('This is the "Settings" screen.')}>
                 <Text style={styles.text}>Sign Out</Text>
             </Pressable>
+
+            <Text>{'\n'}{'\n'}{'\n'}</Text>
+
         </ScrollView>
     );
 }

@@ -27,6 +27,14 @@ export const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
     },
+    infoContainer: {
+        padding: 0,
+    },
+    containerFAQ: {
+        padding: 0,
+        borderBottomWidth: 2,
+        borderBottomColor: '#A9E2DF',
+    },
     parking: {
         backgroundColor: "#49C6E5",
     },
@@ -44,14 +52,25 @@ export const styles = StyleSheet.create({
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
         padding: 5,
+        fontSize: 17,
     },
     textT: {
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
         padding: 10,
-        fontSize: 20,
+        fontSize: 30,
         textDecorationLine: 'underline',
         textAlign: 'center',
+    },
+    textQ: {
+        color: "black",
+        fontFamily: 'Arial Rounded MT Bold',
+        fontSize: 20,
+    },
+    textA: {
+        color: "black",
+        fontFamily: 'Arial Rounded MT Bold',
+        fontSize: 15,
     },
     textTDark: {
         color: 'black',
