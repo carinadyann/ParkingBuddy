@@ -64,12 +64,10 @@ export const styles = StyleSheet.create({
     },
     textQ: {
         color: "black",
-        fontFamily: 'Arial Rounded MT Bold',
         fontSize: 20,
     },
     textA: {
         color: "black",
-        fontFamily: 'Arial Rounded MT Bold',
         fontSize: 15,
     },
     textTDark: {
