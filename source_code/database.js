@@ -34,7 +34,7 @@ export async function createParkingLot(location, capacity, available_spaces) {
     return getParkingLotWithId(lot_id)
 }
 
-const result = await createParkingLot('test location', 100, 50)
-console.log(result)
+//const result = await createParkingLot('test location', 100, 50)
+//console.log(result)
 //const ParkingLot = await getParkingLotWithId(1)
 //console.log(ParkingLot)   
