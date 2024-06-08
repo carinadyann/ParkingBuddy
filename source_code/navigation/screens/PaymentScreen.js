@@ -163,6 +163,8 @@ export default function PaymentScreen({navigation}) {
                                 ]}
                             />
 
+                            <Text>{'\n'}</Text>
+
                             {/* Dropdown for Payment Type */}
                             <Text style={styles.modalText}>Payment Type: </Text>
                             <RNPickerSelect

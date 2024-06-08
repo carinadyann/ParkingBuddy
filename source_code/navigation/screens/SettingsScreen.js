@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity, Button, TextInput } from 'react-native';
 //import { Picker } from '@react-native-picker/picker';
 import RNPickerSelect from 'react-native-picker-select';
 import * as Font from 'expo-font';
@@ -21,12 +21,31 @@ export default function SettingsScreen({navigation}) {
         year: 'N/A', // input
         color: 'N/A', // dropdown
     });
+
+    const handleSubmit = () => {
+        setFormData(prevState => ({
+            ...prevState,
+            ...tempModalData
+        }));
+        setModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setModalVisible(false);
+    };
+
+    const handleChange = (field, value) => {
+        setFormData(prevState => ({
+            ...prevState,
+            [field]: value
+        }));
+    };
     
     return (
         <ScrollView style={styles.container}>
             {/* <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxDark}>
-                <Text style={styles.textT}>Vehicles</Text>
+                <Text style={styles.textT}>Vehicle</Text>
                 <BoxContainer style={styles.infoContainer}>
                     <Text style={styles.text}>License Plate: <Text>{formData.plate}</Text>{'\n'}</Text>
                     <Text style={styles.text}>Make/Model: <Text>{formData.model}</Text>{'\n'}</Text>
@@ -48,7 +67,116 @@ export default function SettingsScreen({navigation}) {
                     <View style={styles.modalContainer}>
                         {/* Modal Content */}
                         <ScrollView style={styles.modalContent}>
-                            <Text style={styles.modalText}>This is a modal 1</Text>
+                            <Text style={styles.textTDark}>Vehicle Details</Text>
+                            <Text>{'\n'}</Text>
+
+                            {/* Text Input for License Plate */}
+                            <Text style={styles.modalText}>License Plate: </Text>
+                            <TextInput
+                                style={{
+                                    backgroundColor: '#A9E2DF',
+                                    color: 'black',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                    placeholderTextColor: 'white',
+                                }}
+                                value={formData.fname}
+                                onChangeText={(text) => handleChange('plate', text)}
+                                placeholder="Enter your license plate number ..."
+                                placeholderTextColor='white'
+                            />
+                            <Text>{'\n'}</Text>
+
+                            {/* Text Input for Make/Model */}
+                            <Text style={styles.modalText}>Make/Model: </Text>
+                            <TextInput
+                                style={{
+                                    backgroundColor: '#A9E2DF',
+                                    color: 'black',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                    placeholderTextColor: 'white',
+                                }}
+                                value={formData.fname}
+                                onChangeText={(text) => handleChange('model', text)}
+                                placeholder="Enter your make/model ..."
+                                placeholderTextColor='white'
+                            />
+                            <Text>{'\n'}</Text>
+
+                            {/* Text Input for Year */}
+                            <Text style={styles.modalText}>Year: </Text>
+                            <TextInput
+                                style={{
+                                    backgroundColor: '#A9E2DF',
+                                    color: 'black',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                    placeholderTextColor: 'white',
+                                }}
+                                value={formData.fname}
+                                onChangeText={(text) => handleChange('year', text)}
+                                placeholder="Enter the year of your car ..."
+                                placeholderTextColor='white'
+                            />
+                            <Text>{'\n'}</Text>
+
+                            {/* Dropdown for Color */}
+                            <Text style={styles.modalText}>Color: </Text>
+                            <RNPickerSelect
+                                value={formData.zone}
+                                onValueChange={(itemValue) => handleChange('color', itemValue)}
+                                placeholder={{
+                                label: "Select a Color ...",
+                                value: null,
+                                color: 'white', // Customize the placeholder color here
+                                }}
+                                style={{
+                                    inputIOS: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    inputAndroid: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
+                                    },
+                                    iconContainer: {
+                                        top: 10,
+                                        right: 12,
+                                    },
+                                }}
+                            
+                                items={[
+                                    { label: "White", value: "White" },
+                                    { label: "Black", value: "Black" },
+                                    { label: "Gray", value: "Gray" },
+                                    { label: "Silver", value: "Silver" },
+                                    { label: "Red", value: "Red" },
+                                    { label: "Blue", value: "Blue" },
+                                    { label: "Green", value: "Green" },
+                                    { label: "Yellow", value: "Yellow" },
+                                    { label: "Orange", value: "Orange" },
+                                    { label: "Brown", value: "Brown" },
+                                    { label: "Beige", value: "Beige" },
+                                    { label: "Gold", value: "Gold" },
+                                    { label: "Purple", value: "Purple" },
+                                ]}
+                                
+                            />
+                            <Text>{'\n'}</Text>
+
+                            <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
+                                <Text style={styles.text}>Submit</Text>
+                            </TouchableOpacity>
+
+                            <Text>{'\n'}</Text>
                         </ScrollView>
 
                         <TouchableOpacity onPress={() => setModalVisible1(false)} style={styles.button}>
@@ -202,9 +330,20 @@ If you have any questions about these Terms, please contact us at carinadyann@cs
                                     <Text style={styles.textQ}>Q: How does the time elapsed feature work?{'\n'}</Text>
                                     <Text style={styles.textA}>A: The time elapsed feature on the Home screen tracks the duration of your current parking session. It shows how much time you have left until your session expires, helping you manage your parking time effectively.{'\n'}</Text>
                                 </BoxContainer>
+                                <BoxContainer style={styles.containerFAQ}>
+                                    <Text style={styles.textQ}>Q: What should I do if the app is not working correctly?{'\n'}</Text>
+                                    <Text style={styles.textA}>A: First, ensure that you have the latest version of the app installed. If the problem persists, try restarting your device. For further assistance, contact our customer support at carinadyann@csu.fullerton.edu .{'\n'}</Text>
+                                </BoxContainer>
+                                <BoxContainer style={styles.containerFAQ}>
+                                    <Text style={styles.textQ}>Q: How do I update my personal information?{'\n'}</Text>
+                                    <Text style={styles.textA}>A: Go to the Profile screen, tap on the edit button to edit any information you wish to update, make the necessary changes, and save your updates.{'\n'}</Text>
+                                </BoxContainer>
+                                <BoxContainer style={styles.infoContainer}>
+                                    <Text style={styles.textQ}>Q: How do I pay for parking?{'\n'}</Text>
+                                    <Text style={styles.textA}>A: On the Payment screen, you can add your preferred payment method (credit/debit card, digital wallet, etc.). When you claim a spot or pay for parking, the app will use your saved payment method for a quick and easy transaction.{'\n'}</Text>
+                                </BoxContainer>
                             </Text>
                             
-                            <Text>{'\n'}</Text>
                         </ScrollView>
 
                         <TouchableOpacity onPress={() => setModalVisible4(false)} style={styles.button}>

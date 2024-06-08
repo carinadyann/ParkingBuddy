@@ -89,11 +89,11 @@ export default function ProfileScreen({navigation}) {
                                     color: 'black',
                                     padding: 10,
                                     borderRadius: 5,
-                                    placeholderTextColor: 'white',
                                 }}
                                 value={formData.fname}
                                 onChangeText={(text) => handleChange('fname', text)}
                                 placeholder="Enter your first name"
+                                placeholderTextColor='white'
                             />
                             <Text>{'\n'}</Text>
 
@@ -109,6 +109,7 @@ export default function ProfileScreen({navigation}) {
                                 value={formData.lname}
                                 onChangeText={(text) => handleChange('lname', text)}
                                 placeholder="Enter your last name"
+                                placeholderTextColor='white'
                             />
                             <Text>{'\n'}</Text>
 
