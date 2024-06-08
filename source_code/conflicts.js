@@ -9,9 +9,9 @@ app.get("/ParkingLot", async (req, res) => {
     res.send(ParkingLot)
 })
 
-app.get("/ParkingLot/:lot_id", async (req, res) => {
-    const lot_id = req.params.lot_id
-    const ParkingLot = await getParkingLot(lot_id)
+app.get("/ParkingLot/:id", async (req, res) => {
+    const lot_id = req.params.id
+    const ParkingLot = await getParkingLotWithId(lot_id)
     res.send(ParkingLot)
 })
 
