@@ -22,16 +22,26 @@ export default function SettingsScreen({navigation}) {
         color: 'N/A', // dropdown
     });
 
+    // Temporary state for modal inputs
+    const [tempModalData, setTempModalData] = React.useState({
+        plate: 'N/A', // input
+        model: 'N/A', // input
+        year: 'N/A', // input
+        color: 'N/A', // dropdown
+    });
+
     const handleSubmit = () => {
         setFormData(prevState => ({
             ...prevState,
-            ...tempModalData
         }));
-        setModalVisible(false);
+        setModalVisible1(false);
     };
 
     const handleCancel = () => {
-        setModalVisible(false);
+        setFormData(prevState => ({
+            ...tempModalData,
+        }));
+        setModalVisible1(false);
     };
 
     const handleChange = (field, value) => {
@@ -47,10 +57,10 @@ export default function SettingsScreen({navigation}) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Vehicle</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>License Plate: <Text>{formData.plate}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Make/Model: <Text>{formData.model}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Year: <Text>{formData.year}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Color: <Text>{formData.color}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>License Plate: <Text style={styles.formText}>{formData.plate}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Make/Model: <Text style={styles.formText}>{formData.model}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Year: <Text style={styles.formText}>{formData.year}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Color: <Text style={styles.formText}>{formData.color}</Text>{'\n'}</Text>
                 </BoxContainer>
                 
                 <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible1(true)}>
@@ -80,7 +90,6 @@ export default function SettingsScreen({navigation}) {
                                     borderRadius: 5,
                                     placeholderTextColor: 'white',
                                 }}
-                                value={formData.fname}
                                 onChangeText={(text) => handleChange('plate', text)}
                                 placeholder="Enter your license plate number ..."
                                 placeholderTextColor='white'
@@ -97,7 +106,6 @@ export default function SettingsScreen({navigation}) {
                                     borderRadius: 5,
                                     placeholderTextColor: 'white',
                                 }}
-                                value={formData.fname}
                                 onChangeText={(text) => handleChange('model', text)}
                                 placeholder="Enter your make/model ..."
                                 placeholderTextColor='white'
@@ -114,7 +122,6 @@ export default function SettingsScreen({navigation}) {
                                     borderRadius: 5,
                                     placeholderTextColor: 'white',
                                 }}
-                                value={formData.fname}
                                 onChangeText={(text) => handleChange('year', text)}
                                 placeholder="Enter the year of your car ..."
                                 placeholderTextColor='white'
@@ -124,7 +131,6 @@ export default function SettingsScreen({navigation}) {
                             {/* Dropdown for Color */}
                             <Text style={styles.modalText}>Color: </Text>
                             <RNPickerSelect
-                                value={formData.zone}
                                 onValueChange={(itemValue) => handleChange('color', itemValue)}
                                 placeholder={{
                                 label: "Select a Color ...",

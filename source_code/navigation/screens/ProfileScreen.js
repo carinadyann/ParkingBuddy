@@ -22,22 +22,24 @@ export default function ProfileScreen({navigation}) {
 
     // Temporary state for modal inputs
     const [tempModalData, setTempModalData] = React.useState({
-        fname: '', // first name
-        lname: '', // last name
-        payment: '', // take from other form
-        school: '', // school campus
-        membership: '', // may not use
+        name: 'N/A', // first name
+        lname: 'N/A', // last name
+        payment: 'N/A', // take from other form
+        school: 'N/A', // school campus
+        membership: 'N/A', // may not use
     });
 
     const handleSubmit = () => {
         setFormData(prevState => ({
             ...prevState,
-            ...tempModalData
         }));
         setModalVisible(false);
     };
 
     const handleCancel = () => {
+        setFormData(prevState => ({
+            ...tempModalData,
+        }));
         setModalVisible(false);
     };
 
@@ -57,10 +59,10 @@ export default function ProfileScreen({navigation}) {
 
                 <Text>{'\n'}</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>First Name: <Text>{formData.fname}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Last Name: <Text>{formData.lname}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>First Name: <Text style={styles.formText}>{formData.fname}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Last Name: <Text style={styles.formText}>{formData.lname}</Text>{'\n'}</Text>
                     {/* <Text style={styles.text}>Preferred Payment: <Text>{formData.payment}</Text></Text> */}
-                    <Text style={styles.text}>Saved School Campus: <Text>{formData.school}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Saved School Campus: <Text style={styles.formText}>{formData.school}</Text>{'\n'}</Text>
                     {/* <Text style={styles.text}>Membership: <Text>{formData.membership}</Text></Text> */}
                 </BoxContainer>
 
@@ -89,10 +91,10 @@ export default function ProfileScreen({navigation}) {
                                     color: 'black',
                                     padding: 10,
                                     borderRadius: 5,
+                                    placeholderTextColor: 'white',
                                 }}
-                                value={formData.fname}
                                 onChangeText={(text) => handleChange('fname', text)}
-                                placeholder="Enter your first name"
+                                placeholder="Enter your first name ..."
                                 placeholderTextColor='white'
                             />
                             <Text>{'\n'}</Text>
@@ -106,7 +108,6 @@ export default function ProfileScreen({navigation}) {
                                     padding: 10,
                                     borderRadius: 5,
                                 }}
-                                value={formData.lname}
                                 onChangeText={(text) => handleChange('lname', text)}
                                 placeholder="Enter your last name"
                                 placeholderTextColor='white'
@@ -116,7 +117,6 @@ export default function ProfileScreen({navigation}) {
                             {/* Dropdown for Saved School Campus */}
                             <Text style={styles.modalText}>Saved School Campus: </Text>
                             <RNPickerSelect
-                                value={formData.zone}
                                 onValueChange={(itemValue) => handleChange('school', itemValue)}
                                 placeholder={{
                                 label: "Select a School ...",

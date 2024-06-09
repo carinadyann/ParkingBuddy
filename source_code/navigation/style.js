@@ -54,11 +54,17 @@ export const styles = StyleSheet.create({
         padding: 5,
         fontSize: 17,
     },
+    formText: {
+        color: "#D4F6FF",
+        fontFamily: 'Arial Rounded MT Bold',
+        padding: 5,
+        fontSize: 17,
+    },
     textT: {
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
         padding: 10,
-        fontSize: 30,
+        fontSize: 26,
         textDecorationLine: 'underline',
         textAlign: 'center',
     },
