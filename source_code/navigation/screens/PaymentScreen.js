@@ -71,9 +71,9 @@ export default function PaymentScreen({navigation}) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Make Payment</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>Payment Due: <Text>(Replace With Function)</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Parking Spot: <Text>(Replace With Function)</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration: <Text>(Ex: 01:00:00)</Text></Text>
+                    <Text style={styles.text}>Payment Due: <Text style={styles.formText}>(Replace With Function)</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{formData.parkingSpot}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration: <Text style={styles.formText}>(Ex: 01:00:00)</Text></Text>
                 </BoxContainer>
 
                 <Pressable style={styles.button} onPress={() => alert('This is the "Payment screen.')}>
@@ -104,8 +104,8 @@ export default function PaymentScreen({navigation}) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Card Information</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>Card on File: <Text>{formData.cardFile}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Payment Type: <Text>{formData.cardType}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Card on File: <Text style={styles.formText}>{formData.cardFile}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Payment Type: <Text style={styles.formText}>{formData.cardType}</Text>{'\n'}</Text>
                 </BoxContainer>
 
                 <Pressable style={styles.button} onPress={() => setModalVisible2(true)}>

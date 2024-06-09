@@ -21,6 +21,13 @@ export default function HomeScreen({ navigation }) {
         durationType: 'N/A' // Default duration option
     });
 
+    // Temporary state for modal inputs
+    const [tempModalData, setTempModalData] = React.useState({
+        zone: 'N/A', // pick random from database
+        parkingSpot: 'N/A', // pick random from database
+        durationType: 'N/A' // Default duration option
+    });
+
     const handleSubmit = () => {
         // can replace the alert with different action using the form data
         // alert('Zone: ${formData.zone}, Parking Spot: ${formData.parkingSpot}, Duration Type: ${formData.durationType}');
@@ -28,6 +35,9 @@ export default function HomeScreen({ navigation }) {
     };
 
     const handleCancel = () => {
+        setFormData(prevState => ({
+            ...tempModalData,
+        }));
         setModalVisible(false);
     };
 
@@ -55,9 +65,9 @@ export default function HomeScreen({ navigation }) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Setup Parking</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>Zone: <Text>{formData.zone}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Parking Spot: <Text>{formData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration Type: <Text>{formData.durationType}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Zone: <Text style={styles.formText}>{formData.zone}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{formData.parkingSpot}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{formData.durationType}</Text>{'\n'}</Text>
                 </BoxContainer>
 
                 <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible(true)}>
