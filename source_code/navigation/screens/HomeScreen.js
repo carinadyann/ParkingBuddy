@@ -29,8 +29,6 @@ export default function HomeScreen({ navigation }) {
     });
 
     const handleSubmit = () => {
-        // can replace the alert with different action using the form data
-        // alert('Zone: ${formData.zone}, Parking Spot: ${formData.parkingSpot}, Duration Type: ${formData.durationType}');
         setModalVisible(false);
     };
 
@@ -220,9 +218,14 @@ export default function HomeScreen({ navigation }) {
 
                 </Modal>
 
-                <Pressable style={styles.button} onPress={() => alert('This is the "Home" screen.')}>
-                    <Text style={styles.text}>Submit</Text>
-                </Pressable>
+                <Pressable style={styles.button} onPress={() => navigation.navigate('Payment', {
+                    parkingSpot: formData.parkingSpot,
+                    duration: formData.durationType,
+                })
+                }
+                >
+                <Text style={styles.text}>Submit</Text>
+            </Pressable>
             </BoxContainer>
 
             <Text>{'\n'}{'\n'}{'\n'}</Text>

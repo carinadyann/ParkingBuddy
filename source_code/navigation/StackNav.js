@@ -1,25 +1,29 @@
-import * as React from "react";
-import { View, Button, Text, Animated } from "react-native";
-import { NavigatioonContainer } from "@react-navigation/native";
+// import * as React from "react";
+// import { View, Button, Text, Animated } from "react-native";
+// import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import PaymentScreen from "./screens/PaymentScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+import HomeScreen from "./screens/HomeScreen";
+import LocatorScreen from "./screens/LocatorScreen";
 
-function Settings({ navigation }) {
+
+const Stack = createStackNavigator();
+
+function StackNav() {
     return (
-        <View
-            style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#8BD7D2",
-            }}
-        >
-            <Text style={{ fontSize: 20, color: '#00BD9D', fontWeight: "800" }}>
-                Settings is here!
-            </Text>
-            <Button 
-                title="Go to Contact"
-                onPress={() => navigation.navigate("Contact")}
-            />
-        </View>
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Locator" component={LocatorScreen} />
+                <Stack.Screen name="Payment" component={PaymentScreen} />
+                <Stack.Screen name="Profile" component={ProfileScreen} />
+                <Stack.Screen name="Settings" component={SettingsScreen} />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 }
+
+export default StackNav;

@@ -50,6 +50,22 @@ export default function ProfileScreen({navigation}) {
         }));
     };
 
+    // Define your array of items with labels and values
+    const schoolCampuses = [
+        { label: "California State University Fullerton", value: "CSUF" },
+        { label: "San Diego State University", value: "SDSU" },
+        { label: "Arizona State University", value: "ASU" },
+        // Add more items here
+    ];
+
+    // Function to sort the array  of items alphabetically by label
+    const sortItemsAlphabetically = (items) => {
+        return items.sort((a, b) => a.label.localeCompare(b.label));
+    };
+
+    // Sort the array of items alphabetically
+    const sortedSchoolCampuses = sortItemsAlphabetically(schoolCampuses);
+
     return (
         <ScrollView style={styles.container}>
             {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
@@ -145,11 +161,7 @@ export default function ProfileScreen({navigation}) {
                                     },
                                 }}
                             
-                                items={[
-                                    { label: "California State University Fullerton", value: "CSUF" },
-                                    { label: "San Diego State University", value: "SDSU" },
-                                    // add more here
-                                ]}
+                                items={sortedSchoolCampuses} //sorted array
                                 
                             />
                             <Text>{'\n'}</Text>
