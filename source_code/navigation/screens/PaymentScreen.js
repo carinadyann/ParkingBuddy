@@ -8,7 +8,9 @@ import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import { GestureHandlerRefContext } from '@react-navigation/stack';
 
-export default function PaymentScreen({navigation}) {
+export default function PaymentScreen({navigation, route}) {
+    const {parkingSpot, duration} = route.params;
+
     //for modal
     const [modalVisible1, setModalVisible1] = React.useState(false);
     const [modalVisible2, setModalVisible2] = React.useState(false);
@@ -72,8 +74,8 @@ export default function PaymentScreen({navigation}) {
                 <Text style={styles.textT}>Make Payment</Text>
                 <BoxContainer style={styles.infoContainer}>
                     <Text style={styles.text}>Payment Due: <Text style={styles.formText}>(Replace With Function)</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{formData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration: <Text style={styles.formText}>(Ex: 01:00:00)</Text></Text>
+                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{parkingSpot}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration: <Text style={styles.formText}>{duration}</Text></Text>
                 </BoxContainer>
 
                 <Pressable style={styles.button} onPress={() => alert('This is the "Payment screen.')}>
