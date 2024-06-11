@@ -2,7 +2,7 @@
   "name": "source_code",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "npx nodemon conflicts.js",
     "start": "expo start",
