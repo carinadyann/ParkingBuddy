@@ -201,7 +201,7 @@ export default function HomeScreen({ navigation }) {
                                     { label: "30 Minutes", value: "30 Minutes" },
                                     { label: "1 Hour", value: "1 Hour" },
                                     { label: "1 Hour 30 Minutes", value: "1 Hour 30 Minutes" },
-                                    // add more here
+                                    { label: "Day Pass", value: "Day Pass" },
                                 ]}
                             />
                             <Text>{'\n'}</Text>
