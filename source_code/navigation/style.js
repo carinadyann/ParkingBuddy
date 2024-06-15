@@ -99,6 +99,12 @@ export const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         textAlign: 'center',
     },
+    stopwatchText: {
+        fontSize: 50,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+    },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
