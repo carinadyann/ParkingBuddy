@@ -1,41 +1,64 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity, Button } from 'react-native';
-//import { Picker } from '@react-native-picker/picker';
+import { StyleSheet, ScrollView, View, Text, Pressable, Modal, TouchableOpacity } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import * as Font from 'expo-font';
 import BoxContainer from '../BoxContainer';
-import DisplayComponent from '../DisplayComponent';
+import DisplayComponent from '../DisplayComponent'; // Make sure this import is correct
 import { styles } from '../style';
-//import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'\
 
 export default function HomeScreen({ navigation }) {
-    const [time, setTime] = React.useState({ms: 0, s: 0, m: 0, h: 0});
+    const [stopwatchRunning, setStopwatchRunning] = React.useState(false);
+    const [stopwatchTime, setStopwatchTime] = React.useState({ h: 0, m: 0, s: 0, ms: 0 });
 
-    //for modal
+    // For modal
     const [modalVisible, setModalVisible] = React.useState(false);
 
-    //for form
+    // For form
     const [formData, setFormData] = React.useState({
-        zone: 'N/A', // pick random from database
-        parkingSpot: 'N/A', // pick random from database
-        durationType: 'N/A' // Default duration option
+        zone: 'N/A',
+        parkingSpot: 'N/A',
+        durationType: 'N/A'
     });
 
-    // Temporary state for modal inputs
-    const [tempModalData, setTempModalData] = React.useState({
-        zone: 'N/A', // pick random from database
-        parkingSpot: 'N/A', // pick random from database
-        durationType: 'N/A' // Default duration option
-    });
+    React.useEffect(() => {
+        let interval;
+        if (stopwatchRunning) {
+            interval = setInterval(() => {
+                setStopwatchTime(prevTime => {
+                    let updatedMs = prevTime.ms + 10;
+                    let updatedS = prevTime.s;
+                    let updatedM = prevTime.m;
+                    let updatedH = prevTime.h;
+
+                    if (updatedMs >= 100) {
+                        updatedS++;
+                        updatedMs = 0;
+                    }
+                    if (updatedS >= 60) {
+                        updatedM++;
+                        updatedS = 0;
+                    }
+                    if (updatedM >= 60) {
+                        updatedH++;
+                        updatedM = 0;
+                    }
+
+                    return { h: updatedH, m: updatedM, s: updatedS, ms: updatedMs };
+                });
+            }, 10);
+        } else {
+            clearInterval(interval);
+        }
+
+        return () => clearInterval(interval);
+    }, [stopwatchRunning]);
 
     const handleSubmit = () => {
+        setStopwatchTime({ h: 0, m: 0, s: 0, ms: 0 });
+        setStopwatchRunning(true);
         setModalVisible(false);
     };
 
     const handleCancel = () => {
-        setFormData(prevState => ({
-            ...tempModalData,
-        }));
         setModalVisible(false);
     };
 
@@ -46,17 +69,43 @@ export default function HomeScreen({ navigation }) {
         }));
     };
 
+    const generateTimeRange = () => {
+        const times = [];
+        const increments = ['00', '30'];
+        for (let hour = 0; hour <= 4; hour++) {
+            for (let minute of increments) {
+                let time = `${hour.toString().padStart(2, '0')}:${minute}`;
+                times.push({ label: `${time}`, value: time });
+            }
+        }
+        times.push({ label: "Day Pass", value: "Day Pass" });
+        return times;
+    };
+
+    const timeOptions = generateTimeRange();
+
+    const calculateAmount = (durationType) => {
+        if (!durationType || durationType === 'N/A') {
+            return 0;
+        } else if (durationType === 'Day Pass') {
+            return 9;
+        } else {
+            const index = timeOptions.findIndex(option => option.value === durationType);
+            if (index !== -1) {
+                return index;
+            } else {
+                return 0;
+            }
+        }
+    };
+
     return (
         <ScrollView style={styles.container}>
-        {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
             <BoxContainer style={styles.boxLight}>
-            {/* <Image style={styles.profile} source={require('Users/carinaadrianzen/Documents/source_code/assets/logo.png')}/> */}
-                
-                <BoxContainer style={styles.clockHolder}>
-                    <BoxContainer style={styles.stopwatch}>
-                        {/* clock held here */}
-                        <DisplayComponent time={time}/>
-                    </BoxContainer>
+                <BoxContainer>
+                    {/* Ensure DisplayComponent is properly receiving props */}
+                    <Text style={styles.textT}>Setup Parking</Text>
+                    <DisplayComponent time={stopwatchTime} />
                 </BoxContainer>
             </BoxContainer>
 
@@ -65,7 +114,7 @@ export default function HomeScreen({ navigation }) {
                 <BoxContainer style={styles.infoContainer}>
                     <Text style={styles.text}>Zone: <Text style={styles.formText}>{formData.zone}</Text>{'\n'}</Text>
                     <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{formData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{formData.durationType}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{formData.durationType + ' Hours'}</Text>{'\n'}</Text>
                 </BoxContainer>
 
                 <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible(true)}>
@@ -85,44 +134,22 @@ export default function HomeScreen({ navigation }) {
                             <Text style={styles.textTDark}>Tap to Change Selection</Text>
                             <Text>{'\n'}</Text>
                             
-                            {/* Dropdown for Zone */}
+                            {/* Dropdowns for Zone, Parking Spot, and Duration Type */}
                             <Text style={styles.modalText}>Zone: </Text>
                             <RNPickerSelect
                                 value={formData.zone}
                                 onValueChange={(itemValue) => handleChange('zone', itemValue)}
                                 placeholder={{
-                                label: "Select a Zone ...",
-                                value: null,
-                                color: 'white', // Customize the placeholder color here
+                                    label: "Select a Zone ...",
+                                    value: null,
+                                    color: 'white',
                                 }}
-                                style={{
-                                    inputIOS: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
-                                        color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
-                                }}
-                            
+                                style={pickerSelectStyles}
                                 items={[
                                     { label: "Zone 1", value: "Zone 1" },
                                     { label: "Zone 2", value: "Zone 2" },
-                                    // add more here
+                                    // Add more options as needed
                                 ]}
-                                
                             />
                             <Text>{'\n'}</Text>
 
@@ -131,38 +158,16 @@ export default function HomeScreen({ navigation }) {
                                 value={formData.parkingSpot}
                                 onValueChange={(itemValue) => handleChange('parkingSpot', itemValue)}
                                 placeholder={{
-                                label: "Select a Spot ...",
-                                value: null,
-                                color: 'white', // Customize the placeholder color here
+                                    label: "Select a Spot ...",
+                                    value: null,
+                                    color: 'white',
                                 }}
-                                style={{
-                                    inputIOS: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
-                                        color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
-                                }}
-                            
+                                style={pickerSelectStyles}
                                 items={[
                                     { label: "A1", value: "A1" },
                                     { label: "A2", value: "A2" },
-                                    // add more here
+                                    // Add more options as needed
                                 ]}
-
                             />
                             <Text>{'\n'}</Text>
 
@@ -171,65 +176,55 @@ export default function HomeScreen({ navigation }) {
                                 value={formData.durationType}
                                 onValueChange={(itemValue) => handleChange('durationType', itemValue)}
                                 placeholder={{
-                                label: "Select a Duration ...",
-                                value: null,
-                                color: 'white', // Customize the placeholder color here
+                                    label: "Select a Duration ...",
+                                    value: null,
+                                    color: 'white',
                                 }}
-                                style={{
-                                    inputIOS: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
-                                        color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
-                                }}
-                        
-                                items={[
-                                    { label: "30 Minutes", value: "30 Minutes" },
-                                    { label: "1 Hour", value: "1 Hour" },
-                                    { label: "1 Hour 30 Minutes", value: "1 Hour 30 Minutes" },
-                                    { label: "Day Pass", value: "Day Pass" },
-                                ]}
+                                style={pickerSelectStyles}
+                                items={timeOptions}
                             />
                             <Text>{'\n'}</Text>
                             <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
                                 <Text style={styles.text}>Submit</Text>
                             </TouchableOpacity>
-
                         </ScrollView>
                         
                         <TouchableOpacity title="Cancel" onPress={handleCancel} style={styles.button}>
-                                <Text style={styles.text}>Cancel</Text>
+                            <Text style={styles.text}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
-
                 </Modal>
 
                 <Pressable style={styles.button} onPress={() => navigation.navigate('Payment', {
                     parkingSpot: formData.parkingSpot,
                     duration: formData.durationType,
-                })
-                }
-                >
-                <Text style={styles.text}>Submit</Text>
-            </Pressable>
+                    amount: calculateAmount(formData.durationType),
+                })}>
+                    <Text style={styles.text}>Submit</Text>
+                </Pressable>
             </BoxContainer>
-
-            <Text>{'\n'}{'\n'}{'\n'}</Text>
-
         </ScrollView>
     );
 }
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        backgroundColor: '#A9E2DF',
+        color: 'black',
+        padding: 10,
+        borderRadius: 5,
+    },
+    inputAndroid: {
+        backgroundColor: '#A9E2DF',
+        color: 'black',
+        padding: 10,
+        borderRadius: 5,
+    },
+    placeholder: {
+        color: 'white',
+    },
+    iconContainer: {
+        top: 10,
+        right: 12,
+    },
+});
