@@ -51,6 +51,16 @@ export default function SettingsScreen({navigation}) {
         }));
     };
     
+    const generateYearRange = (startYear, endYear) => {
+        const years = [];
+        for (let year = startYear; year <= endYear; year++) {
+            years.push({ label: year.toString(), value: year.toString() });
+        }
+        return years;
+    }
+
+    const yearOptions = generateYearRange(1980, new Date().getFullYear());
+    
     return (
         <ScrollView style={styles.container}>
             {/* <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
@@ -112,19 +122,37 @@ export default function SettingsScreen({navigation}) {
                             />
                             <Text>{'\n'}</Text>
 
-                            {/* Text Input for Year */}
+                            {/* Dropdown for Year */}
                             <Text style={styles.modalText}>Year: </Text>
-                            <TextInput
-                                style={{
-                                    backgroundColor: '#A9E2DF',
-                                    color: 'black',
-                                    padding: 10,
-                                    borderRadius: 5,
-                                    placeholderTextColor: 'white',
+                            <RNPickerSelect
+                                onValueChange={(value) => handleChange('year', value)}
+                                placeholder={{
+                                    label: "Select Year...",
+                                    value: null,
+                                    color: 'white',
                                 }}
-                                onChangeText={(text) => handleChange('year', text)}
-                                placeholder="Enter the year of your car ..."
-                                placeholderTextColor='white'
+                                style={{
+                                    inputIOS: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    inputAndroid: {
+                                        backgroundColor: '#A9E2DF',
+                                        color: 'black',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                    },
+                                    placeholder: {
+                                        color: 'white',
+                                    },
+                                    iconContainer: {
+                                        top: 10,
+                                        right: 12,
+                                    },
+                                }}
+                                items={yearOptions}
                             />
                             <Text>{'\n'}</Text>
 
