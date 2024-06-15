@@ -6,8 +6,9 @@ import DisplayComponent from '../DisplayComponent'; // Make sure this import is 
 import { styles } from '../style';
 
 export default function HomeScreen({ navigation }) {
-    const [stopwatchRunning, setStopwatchRunning] = React.useState(false);
+    const [durationType, setDurationType] = React.useState(null);
     const [stopwatchTime, setStopwatchTime] = React.useState({ h: 0, m: 0, s: 0, ms: 0 });
+    const [stopwatchRunning, setStopwatchRunning] = React.useState(false);
 
     // For modal
     const [modalVisible, setModalVisible] = React.useState(false);
@@ -19,44 +20,47 @@ export default function HomeScreen({ navigation }) {
         durationType: 'N/A'
     });
 
-    React.useEffect(() => {
-        let interval;
-        if (stopwatchRunning) {
-            interval = setInterval(() => {
-                setStopwatchTime(prevTime => {
-                    let updatedMs = prevTime.ms + 10;
-                    let updatedS = prevTime.s;
-                    let updatedM = prevTime.m;
-                    let updatedH = prevTime.h;
-
-                    if (updatedMs >= 100) {
-                        updatedS++;
-                        updatedMs = 0;
-                    }
-                    if (updatedS >= 60) {
-                        updatedM++;
-                        updatedS = 0;
-                    }
-                    if (updatedM >= 60) {
-                        updatedH++;
-                        updatedM = 0;
-                    }
-
-                    return { h: updatedH, m: updatedM, s: updatedS, ms: updatedMs };
-                });
-            }, 10);
-        } else {
-            clearInterval(interval);
-        }
-
-        return () => clearInterval(interval);
-    }, [stopwatchRunning]);
-
     const handleSubmit = () => {
-        setStopwatchTime({ h: 0, m: 0, s: 0, ms: 0 });
+        const selectedTime = durationType;
+        if (!selectedTime) {
+            alert('Please select a duration type.');
+            return;
+        }
+        const [hours, minutes] = selectedTime.split(':');
+        setStopwatchTime({ h: parseInt(hours), m: parseInt(minutes), s: 0 });
         setStopwatchRunning(true);
         setModalVisible(false);
     };
+
+    const handleDurationTypeChange = (value) => {
+        handleChange('durationType', value);
+        setDurationType(value);
+    };
+
+    React.useEffect(() => {
+        let timer;
+        if (stopwatchRunning) {
+            timer = setInterval(() => {
+                setStopwatchTime(prevTime => {
+                    let { h, m, s } = prevTime;
+                    if (s > 0) {
+                        return { h, m, s: s - 1 };
+                    } else if (m > 0) {
+                        return { h, m: m - 1, s: 59 };
+                    } else if (h > 0) {
+                        return { h: h - 1, m: 59, s: 59 };
+                    } else {
+                        clearInterval(timer);
+                        setStopwatchRunning(false);
+                        return { h, m, s };
+                    }
+                });
+            }, 1000);
+        } else {
+            clearInterval(timer);
+        }
+        return () => clearInterval(timer);
+    }, [stopwatchRunning]);
 
     const handleCancel = () => {
         setModalVisible(false);
@@ -104,8 +108,10 @@ export default function HomeScreen({ navigation }) {
             <BoxContainer style={styles.boxLight}>
                 <BoxContainer>
                     {/* Ensure DisplayComponent is properly receiving props */}
-                    <Text style={styles.textT}>Setup Parking</Text>
-                    <DisplayComponent time={stopwatchTime} />
+                    <Text style={styles.textT}>Stopwatch</Text>
+                    <Text style={styles.stopwatchText}>
+                    {`${stopwatchTime.h.toString().padStart(2, '0')}:${stopwatchTime.m.toString().padStart(2, '0')}:${stopwatchTime.s.toString().padStart(2, '0')}`}
+                    </Text>
                 </BoxContainer>
             </BoxContainer>
 
@@ -114,7 +120,7 @@ export default function HomeScreen({ navigation }) {
                 <BoxContainer style={styles.infoContainer}>
                     <Text style={styles.text}>Zone: <Text style={styles.formText}>{formData.zone}</Text>{'\n'}</Text>
                     <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{formData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{formData.durationType + ' Hours'}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{durationType ? durationType: 'N/A' + ' Hours'}</Text>{'\n'}</Text>
                 </BoxContainer>
 
                 <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible(true)}>
@@ -174,7 +180,8 @@ export default function HomeScreen({ navigation }) {
                             <Text style={styles.modalText}>Duration Type: </Text>
                             <RNPickerSelect
                                 value={formData.durationType}
-                                onValueChange={(itemValue) => handleChange('durationType', itemValue)}
+                                // onValueChange={(itemValue) => handleChange('durationType', itemValue)}
+                                onValueChange={handleDurationTypeChange}
                                 placeholder={{
                                     label: "Select a Duration ...",
                                     value: null,
