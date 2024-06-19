@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text, Pressable, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Pressable, Modal, TouchableOpacity, Alert } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import BoxContainer from '../BoxContainer';
-import DisplayComponent from '../DisplayComponent'; // Make sure this import is correct
+import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
+import { PrivateValueStore } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
@@ -15,25 +16,40 @@ export default function HomeScreen({ navigation }) {
 
     // For form
     const [formData, setFormData] = React.useState({
-        zone: 'N/A',
-        parkingSpot: 'N/A',
-        durationType: 'N/A'
+        zone: null,
+        parkingSpot: null,
+        durationType: null,
+    });
+
+    // Temporary form data 
+    const [tempFormData, setTempFormData] = React.useState({
+        zone: null,
+        parkingSpot: null,
+        durationType: null,
     });
 
     const handleSubmit = () => {
-        const selectedTime = durationType;
-        if (!selectedTime) {
-            alert('Please select a duration type.');
+        const { zone, parkingSpot, durationType } = formData;
+    
+        if (!zone || !parkingSpot || !durationType) {
+            Alert.alert('Error', 'Please fill in all the required fields.');
             return;
         }
-        const [hours, minutes] = selectedTime.split(':');
-        setStopwatchTime({ h: parseInt(hours), m: parseInt(minutes), s: 0 });
+    
+        if (durationType === 'Day Pass') {
+            setStopwatchTime({ h: 24, m: 0, s: 0 });
+        } else {
+            const [hours, minutes] = durationType.split(':');
+            setStopwatchTime({ h: parseInt(hours), m: parseInt(minutes), s: 0 });
+        }
         setStopwatchRunning(true);
+        setFormData({ ...tempFormData });
         setModalVisible(false);
     };
+    
 
     const handleDurationTypeChange = (value) => {
-        handleChange('durationType', value);
+        handleTempChange('durationType', value);
         setDurationType(value);
     };
 
@@ -63,13 +79,19 @@ export default function HomeScreen({ navigation }) {
     }, [stopwatchRunning]);
 
     const handleCancel = () => {
+        setTempFormData({ ...formData });
         setModalVisible(false);
     };
 
-    const handleChange = (field, value) => {
-        setFormData(prevState => ({
+    const handleEditPress = () => {
+        setTempFormData({ ...formData });
+        setModalVisible(true);
+    };
+
+    const handleTempChange = (field, value) => {
+        setTempFormData(prevState => ({
             ...prevState,
-            [field]: value 
+            [field]: value
         }));
     };
 
@@ -118,12 +140,12 @@ export default function HomeScreen({ navigation }) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Setup Parking</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>Zone: <Text style={styles.formText}>{formData.zone}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{formData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{durationType ? durationType: 'N/A' + ' Hours'}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Zone: <Text style={styles.formText}>{tempFormData.zone}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{tempFormData.parkingSpot}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{tempFormData.durationType ? tempFormData.durationType: 'N/A' + ' Hours'}</Text>{'\n'}</Text>
                 </BoxContainer>
 
-                <TouchableOpacity style={styles.buttonEdit} onPress={() => setModalVisible(true)}>
+                <TouchableOpacity style={styles.buttonEdit} onPress={handleEditPress}>
                     <Text style={styles.text}>Edit</Text>
                 </TouchableOpacity>
 
@@ -144,7 +166,7 @@ export default function HomeScreen({ navigation }) {
                             <Text style={styles.modalText}>Zone: </Text>
                             <RNPickerSelect
                                 value={formData.zone}
-                                onValueChange={(itemValue) => handleChange('zone', itemValue)}
+                                onValueChange={(itemValue) => handleTempChange('zone', itemValue)}
                                 placeholder={{
                                     label: "Select a Zone ...",
                                     value: null,
@@ -162,7 +184,7 @@ export default function HomeScreen({ navigation }) {
                             <Text style={styles.modalText}>Parking Spot: </Text>
                             <RNPickerSelect
                                 value={formData.parkingSpot}
-                                onValueChange={(itemValue) => handleChange('parkingSpot', itemValue)}
+                                onValueChange={(itemValue) => handleTempChange('parkingSpot', itemValue)}
                                 placeholder={{
                                     label: "Select a Spot ...",
                                     value: null,
