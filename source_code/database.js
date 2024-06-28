@@ -15,6 +15,31 @@ export async function getParkingLot(){
     return rows
 }
 
+export async function getParkingSpace(){
+    const [rows] = await pool.query("SELECT * FROM ParkingSpace")
+    return rows
+}
+
+export async function getUser(){
+    const [rows] = await pool.query("SELECT * FROM User")
+    return rows
+}
+
+export async function getVehicle(){
+    const [rows] = await pool.query("SELECT * FROM ParkingLot")
+    return rows
+}
+
+export async function getReservation(){
+    const [rows] = await pool.query("SELECT * FROM Reservation")
+    return rows
+}
+
+export async function getTransactionHistory(){
+    const [rows] = await pool.query("SELECT * FROM TransactionHistory")
+    return rows
+}
+
 export async function getParkingLotWithId(lot_id) {
     const [rows] = await pool.query(`
     SELECT *
