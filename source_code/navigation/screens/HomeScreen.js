@@ -23,13 +23,13 @@ export default function HomeScreen({ navigation }) {
 
     // Temporary form data 
     const [tempFormData, setTempFormData] = React.useState({
-        zone: null,
-        parkingSpot: null,
-        durationType: null,
+        zone: "N/A",
+        parkingSpot: "N/A",
+        durationType: "N/A",
     });
 
     const handleSubmit = () => {
-        const { zone, parkingSpot, durationType } = formData;
+        const { zone, parkingSpot, durationType } = tempFormData;
     
         if (!zone || !parkingSpot || !durationType) {
             Alert.alert('Error', 'Please fill in all the required fields.');
@@ -45,6 +45,12 @@ export default function HomeScreen({ navigation }) {
         setStopwatchRunning(true);
         setFormData({ ...tempFormData });
         setModalVisible(false);
+
+        navigation.navigate('Payment', {
+            parkingSpot: tempFormData.parkingSpot,
+            duration: tempFormData.durationType,
+            amount: calculateAmount(tempFormData.durationType),
+        });
     };
     
 
@@ -165,7 +171,7 @@ export default function HomeScreen({ navigation }) {
                             {/* Dropdowns for Zone, Parking Spot, and Duration Type */}
                             <Text style={styles.modalText}>Zone: </Text>
                             <RNPickerSelect
-                                value={formData.zone}
+                                value={tempFormData.zone}
                                 onValueChange={(itemValue) => handleTempChange('zone', itemValue)}
                                 placeholder={{
                                     label: "Select a Zone ...",
@@ -183,7 +189,7 @@ export default function HomeScreen({ navigation }) {
 
                             <Text style={styles.modalText}>Parking Spot: </Text>
                             <RNPickerSelect
-                                value={formData.parkingSpot}
+                                value={tempFormData.parkingSpot}
                                 onValueChange={(itemValue) => handleTempChange('parkingSpot', itemValue)}
                                 placeholder={{
                                     label: "Select a Spot ...",
@@ -201,7 +207,7 @@ export default function HomeScreen({ navigation }) {
 
                             <Text style={styles.modalText}>Duration Type: </Text>
                             <RNPickerSelect
-                                value={formData.durationType}
+                                value={tempFormData.durationType}
                                 // onValueChange={(itemValue) => handleChange('durationType', itemValue)}
                                 onValueChange={handleDurationTypeChange}
                                 placeholder={{
@@ -224,13 +230,13 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 </Modal>
 
-                <Pressable style={styles.button} onPress={() => navigation.navigate('Payment', {
+                {/* <Pressable style={styles.button} onPress={() => navigation.navigate('Payment', {
                     parkingSpot: formData.parkingSpot,
                     duration: formData.durationType,
                     amount: calculateAmount(formData.durationType),
                 })}>
                     <Text style={styles.text}>Submit</Text>
-                </Pressable>
+                </Pressable> */}
             </BoxContainer>
         </ScrollView>
     );
