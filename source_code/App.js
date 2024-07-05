@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { View, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainContainer from './navigation/MainContainer';
-import LocatorScreen from './navigation/screens/LocatorScreen';
+import LoginScreen from './navigation/screens/LoginScreen';
+//import { styles } from '../style';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,7 +22,7 @@ function App() {
   }, []);
 
   const handleLoginSuccess = async () => {
-    await AsyncStorage.setItem('userToken', 'abc123');
+    await AsyncStorage.setItem('userToken', 'abc123'); // Replace with actual authentication logic
     setIsLoggedIn(true);
   };
 
@@ -33,15 +34,21 @@ function App() {
   return (
     <SafeAreaProvider>
       {isLoggedIn ? (
-        <ScrollView>
-          <MainContainer onLogout={handleLogout} />
+        <View style={styles.container}>
+          <MainContainer />
           <Button title="Logout" onPress={handleLogout} />
-        </ScrollView>
+        </View>
       ) : (
-        <LocatorScreen onLoginSuccess={handleLoginSuccess} />
+        <LoginScreen onLoginSuccess={handleLoginSuccess} />
       )}
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default App;

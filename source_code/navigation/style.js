@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "white",
         padding: 20,
         height: '100%',
+        flex: 1,
     },
     boxLight: {
         backgroundColor: "#54DEFD",
