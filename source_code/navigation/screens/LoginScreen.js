@@ -1,22 +1,24 @@
-import * as React from 'react';
-import { View, ScrollView, Text, TextInput, Button, StyleSheet, Modal } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { styles } from '../style';
+import BoxContainer from '../BoxContainer';
 
-const LoginScreen = ({ visible, onLoginSuccess }) => {
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
+const LoginScreen = ({ onLoginSuccess }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        if (username === 'admin' && password === 'password') {
-            onLoginSuccess();
-        } else {
-            alert('Invalid credentials');
-        };
+  const handleLogin = () => {
+    // Replace with actual authentication logic
+    if (username === 'admin' && password === 'password') {
+      onLoginSuccess(); // Call this function to indicate successful login
+    } else {
+      alert('Invalid credentials');
     }
+  };
 
-    return (
-        <ScrollView>
-            <Text>Login</Text>
+  return (
+    <ScrollView style={styles.container}>
+        <BoxContainer style={styles.boxDark}>
             <TextInput
                 placeholder="Username"
                 value={username}
@@ -28,7 +30,12 @@ const LoginScreen = ({ visible, onLoginSuccess }) => {
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <Button title="Login" onPress={handleLogin} />
-        </ScrollView>
-    );
+            <TouchableOpacity title="Submit" onPress={handleLogin} style={styles.button}>
+                <Text style={styles.text}>Login</Text>
+            </TouchableOpacity>
+        </BoxContainer>
+    </ScrollView>
+  );
 };
+
+export default LoginScreen;

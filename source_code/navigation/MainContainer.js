@@ -1,40 +1,44 @@
-import React from 'react';
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+// Screens
 import HomeScreen from './screens/HomeScreen';
-import LocatorScreen from './screens/LocatorScreen'
+import LocatorScreen from './screens/LocatorScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
-const Tab = createBottomTabNavigator();
-
+// Screen names
 const homeName = "Home";
 const locatorName = "Locator";
 const paymentName = "Payment";
 const profileName = "Profile";
 const settingsName = "Settings";
 
-function MainContainer({ onLogout }) {
+const Tab = createBottomTabNavigator();
+
+function MainContainer() {
   return (
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName={homeName}
         screenOptions={({ route }) => ({
+          headerShown: false,  // Ensure header is hidden
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
+            let rn = route.name;
 
-            if (route.name === homeName) {
+            if (rn === homeName) {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === locatorName) {
+            } else if (rn === locatorName) {
               iconName = focused ? 'compass' : 'compass-outline';
-            } else if (route.name === paymentName) {
+            } else if (rn === paymentName) {
               iconName = focused ? 'card' : 'card-outline';
-            } else if (route.name === profileName) {
+            } else if (rn === profileName) {
               iconName = focused ? 'person-circle' : 'person-circle-outline';
-            } else if (route.name === settingsName) {
+            } else if (rn === settingsName) {
               iconName = focused ? 'settings' : 'settings-outline';
             }
 
