@@ -4,6 +4,8 @@ import { getParkingLot, getParkingLotWithId, createParkingLot } from './database
 
 const app = express()
 
+
+//General Query
 app.get("/ParkingLot", async (req, res) => {
   const ParkingLot = await getParkingLot()
   res.send(ParkingLot)
@@ -36,15 +38,67 @@ app.get("/TransactionHistory", async (req, res) => {
 
 app.get("/Feedback", async (req, res) => {
   const Feedback = await getFeedback()
-  res.send(TransactionHistory)
+  res.send(Feedback)
 })
 
+app.get("/Employee", async (req, res) => {
+  const Employee = await getEmployee()
+  res.send(Feedback)
+})
+
+
+// Query with ID
 app.get("/ParkingLot/:id", async (req, res) => {
     const lot_id = req.params.id
     const ParkingLot = await getParkingLotWithId(lot_id)
     res.send(ParkingLot)
 })
 
+app.get("/ParkingSpace/:id", async (req, res) => {
+  const space_id = req.params.id
+  const ParkingSpace = await getParkingSpaceWithId(space_id)
+  res.send(ParkingSpace)
+})
+
+app.get("/User/:id", async (req, res) => {
+  const user_id = req.params.id
+  const User = await getUserWithId(user_id)
+  res.send(User)
+})
+
+app.get("/Vehicle/:id", async (req, res) => {
+  const vehicle_id = req.params.id
+  const Vehicle = await getVehicleWithId(vehicle_id)
+  res.send(Vehicle)
+})
+
+app.get("/Reservation/:id", async (req, res) => {
+  const reservation_id = req.params.id
+  const Reservation = await getReservationWithId(reservation_id)
+  res.send(Reservation)
+})
+
+app.get("/TransactionHistory/:id", async (req, res) => {
+  const transaction_id = req.params.id
+  const TransactionHistory = await getTransactionHistoryWithId(transaction_id)
+  res.send(TransactionHistory)
+})
+
+app.get("/Feedback/:id", async (req, res) => {
+  const feedback_id = req.params.id
+  const Feedback = await getFeedbackWithId(feedback_id)
+  res.send(Feedback)
+})
+
+app.get("/Employee/:id", async (req, res) => {
+  const employee_id = req.params.id
+  const Employee = await getEmployeeWithId(employee_id)
+  res.send(Employee)
+})
+
+
+
+// Error Handling
 app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).send('Something broke!')
