@@ -6,8 +6,9 @@ import * as Font from 'expo-font';
 import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function SettingsScreen({navigation}) {
+export default function SettingsScreen({ navigation }) {
     //for modals
     const [modalVisible1, setModalVisible1] = React.useState(false);
     const [modalVisible2, setModalVisible2] = React.useState(false);
@@ -50,6 +51,25 @@ export default function SettingsScreen({navigation}) {
             [field]: value
         }));
     };
+
+    const handleLogout = async () => {
+        try {
+          // Clear the user data from AsyncStorage
+          await AsyncStorage.removeItem('userToken');
+          // Navigate back to the login screen
+          navigation.navigate('Login');
+        } catch (error) {
+          console.error('Error logging out:', error);
+        }
+      };
+    
+      React.useEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <Button onPress={handleLogout} title="Logout" />
+          ),
+        });
+      }, [navigation]);
     
     const generateYearRange = (startYear, endYear) => {
         const years = [];
@@ -388,7 +408,7 @@ If you have any questions about these Terms, please contact us at carinadyann@cs
             </Modal>
 
             {/* Sign out */}
-            <Pressable style={styles.button} onPress={() => alert('This is the "Settings" screen.')}>
+            <Pressable style={styles.button} onPress={handleLogout}>
                 <Text style={styles.text}>Sign Out</Text>
             </Pressable>
 
