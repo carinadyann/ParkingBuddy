@@ -1,19 +1,38 @@
 import express from 'express'
 
-import { getParkingLot, getParkingLotWithId, createParkingLot } from './database.js'
+import { 
+  getParkingLot, 
+  getParkingLotWithId, 
+  createParkingLot, 
+  getParkingSpace, 
+  getParkingSpaceWithId, 
+  getUser, 
+  getUserWithId, 
+  getVehicle, 
+  getVehicleWithId, 
+  getReservation, 
+  getReservationWithId, 
+  getTransactionHistory, 
+  getTransactionHistoryWithId, 
+  getFeedback, 
+  getFeedbackWithId, 
+  getEmployee, 
+  getEmployeeWithId 
+} from './database.js'
 
 const app = express()
 
+app.use(express.json())
 
-//General Query
+// General Query
 app.get("/ParkingLot", async (req, res) => {
   const ParkingLot = await getParkingLot()
   res.send(ParkingLot)
 })
 
 app.get("/ParkingSpace", async (req, res) => {
-    const ParkingSpace = await getParkingSpace()
-    res.send(ParkingSpace)
+  const ParkingSpace = await getParkingSpace()
+  res.send(ParkingSpace)
 })
 
 app.get("/User", async (req, res) => {
@@ -46,12 +65,11 @@ app.get("/Employee", async (req, res) => {
   res.send(Feedback)
 })
 
-
 // Query with ID
 app.get("/ParkingLot/:id", async (req, res) => {
-    const lot_id = req.params.id
-    const ParkingLot = await getParkingLotWithId(lot_id)
-    res.send(ParkingLot)
+  const lot_id = req.params.id
+  const ParkingLot = await getParkingLotWithId(lot_id)
+  res.send(ParkingLot)
 })
 
 app.get("/ParkingSpace/:id", async (req, res) => {
@@ -96,14 +114,19 @@ app.get("/Employee/:id", async (req, res) => {
   res.send(Employee)
 })
 
-
+// Create new Parking Lot
+app.post("/ParkingLot", async (req, res) => {
+  const { location, capacity, available_spaces } = req.body
+  const ParkingLot = await createParkingLot(location, capacity, available_spaces)
+  res.status(201).send(ParkingLot)
+})
 
 // Error Handling
 app.use((err, req, res, next) => {
-    console.error(err.stack)
-    res.status(500).send('Something broke!')
-  })
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
 
-  app.listen(8080, () => {
-    console.log('Server is running on port 8080')
-  })
+app.listen(8080, () => {
+  console.log('Server is running on port 8080')
+})
