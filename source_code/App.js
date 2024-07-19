@@ -4,7 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainContainer from './navigation/MainContainer';
 import LoginScreen from './navigation/screens/LoginScreen';
-import SettingsScreen from './navigation/screens/SettingsScreen.js'
+import SettingsScreen from './navigation/screens/SettingsScreen.js';
 //import StackNav from './navigation/StackNav';
 
 function App() {
@@ -35,14 +35,12 @@ function App() {
     <SafeAreaProvider>
       {isLoggedIn ? (
         <View style={styles.container}>
-          <MainContainer />
-          <Button title="Logout" onPress={handleLogout}/>
+          <MainContainer onLogout={handleLogout} />
+          {/* <Button title="Logout" onPress={handleLogout}/> */}
         </View>
       ) : (
         <LoginScreen onLoginSuccess={handleLoginSuccess} /> // Ensure onLoginSuccess is passed here
       )}
-      <SettingsScreen onLogout={handleLogout} />
-      <Text>{'\n'}</Text>
     </SafeAreaProvider>
   );
 }

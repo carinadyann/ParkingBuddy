@@ -21,6 +21,7 @@ const LoginScreen = ({ onLoginSuccess }) => {
         <BoxContainer style={styles.boxDark}>
             <TextInput
                 placeholder="Username"
+                palceholderTextColor=""
                 value={username}
                 onChangeText={setUsername}
             />

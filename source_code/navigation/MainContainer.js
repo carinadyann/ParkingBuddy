@@ -19,7 +19,7 @@ const settingsName = "Settings";
 
 const Tab = createBottomTabNavigator();
 
-function MainContainer() {
+function MainContainer({ onLogout }) {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -63,7 +63,9 @@ function MainContainer() {
         <Tab.Screen name={locatorName} component={LocatorScreen} />
         <Tab.Screen name={paymentName} component={PaymentScreen} />
         <Tab.Screen name={profileName} component={ProfileScreen} />
-        <Tab.Screen name={settingsName} component={SettingsScreen} />
+        <Tab.Screen name={settingsName}>
+          {() => <SettingsScreen onLogout={onLogout} />}
+        </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );
