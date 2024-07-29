@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text, Pressable, Modal, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Pressable, Modal, TouchableOpacity, Alert, Image } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
@@ -133,6 +133,8 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
+        {/* Logo Here */}
+        <Image source={require('../../assets/logoName.png')} style={styles.logoCenter} />
             <BoxContainer style={styles.boxLight}>
                 <BoxContainer>
                     {/* Ensure DisplayComponent is properly receiving props */}

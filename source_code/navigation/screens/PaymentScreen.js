@@ -69,7 +69,8 @@ export default function PaymentScreen({navigation, route}) {
 
     return (
         <ScrollView style={styles.container}>
-            {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
+            {/* Logo Here */}
+            <Image source={require('../../assets/logoName.png')} style={styles.logoCenter} />
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Make Payment</Text>
                 <BoxContainer style={styles.infoContainer}>

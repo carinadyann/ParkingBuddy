@@ -13,7 +13,8 @@ const dataset = ['Spot 1', 'Spot 2', 'Spot 3', 'Spot 4'];
 export default function LocatorScreen({navigation}) {
     return (
         <ScrollView style={styles.container}>
-            {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
+            {/* Logo Here */}
+            <Image source={require('../../assets/logoName.png')} style={styles.logoCenter} />
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Open Spots (Live)</Text>
                 {dataset.map((item, index) => (

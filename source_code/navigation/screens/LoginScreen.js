@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 import { styles } from '../style';
 import BoxContainer from '../BoxContainer';
 
@@ -17,24 +17,27 @@ const LoginScreen = ({ onLoginSuccess }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-        <Image source={require('../../assets/images/logoName.png')} style={styles.logoCenter} />
+    <ScrollView contentContainerStyle={styles.loginContainer}>
+        {/* Logo Here */}
+        <Image source={require('../../assets/logoName.png')} style={styles.logoCenterLarge} />
         <BoxContainer style={styles.boxDark}>
             <TextInput
                 placeholder="Username"
-                placeholderTextColor="white"
+                placeholderTextColor="#CBEEF7"
                 value={username}
                 onChangeText={setUsername}
-                style={styles.input}
+                style={[styles.input, { color: 'white' }]}
             />
+            <Text style={styles.break}>{'\n'}</Text>
             <TextInput
                 placeholder="Password"
-                placeholderTextColor="white"
+                placeholderTextColor="#CBEEF7"
                 value={password}
                 onChangeText={setPassword}
-                style={styles.input}
+                style={[styles.input, { color: 'white' }]}
                 secureTextEntry
             />
+            <Text style={styles.break}>{'\n'}</Text>
             <TouchableOpacity title="Submit" onPress={handleLogin} style={styles.button}>
                 <Text style={styles.text}>Login</Text>
             </TouchableOpacity>
