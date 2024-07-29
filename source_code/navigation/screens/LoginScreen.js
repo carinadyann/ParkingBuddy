@@ -18,17 +18,21 @@ const LoginScreen = ({ onLoginSuccess }) => {
 
   return (
     <ScrollView style={styles.container}>
+        <Image source={require('../../assets/images/logoName.png')} style={styles.logoCenter} />
         <BoxContainer style={styles.boxDark}>
             <TextInput
                 placeholder="Username"
-                palceholderTextColor=""
+                placeholderTextColor="white"
                 value={username}
                 onChangeText={setUsername}
+                style={styles.input}
             />
             <TextInput
                 placeholder="Password"
+                placeholderTextColor="white"
                 value={password}
                 onChangeText={setPassword}
+                style={styles.input}
                 secureTextEntry
             />
             <TouchableOpacity title="Submit" onPress={handleLogin} style={styles.button}>
