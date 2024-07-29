@@ -78,7 +78,9 @@ export default function SettingsScreen({ onLogout }) {
     
     return (
         <ScrollView style={styles.container}>
-            {/* <Image style={styles.logoCenter} source={require('/Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
+            {/* Logo Here */}
+            <Image source={require('../../assets/logoName.png')} style={styles.logoCenter} />
+            
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Vehicle</Text>
                 <BoxContainer style={styles.infoContainer}>

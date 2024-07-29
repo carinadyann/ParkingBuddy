@@ -8,6 +8,13 @@ export const styles = StyleSheet.create({
         height: '100%',
         flex: 1,
     },
+    loginContainer: {
+        flex: 1,
+        padding: 20,
+        paddingTop: 70,
+        // justifyContent: 'center',
+        
+    },
     boxLight: {
         backgroundColor: "#54DEFD",
         padding: 20,
@@ -100,6 +107,15 @@ export const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         textAlign: 'center',
     },
+    input: {
+        fontSize: 20,
+        padding: 10,
+        backgroundColor: '#3CA3BD',
+        borderRadius: 5,
+    },
+    break: {
+        fontSize: 5,
+    },
     stopwatchText: {
         fontSize: 50,
         fontWeight: 'bold',
@@ -142,6 +158,11 @@ export const styles = StyleSheet.create({
     logoCenter: {
         width: 70,
         height: 70,
+        alignSelf: 'center',
+    },
+    logoCenterLarge: {
+        width: 150,
+        height: 150,
         alignSelf: 'center',
     },
     profile: {

@@ -68,12 +68,17 @@ export default function ProfileScreen({navigation}) {
 
     return (
         <ScrollView style={styles.container}>
-            {/* <Image style={styles.logoCenter} source={require('Users/carinaadrianzen/Documents/source_code/assets/logoName.png')}/> */}
+            {/* Logo Here */}
+            <Image source={require('../../assets/logoName.png')} style={styles.logoCenter} />
+
             <BoxContainer style={styles.boxDark}>
             <Text style={styles.textT}>My Profile</Text>
-                {/* <Image style={styles.profile} source={require('Users/carinaadrianzen/Documents/source_code/assets/logo.png')}/> */}
+                <Text style={styles.break}>{'\n'}</Text>
+                
+                {/* Logo Here */}
+                <Image source={require('../../assets/logo.png')} style={styles.profile} />
 
-                <Text>{'\n'}</Text>
+                <Text style={styles.break}>{'\n'}</Text>
                 <BoxContainer style={styles.infoContainer}>
                     <Text style={styles.text}>First Name: <Text style={styles.formText}>{formData.fname}</Text>{'\n'}</Text>
                     <Text style={styles.text}>Last Name: <Text style={styles.formText}>{formData.lname}</Text>{'\n'}</Text>
