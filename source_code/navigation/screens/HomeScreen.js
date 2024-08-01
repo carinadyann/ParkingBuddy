@@ -10,6 +10,7 @@ export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
     const [stopwatchTime, setStopwatchTime] = React.useState({ h: 0, m: 0, s: 0, ms: 0 });
     const [stopwatchRunning, setStopwatchRunning] = React.useState(false);
+    const [isTimerFinished, setIsTimerFinished] = React.useState(false);
 
     // For modal
     const [modalVisible, setModalVisible] = React.useState(false);
@@ -50,6 +51,7 @@ export default function HomeScreen({ navigation }) {
             parkingSpot: tempFormData.parkingSpot,
             duration: tempFormData.durationType,
             amount: calculateAmount(tempFormData.durationType),
+            isTimerFinished: isTimerFinished
         });
     };
     
@@ -74,6 +76,7 @@ export default function HomeScreen({ navigation }) {
                     } else {
                         clearInterval(timer);
                         setStopwatchRunning(false);
+                        setIsTimerFinished(true);
                         return { h, m, s };
                     }
                 });
