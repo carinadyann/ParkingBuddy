@@ -7,14 +7,27 @@ import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import { GestureHandlerRefContext } from '@react-navigation/stack';
+import { RawButton } from 'react-native-gesture-handler';
 
 export default function PaymentScreen({navigation, route}) {
-    const { parkingSpot = 'N/A', duration = 'N/A', amount = 0 } = route.params || {};
+    const { parkingSpot = 'N/A', duration = 'N/A', amount = 0, isTimerFinished = false } = route.params || {};
 
     //for modal
     const [modalVisible1, setModalVisible1] = React.useState(false);
     const [modalVisible2, setModalVisible2] = React.useState(false);
     const [modalVisible3, setModalVisible3] = React.useState(false);
+
+    //for card payment
+    const [paymentModalVisible, setPaymentModalVisible] = React.useState(null);
+    const [selectedCard, setSelectedCard] = React.useState(null);
+
+    const [newCardLabel, setNewCardLabel] = React.useState('');
+    const [newCardValue, setNewCardValue] = React.useState('');
+
+    const [cardItems, setCardItems] = React.useState([
+        { label: "Card ending in 1234", value: "1234" },
+        { label: "Card ending in 5678", valye: "5678" }
+    ]);
 
     //for form
     const [formData, setFormData] = React.useState({
@@ -22,16 +35,25 @@ export default function PaymentScreen({navigation, route}) {
         cardType: 'N/A', // pick random from database
     });
 
-    //for card items
-    const [cardItems, setCardItems] = React.useState([
-        { label: "XXXX XXXX XXXX XXXX", value: "XXXX XXXX XXXX XXXX" },
-        { label: "YYYY YYYY YYYY YYYY", value: "YYYY YYYY YYYY YYYY" },
-    ]);
+    const addCard = (newCard) => {
+        setCardItems(prevItems => [...prevItems, newCard]);
+    };
 
-    const [newCardData, setNewCardData] = React.useState({
-        cardNumber: '',
-        cardType: ''
-    });
+    const deleteCard = (cardValue) => {
+        setCardItems(prevItems => prevItems.filter(card => card.value !== cardValue));
+    };
+
+    const handleAddCard = () => {
+        if (newCardLabel.trim() !== '' && newCardValue.trim() !== '') {
+            addCard({  label: newCardLabel, value: newCardValue });
+            setNewCardValue('');
+            setNewCardValue('');
+        }
+    };
+
+    const handleDeleteCard = (cardValue) => {
+        deleteCard(cardValue);
+    };
 
     const handleSubmit = () => {
         //alert(`Card on File: ${formData.cardFile}, Payment Type: ${formData.cardType}`);
@@ -79,9 +101,11 @@ export default function PaymentScreen({navigation, route}) {
                     <Text style={styles.text}>Duration: <Text style={styles.formText}>{duration  + ' Hours'}</Text></Text>
                 </BoxContainer>
 
-                <Pressable style={styles.button} onPress={() => alert('This is the "Payment screen.')}>
-                    <Text style={styles.text}>Pay</Text>
-                </Pressable>
+                {/* {isTimerFinished && ( */}
+                    <Pressable style={styles.button} onPress={() => setPaymentModalVisible(true)}>
+                        <Text style={styles.text}>Pay</Text>
+                    </Pressable>
+                {/* )} */}
 
                 {/* Modal Component 1 */}
                 <Modal 
@@ -214,10 +238,24 @@ export default function PaymentScreen({navigation, route}) {
                         </ScrollView>
 
                         <TouchableOpacity onPress={() => setModalVisible2(false)} style={styles.button}>
-                                <Text style={styles.text}>Close</Text>
+                            <Text style={styles.text}>Close</Text>
                         </TouchableOpacity>
                     </View>
 
+                </Modal>
+
+                {/* Payment Modal */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={paymentModalVisible}
+                    onRequestClose={() => setPaymentModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.textTDark}>Select a Card</Text>
+                        </View>
+                    </View>
                 </Modal>
 
             </BoxContainer>
