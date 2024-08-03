@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+    // Boxes and Containers
     container: {
         paddingTop: 60,
         backgroundColor: "white",
@@ -46,6 +47,7 @@ export const styles = StyleSheet.create({
     parking: {
         backgroundColor: "#49C6E5",
     },
+    // Clock
     clockHolder: {
         width: 100,
         background: "black",
@@ -56,6 +58,7 @@ export const styles = StyleSheet.create({
         padding: 60,
         textAlign: 'center',
     },
+    // Text
     text: {
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
@@ -122,6 +125,7 @@ export const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
+    // Buttons
     button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -154,6 +158,17 @@ export const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
+    },
+    buttonLink: {
+        textAlign: 'left',
+        color: 'blue',
+        fontSize: 15,
+    },
+    buttonLinkPressed: {
+        textAlign: 'left',
+        textDecorationLine: 'underline',
+        color: 'blue',
+        fontSize: 15,
     },
     logoCenter: {
         width: 70,

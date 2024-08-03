@@ -12,6 +12,8 @@ import { RawButton } from 'react-native-gesture-handler';
 export default function PaymentScreen({navigation, route}) {
     const { parkingSpot = 'N/A', duration = 'N/A', amount = 0, isTimerFinished = false } = route.params || {};
 
+    const [isPressed, setIsPressed] = React.useState(false);
+
     //for modal
     const [modalVisible1, setModalVisible1] = React.useState(false);
     const [modalVisible2, setModalVisible2] = React.useState(false);
@@ -34,6 +36,11 @@ export default function PaymentScreen({navigation, route}) {
         cardFile: 'N/A', // according to database
         cardType: 'N/A', // pick random from database
     });
+
+    const handlePayment = () => {
+        alert(`Payment made using card ending in ${formData.cardFile}`);
+        setPaymentModalVisible(false);
+    };
 
     const addCard = (newCard) => {
         setCardItems(prevItems => [...prevItems, newCard]);
@@ -101,6 +108,7 @@ export default function PaymentScreen({navigation, route}) {
                     <Text style={styles.text}>Duration: <Text style={styles.formText}>{duration  + ' Hours'}</Text></Text>
                 </BoxContainer>
 
+                {/* Darken if timer isn't finised */}
                 {/* {isTimerFinished && ( */}
                     <Pressable style={styles.button} onPress={() => setPaymentModalVisible(true)}>
                         <Text style={styles.text}>Pay</Text>
@@ -231,6 +239,13 @@ export default function PaymentScreen({navigation, route}) {
                             />
 
                             <Text>{'\n'}</Text>
+
+                            <TouchableOpacity onPress={() => setModalVisible2(false)} style={isPressed ? styles.buttonLinkPressed : styles.buttonLink}>
+                                <Text style={styles.buttonLink}>Add a Card</Text>
+                            </TouchableOpacity>
+
+                            <Text>{'\n'}</Text>
+
                             <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
                                 <Text style={styles.text}>Submit</Text>
                             </TouchableOpacity>
@@ -246,15 +261,25 @@ export default function PaymentScreen({navigation, route}) {
 
                 {/* Payment Modal */}
                 <Modal
-                    animationType="slide"
                     transparent={true}
                     visible={paymentModalVisible}
                     onRequestClose={() => setPaymentModalVisible(false)}
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
-                            <Text style={styles.textTDark}>Select a Card</Text>
+                            <Text style={styles.textTDark}>Confirm Payment</Text>
+                            <Text>{'\n'}</Text>
+                            
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={handlePayment}
+                            >
+                                <Text style={styles.text}>Confirm Payment</Text>
+                            </TouchableOpacity>
                         </View>
+                        <TouchableOpacity onPress={() => setPaymentModalVisible(false)} style={styles.button}>
+                            <Text style={styles.text}>Close</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
 
