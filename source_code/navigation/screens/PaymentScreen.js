@@ -99,7 +99,7 @@ export default function PaymentScreen({navigation, route}) {
     return (
         <ScrollView style={styles.container}>
             {/* Logo Here */}
-            <Image source={require('../../assets/logoName.png')} style={styles.logoCenter} />
+            <Image source={require('../../assets/logo.png')} style={styles.logoCenter} />
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Make Payment</Text>
                 <BoxContainer style={styles.infoContainer}>
@@ -147,6 +147,39 @@ export default function PaymentScreen({navigation, route}) {
                     <Text style={styles.text}>Change Payment Method</Text>
                 </Pressable>
 
+                {/* Payment Modal */}
+                <Modal
+                    transparent={true}
+                    visible={paymentModalVisible}
+                    onRequestClose={() => setPaymentModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.textTDark}>Confirm Payment</Text>
+                            <Text>{'\n'}</Text>
+                            
+                            <Text style={styles.modalText}>Card on File: <Text style={styles.modalUserData}>{formData.cardFile}</Text></Text>
+                            <Text>{'\n'}</Text>
+
+                            <Text style={styles.modalText}>Card Type: <Text style={styles.modalUserData}>{formData.cardType}</Text></Text>
+                            <Text>{'\n'}</Text>
+
+                            <Text style={styles.modalText}>Payment Charge: <Text style={styles.modalUserData}>${amount}</Text></Text>
+                            <Text>{'\n'}</Text>
+
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={handlePayment}
+                            >
+                                <Text style={styles.text}>Submit</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={() => setPaymentModalVisible(false)} style={styles.button}>
+                            <Text style={styles.text}>Close</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+
                 {/* Modal Component 2 */}
                 <Modal 
                     animationType='none'
@@ -192,8 +225,8 @@ export default function PaymentScreen({navigation, route}) {
                                     },
                                 }}
                                 items={[
-                                    { label: "XXXX XXXX XXXX XXXX", value: "XXXX XXXX XXXX XXXX" },
-                                    { label: "XXXX XXXX XXXX XXXX", value: "XXXX XXXX XXXX XXXX" },
+                                    { label: "XXXX XXXX XXXX 1234", value: "XXXX XXXX XXXX 1234" },
+                                    { label: "XXXX XXXX XXXX 5678", value: "XXXX XXXX XXXX 5678" },
                                     // Add more options here
                                 ]}
                             />
@@ -257,30 +290,6 @@ export default function PaymentScreen({navigation, route}) {
                         </TouchableOpacity>
                     </View>
 
-                </Modal>
-
-                {/* Payment Modal */}
-                <Modal
-                    transparent={true}
-                    visible={paymentModalVisible}
-                    onRequestClose={() => setPaymentModalVisible(false)}
-                >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.textTDark}>Confirm Payment</Text>
-                            <Text>{'\n'}</Text>
-                            
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={handlePayment}
-                            >
-                                <Text style={styles.text}>Confirm Payment</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity onPress={() => setPaymentModalVisible(false)} style={styles.button}>
-                            <Text style={styles.text}>Close</Text>
-                        </TouchableOpacity>
-                    </View>
                 </Modal>
 
             </BoxContainer>
