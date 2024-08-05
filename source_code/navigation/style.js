@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     container: {
         paddingTop: 60,
         backgroundColor: "white",
-        padding: 20,
+        padding: 10,
         height: '100%',
         flex: 1,
     },
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     },
     boxLight: {
         backgroundColor: "#54DEFD",
-        padding: 20,
+        padding: 10,
         margin: 10,
         color: "white",
         fontFamily: 'Arial Rounded MT Bold',
@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     },
     boxDark: {
         backgroundColor: "#49C6E5",
-        padding: 20,
+        padding: 10,
         margin: 10,
         borderRadius: 10,
         shadowColor: '#000',
@@ -205,5 +205,10 @@ export const styles = StyleSheet.create({
     modalText: {
         fontSize: 18,
         marginBottom: 10,
+    },
+    modalUserData: {
+        fontSize: 18,
+        marginBottom: 10,
+        color: '#49C6E5',
     },
 });

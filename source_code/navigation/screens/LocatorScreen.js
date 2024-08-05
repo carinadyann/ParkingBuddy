@@ -14,7 +14,7 @@ export default function LocatorScreen({navigation}) {
     return (
         <ScrollView style={styles.container}>
             {/* Logo Here */}
-            <Image source={require('../../assets/logoName.png')} style={styles.logoCenter} />
+            <Image source={require('../../assets/logo.png')} style={styles.logoCenter} />
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Open Spots (Live)</Text>
                 {dataset.map((item, index) => (
