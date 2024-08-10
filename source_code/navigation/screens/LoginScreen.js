@@ -21,6 +21,7 @@ const LoginScreen = ({ onLoginSuccess }) => {
         {/* Logo Here */}
         <Image source={require('../../assets/logoName.png')} style={styles.logoCenterLarge} />
         <BoxContainer style={styles.boxDark}>
+            <Text style={styles.break}>{'\n'}</Text>
             <TextInput
                 placeholder="Username"
                 placeholderTextColor="#CBEEF7"
