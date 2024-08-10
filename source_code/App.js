@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainContainer from './navigation/MainContainer';
 import LoginScreen from './navigation/screens/LoginScreen';
 import SettingsScreen from './navigation/screens/SettingsScreen.js';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 //import StackNav from './navigation/StackNav';
 
 function App() {
@@ -32,16 +33,18 @@ function App() {
   };
 
   return (
-    <SafeAreaProvider>
-      {isLoggedIn ? (
-        <View style={styles.container}>
-          <MainContainer onLogout={handleLogout} />
-          {/* <Button title="Logout" onPress={handleLogout}/> */}
-        </View>
-      ) : (
-        <LoginScreen onLoginSuccess={handleLoginSuccess} /> // Ensure onLoginSuccess is passed here
-      )}
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        {isLoggedIn ? (
+          <View style={styles.container}>
+            <MainContainer onLogout={handleLogout} />
+            {/* <Button title="Logout" onPress={handleLogout}/> */}
+          </View>
+        ) : (
+          <LoginScreen onLoginSuccess={handleLoginSuccess} /> // Ensure onLoginSuccess is passed here
+        )}
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
