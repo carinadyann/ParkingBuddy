@@ -65,6 +65,13 @@ export const styles = StyleSheet.create({
         padding: 5,
         fontSize: 17,
     },
+    textBold: {
+        color: "white",
+        fontFamily: 'Arial Rounded MT Bold',
+        padding: 5,
+        fontSize: 17,
+        fontWeight: 'bold',
+    },
     formText: {
         color: "#D4F6FF",
         fontFamily: 'Arial Rounded MT Bold',
@@ -113,6 +120,8 @@ export const styles = StyleSheet.create({
     input: {
         fontSize: 20,
         padding: 10,
+        marginLeft: 5,
+        marginRight: 5,
         backgroundColor: '#3CA3BD',
         borderRadius: 5,
     },
@@ -160,11 +169,6 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.8,
     },
     buttonLink: {
-        textAlign: 'left',
-        color: 'blue',
-        fontSize: 15,
-    },
-    buttonLinkPressed: {
         textAlign: 'left',
         textDecorationLine: 'underline',
         color: 'blue',
