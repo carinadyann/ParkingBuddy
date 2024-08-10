@@ -7,7 +7,7 @@ import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import { GestureHandlerRefContext } from '@react-navigation/stack';
-import { RawButton } from 'react-native-gesture-handler';
+import { RawButton, TextInput } from 'react-native-gesture-handler';
 
 export default function PaymentScreen({navigation, route}) {
     const { parkingSpot = 'N/A', duration = 'N/A', amount = 0, isTimerFinished = false } = route.params || {};
@@ -28,7 +28,7 @@ export default function PaymentScreen({navigation, route}) {
 
     const [cardItems, setCardItems] = React.useState([
         { label: "Card ending in 1234", value: "1234" },
-        { label: "Card ending in 5678", valye: "5678" }
+        { label: "Card ending in 5678", value: "5678" }
     ]);
 
     //for form
@@ -39,6 +39,11 @@ export default function PaymentScreen({navigation, route}) {
 
     const handlePayment = () => {
         alert(`Payment made using card ending in ${formData.cardFile}`);
+        setPaymentModalVisible(false);
+    };
+
+    const handleNewCard = () => {
+        alert(`New Payment Method Added`);
         setPaymentModalVisible(false);
     };
 
@@ -103,36 +108,28 @@ export default function PaymentScreen({navigation, route}) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Make Payment</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>Payment Due: <Text style={styles.formText}>${amount}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration: <Text style={styles.formText}>{duration  + ' Hours'}</Text></Text>
+                    <Text style={styles.textBold}>Payment Due: <Text style={styles.formText}>${amount}</Text>{'\n'}</Text>
+                    <Text style={styles.textBold}>Parking Spot: <Text style={styles.formText}>{parkingSpot}</Text>{'\n'}</Text>
+                    <Text style={styles.textBold}>Duration: <Text style={styles.formText}>{duration  + ' Hours'}</Text></Text>
                 </BoxContainer>
 
                 {/* Darken if timer isn't finised */}
-                {/* {isTimerFinished && ( */}
-                    <Pressable style={styles.button} onPress={() => setPaymentModalVisible(true)}>
-                        <Text style={styles.text}>Pay</Text>
-                    </Pressable>
-                {/* )} */}
-
-                {/* Modal Component 1 */}
-                <Modal 
-                    animationType='none'
-                    transparent={true}
-                    visible={modalVisible1}
-                    onRequestClose={() => setModalVisible1(false)}
+                <Pressable 
+                    style={styles.button}
+                    onPress={() => {
+                        if (isTimerFinished) {
+                            if (formData.cardFile === 'N/A') {
+                                alert("Please select a card before preceeding to payment.");
+                            } else {
+                                setPaymentModalVisible(true);
+                            }
+                        } else {
+                            alert('Please wait until the timer is finished before making a payment.');
+                        }
+                    }}
                 >
-                    <View style={styles.modalContainer}>
-                        {/* Modal Content */}
-                        <ScrollView style={styles.modalContent}>
-                            <Text>This is modal 1</Text>
-                        </ScrollView>
-                        <TouchableOpacity onPress={() => setModalVisible1(false)} style={styles.button}>
-                                <Text style={styles.text}>Close</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                </Modal>
+                    <Text style={styles.text}>Pay</Text>
+                </Pressable>
 
             </BoxContainer>
             
@@ -273,9 +270,14 @@ export default function PaymentScreen({navigation, route}) {
 
                             <Text>{'\n'}</Text>
 
-                            <TouchableOpacity onPress={() => setModalVisible2(false)} style={isPressed ? styles.buttonLinkPressed : styles.buttonLink}>
-                                <Text style={styles.buttonLink}>Add a Card</Text>
-                            </TouchableOpacity>
+                            <Pressable style={styles.buttonLink} onPress={() => {
+                                setModalVisible2(false);
+                                setModalVisible1(true);
+                                }}
+                            >
+                                <Text style={styles.buttonLink}>Add a Card +</Text>
+                            </Pressable>
+
 
                             <Text>{'\n'}</Text>
 
@@ -289,8 +291,46 @@ export default function PaymentScreen({navigation, route}) {
                             <Text style={styles.text}>Close</Text>
                         </TouchableOpacity>
                     </View>
-
                 </Modal>
+
+                {/* Add Card Modal */}
+                <Modal 
+                    animationType='none'
+                    transparent={true}
+                    visible={modalVisible1}
+                    onRequestClose={() => setModalVisible1(false)}
+                >
+                <View style={styles.modalContainer}>
+                {/* Modal Content */}
+                <ScrollView style={styles.modalContent}>
+                    <Text style={styles.textTDark}>Add a New Card</Text>
+                    <Text style={styles.break}>{'\n'}</Text>
+
+                    {/* Cardholder Name Input */}
+                    <Text style={styles.modalText}>Cardholder Name</Text>
+                    <TextInput
+                        placeholder="Enter cardholder name"
+                        placeholderTextColor="#CBEEF7"
+                        style={[styles.input, { color: 'white' }]}
+                        value={newCardLabel}
+                        onChangeText={setNewCardLabel}
+                    />
+                    <Text style={styles.break}>{'\n'}</Text>
+
+                    <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
+                        <Text style={styles.text}>Submit</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+                <TouchableOpacity onPress={() => {
+                    setModalVisible1(false);
+                    setModalVisible2(true);
+                    }} 
+                    style={styles.button}
+                    >
+                    <Text style={styles.text}>Close</Text>
+                </TouchableOpacity>
+            </View>
+        </Modal>
 
             </BoxContainer>
 
