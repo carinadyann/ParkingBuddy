@@ -215,4 +215,11 @@ export const styles = StyleSheet.create({
         marginBottom: 10,
         color: '#49C6E5',
     },
+    inputCustom: {
+        backgroundColor: '#A9E2DF',
+        color: 'black',
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 5,
+    },
 });
