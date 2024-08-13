@@ -25,6 +25,8 @@ export default function PaymentScreen({navigation, route}) {
 
     const [newCardLabel, setNewCardLabel] = React.useState('');
     const [newCardValue, setNewCardValue] = React.useState('');
+    const [newCardExpirationDate, setNewCardExpirationDate] = React.useState('');
+    const [newCardCvv, setNewCardCvv] = React.useState('');
 
     const [cardItems, setCardItems] = React.useState([
         { label: "Card ending in 1234", value: "1234" },
@@ -56,6 +58,9 @@ export default function PaymentScreen({navigation, route}) {
     };
 
     const handleAddCard = () => {
+        addNewCard();
+        setModalVisible1(false);
+        setModalVisible2(true);
         if (newCardLabel.trim() !== '' && newCardValue.trim() !== '') {
             addCard({  label: newCardLabel, value: newCardValue });
             setNewCardValue('');
@@ -91,13 +96,20 @@ export default function PaymentScreen({navigation, route}) {
     };
 
     const addNewCard = () => {
-        if (newCardData.cardNumber.trim() !== '' && newCardData.cardType.trim() !== '') {
+        if (newCardLabel.trim() !== '' && newCardValue.trim() !== '' && newCardExpirationDate.trim() !== '' && newCardCvv.trim() !== '') {
+            const cardDetails = {
+                label: `Card ending in ${newCardValue.slice(-4)}`,
+                value: newCardValue
+            };
             setCardItems(prevItems => [
                 ...prevItems,
-                { label: newCardData.cardNumber, value: newCardData.cardNumber }
+                cardDetails
             ]);
-            setNewCardData({ cardNumber: '', cardType: '' }); // Clear the form
-            setModalVisible3(false); // Close the add card modal
+            setNewCardLabel('');
+            setNewCardValue('');
+            setNewCardExpirationDate('');
+            setNewCardCvv('');
+            setModalVisible1(false);
         }
     };
 
@@ -113,7 +125,6 @@ export default function PaymentScreen({navigation, route}) {
                     <Text style={styles.textBold}>Duration: <Text style={styles.formText}>{duration  + ' Hours'}</Text></Text>
                 </BoxContainer>
 
-                {/* Darken if timer isn't finised */}
                 <Pressable 
                     style={styles.button}
                     onPress={() => {
@@ -201,25 +212,8 @@ export default function PaymentScreen({navigation, route}) {
                                 color: 'white', // Customize the placeholder color here
                                 }}
                                 style={{
-                                    inputIOS: {
-                                    backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
-                                        color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
+                                    inputIOS: styles.inputCustom,
+                                    inputAndroid: styles.inputCustom,
                                 }}
                                 items={[
                                     { label: "XXXX XXXX XXXX 1234", value: "XXXX XXXX XXXX 1234" },
@@ -241,25 +235,8 @@ export default function PaymentScreen({navigation, route}) {
                                 color: 'white', // Customize the placeholder color here
                                 }}
                                 style={{
-                                    inputIOS: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
-                                        color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
+                                    inputIOS: styles.inputCustom,
+                                    inputAndroid: styles.inputCustom,
                                 }}
                                 items={[
                                     { label: "Mastercard", value: "Mastercard" },
@@ -304,22 +281,59 @@ export default function PaymentScreen({navigation, route}) {
                 {/* Modal Content */}
                 <ScrollView style={styles.modalContent}>
                     <Text style={styles.textTDark}>Add a New Card</Text>
-                    <Text style={styles.break}>{'\n'}</Text>
+                    <Text>{'\n'}</Text>
 
                     {/* Cardholder Name Input */}
-                    <Text style={styles.modalText}>Cardholder Name</Text>
+                    <Text style={styles.modalText}>Cardholder Name:</Text>
                     <TextInput
                         placeholder="Enter cardholder name"
                         placeholderTextColor="#CBEEF7"
-                        style={[styles.input, { color: 'white' }]}
+                        style={[styles.inputCustom, { color: 'white' }]}
                         value={newCardLabel}
                         onChangeText={setNewCardLabel}
+                    />
+                    <Text>{'\n'}</Text>
+
+                    {/* Card Number */}
+                    <Text style={styles.modalText}>Card Number:</Text>
+                    <TextInput
+                        placeholder='Enter card number'
+                        placeholderTextColor="#CBEEF7"
+                        keyboardType='numeric'
+                        style={[styles.inputCustom, { color: 'white' }]}
+                        value={newCardValue}
+                        onChangeText={setNewCardValue}
+                    />
+                    <Text>{'\n'}</Text>
+
+                    {/* Expiration Date Input */}
+                    <Text style={styles.modalText}>Expiration Date:</Text>
+                    <TextInput
+                        placeholder='MM/YY'
+                        placeholderTextColor="#CBEEF7"
+                        style={[styles.inputCustom, { color: 'white' }]}
+                        value={newCardExpirationDate}
+                        onChangeText={setNewCardExpirationDate}
+                    />
+                    <Text>{'\n'}</Text>
+
+                    {/* CVV Input */}
+                    <Text style={styles.modalText}>CVV:</Text>
+                    <TextInput
+                        placeholder='Enter CVV'
+                        placeholderTextColor="#CBEEF7"
+                        keyboardType='numberic'
+                        style={[styles.inputCustom, { color: 'white' }]}
+                        value={newCardValue}
+                        onChangeText={setNewCardExpirationDate}
                     />
                     <Text style={styles.break}>{'\n'}</Text>
 
                     <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
                         <Text style={styles.text}>Submit</Text>
                     </TouchableOpacity>
+                    <Text>{'\n'}</Text>
+                    
                 </ScrollView>
                 <TouchableOpacity onPress={() => {
                     setModalVisible1(false);
