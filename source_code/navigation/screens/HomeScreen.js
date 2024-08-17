@@ -1,14 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text, Pressable, Modal, TouchableOpacity, Alert, Image } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Modal, Alert, Image } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import BoxContainer from '../BoxContainer';
-import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
-import { PrivateValueStore } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
-    const [stopwatchTime, setStopwatchTime] = React.useState({ h: 0, m: 0, s: 0, ms: 0 });
+    const [stopwatchTime, setStopwatchTime] = React.useState({ h: 0, m: 0, s: 0 });
     const [stopwatchRunning, setStopwatchRunning] = React.useState(false);
     const [isTimerFinished, setIsTimerFinished] = React.useState(false);
 
@@ -31,12 +29,12 @@ export default function HomeScreen({ navigation }) {
 
     const handleSubmit = () => {
         const { zone, parkingSpot, durationType } = tempFormData;
-    
+
         if (!zone || !parkingSpot || !durationType) {
             Alert.alert('Error', 'Please fill in all the required fields.');
             return;
         }
-    
+
         if (durationType === 'Day Pass') {
             setStopwatchTime({ h: 24, m: 0, s: 0 });
         } else {
@@ -54,7 +52,6 @@ export default function HomeScreen({ navigation }) {
             isTimerFinished: isTimerFinished
         });
     };
-    
 
     const handleDurationTypeChange = (value) => {
         handleTempChange('durationType', value);
@@ -136,14 +133,13 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-        {/* Logo Here */}
-        <Image source={require('../../assets/logo.png')} style={styles.logoCenter} />
+            {/* Logo Here */}
+            <Image source={require('../../assets/logo.png')} style={styles.logoCenter} />
             <BoxContainer style={styles.boxLight}>
                 <BoxContainer>
-                    {/* Ensure DisplayComponent is properly receiving props */}
                     <Text style={styles.textT}>Stopwatch</Text>
                     <Text style={styles.stopwatchText}>
-                    {`${stopwatchTime.h.toString().padStart(2, '0')}:${stopwatchTime.m.toString().padStart(2, '0')}:${stopwatchTime.s.toString().padStart(2, '0')}`}
+                        {`${stopwatchTime.h.toString().padStart(2, '0')}:${stopwatchTime.m.toString().padStart(2, '0')}:${stopwatchTime.s.toString().padStart(2, '0')}`}
                     </Text>
                 </BoxContainer>
             </BoxContainer>
@@ -153,7 +149,7 @@ export default function HomeScreen({ navigation }) {
                 <BoxContainer style={styles.infoContainer}>
                     <Text style={styles.text}>Zone: <Text style={styles.formText}>{tempFormData.zone}</Text>{'\n'}</Text>
                     <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{tempFormData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{tempFormData.durationType ? tempFormData.durationType: 'N/A' + ' Hours'}</Text>{'\n'}</Text>
+                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{tempFormData.durationType ? tempFormData.durationType : 'N/A' + ' Hours'}</Text>{'\n'}</Text>
                 </BoxContainer>
 
                 <TouchableOpacity style={styles.buttonEdit} onPress={handleEditPress}>
@@ -161,7 +157,7 @@ export default function HomeScreen({ navigation }) {
                 </TouchableOpacity>
 
                 {/* Modal Component */}
-                <Modal 
+                <Modal
                     animationType='none'
                     transparent={true}
                     visible={modalVisible}
@@ -172,7 +168,7 @@ export default function HomeScreen({ navigation }) {
                         <ScrollView style={styles.modalContent}>
                             <Text style={styles.textTDark}>Tap to Change Selection</Text>
                             <Text>{'\n'}</Text>
-                            
+
                             {/* Dropdowns for Zone, Parking Spot, and Duration Type */}
                             <Text style={styles.modalText}>Zone: </Text>
                             <RNPickerSelect
@@ -213,7 +209,6 @@ export default function HomeScreen({ navigation }) {
                             <Text style={styles.modalText}>Duration Type: </Text>
                             <RNPickerSelect
                                 value={tempFormData.durationType}
-                                // onValueChange={(itemValue) => handleChange('durationType', itemValue)}
                                 onValueChange={handleDurationTypeChange}
                                 placeholder={{
                                     label: "Select a Duration ...",
@@ -224,24 +219,16 @@ export default function HomeScreen({ navigation }) {
                                 items={timeOptions}
                             />
                             <Text>{'\n'}</Text>
-                            <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
+                            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                                 <Text style={styles.text}>Submit</Text>
                             </TouchableOpacity>
                         </ScrollView>
-                        
-                        <TouchableOpacity title="Cancel" onPress={handleCancel} style={styles.button}>
+
+                        <TouchableOpacity onPress={handleCancel} style={styles.button}>
                             <Text style={styles.text}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>
-
-                {/* <Pressable style={styles.button} onPress={() => navigation.navigate('Payment', {
-                    parkingSpot: formData.parkingSpot,
-                    duration: formData.durationType,
-                    amount: calculateAmount(formData.durationType),
-                })}>
-                    <Text style={styles.text}>Submit</Text>
-                </Pressable> */}
             </BoxContainer>
         </ScrollView>
     );
