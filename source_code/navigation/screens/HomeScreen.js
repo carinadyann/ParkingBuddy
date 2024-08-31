@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
         durationType: "N/A",
     });
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const { zone, parkingSpot, durationType } = tempFormData;
 
         if (!zone || !parkingSpot || !durationType) {
@@ -45,12 +45,37 @@ export default function HomeScreen({ navigation }) {
         setFormData({ ...tempFormData });
         setModalVisible(false);
 
-        navigation.navigate('Payment', {
-            parkingSpot: tempFormData.parkingSpot,
-            duration: tempFormData.durationType,
-            amount: calculateAmount(tempFormData.durationType),
-            isTimerFinished: isTimerFinished
-        });
+        try {
+            // Replace 'your-api-endpoint' with your actual API endpoint
+            const response = await fetch('https://your-api-endpoint.com/save-parking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    zone,
+                    parkingSpot,
+                    durationType,
+                }),
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('Parking setup saved:', responseData);
+
+                navigation.navigate('Payment', {
+                    parkingSpot: tempFormData.parkingSpot,
+                    duration: tempFormData.durationType,
+                    amount: calculateAmount(tempFormData.durationType),
+                    isTimerFinished: isTimerFinished
+                });
+            } else {
+                Alert.alert('Error', 'Failed to save parking setup. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error saving parking setup:', error);
+            Alert.alert('Error', 'Failed to save parking setup. Please try again.');
+        }
     };
 
     const handleDurationTypeChange = (value) => {
@@ -219,14 +244,16 @@ export default function HomeScreen({ navigation }) {
                                 items={timeOptions}
                             />
                             <Text>{'\n'}</Text>
-                            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                                <Text style={styles.text}>Submit</Text>
-                            </TouchableOpacity>
-                        </ScrollView>
 
-                        <TouchableOpacity onPress={handleCancel} style={styles.button}>
-                            <Text style={styles.text}>Cancel</Text>
-                        </TouchableOpacity>
+                            <View style={styles.buttonContainer}>
+                                <TouchableOpacity style={styles.buttonCancel} onPress={handleCancel}>
+                                    <Text style={styles.textTDark}>Cancel</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
+                                    <Text style={styles.textTDark}>Submit</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
                     </View>
                 </Modal>
             </BoxContainer>
@@ -236,22 +263,25 @@ export default function HomeScreen({ navigation }) {
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
-        backgroundColor: '#A9E2DF',
-        color: 'black',
-        padding: 10,
-        borderRadius: 5,
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'white',
+        paddingRight: 30,
+        backgroundColor: 'black', // to ensure the text is visible
     },
     inputAndroid: {
-        backgroundColor: '#A9E2DF',
-        color: 'black',
-        padding: 10,
-        borderRadius: 5,
-    },
-    placeholder: {
+        fontSize: 16,
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
         color: 'white',
-    },
-    iconContainer: {
-        top: 10,
-        right: 12,
+        paddingRight: 30,
+        backgroundColor: 'black', // to ensure the text is visible
     },
 });
