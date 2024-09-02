@@ -105,6 +105,21 @@ app.post("/ParkingLot", async (req, res) => {
   res.status(201).send(ParkingLot);
 });
 
+// Add this new endpoint to handle saving parking setup data
+app.post("/save-parking", async (req, res) => {
+  const { zone, parkingSpot, durationType, userId } = req.body;
+
+  try {
+    // Save the parking setup data to the database
+    const result = await getSetupParking({ zone, parkingSpot, durationType, userId });
+
+    res.status(201).json({ message: 'Parking setup saved successfully', data: result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to save parking setup' });
+  }
+});
+
 // Error Handling
 app.use((err, req, res, next) => {
   console.error(err.stack);

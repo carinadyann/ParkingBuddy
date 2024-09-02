@@ -47,7 +47,7 @@ export default function HomeScreen({ navigation }) {
 
         try {
             // Replace 'your-api-endpoint' with your actual API endpoint
-            const response = await fetch('https://your-api-endpoint.com/save-parking', {
+            const response = await fetch('https://localhost:8080/save-parking', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
