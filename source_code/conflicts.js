@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 
 import { 
   getParkingLot, 
@@ -19,6 +20,7 @@ import {
 
 const app = express();
 
+app.use(cors()); // Enable CORS
 app.use(express.json());
 
 // General Query
