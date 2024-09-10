@@ -41,6 +41,7 @@ CREATE TABLE UserCredentials (
 -- Insert data into UserCredentials
 INSERT INTO UserCredentials (user_id, username, password) VALUES
 (1, 'admin', 'password');
+(2, 'anthony', 'password');
 
 
 CREATE TABLE Vehicle (

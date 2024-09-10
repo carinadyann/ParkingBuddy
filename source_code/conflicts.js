@@ -1,7 +1,6 @@
-import express from 'express';
-import cors from 'cors';
-
-import { 
+const express = require('express');
+const cors = require('cors');
+const { 
   getParkingLot, 
   getParkingLotWithId, 
   createParkingLot, 
@@ -16,11 +15,11 @@ import {
   getTransactionHistoryWithId, 
   getEmployee, 
   getEmployeeWithId 
-} from './database.js';
+} = require('./database.js');
 
 const app = express();
 
-app.use(cors()); // Enable CORS
+app.use(cors());
 app.use(express.json());
 
 // General Query

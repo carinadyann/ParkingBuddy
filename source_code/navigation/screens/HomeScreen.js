@@ -46,8 +46,8 @@ export default function HomeScreen({ navigation }) {
         setModalVisible(false);
 
         try {
-            // Replace 'your-api-endpoint' with your actual API endpoint
-            const response = await fetch('https://192.168.0.168:8080/save-parking', {
+            // 
+            const response = await fetch('https://127.0.0.1:3306/save-parking', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

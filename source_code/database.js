@@ -1,5 +1,5 @@
-import mysql from 'mysql2';
-import dotenv from 'dotenv';
+const mysql = require('mysql2');
+const dotenv = require('dotenv');
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -10,49 +10,49 @@ const pool = mysql.createPool({
 }).promise();
 
 // Get ParkingLot data
-export async function getParkingLot() {
+const getParkingLot = async () => {
     const [rows] = await pool.query("SELECT * FROM ParkingLot");
     return rows;
-}
+};
 
 // Get SetupParking data (replaces ParkingSpace)
-export async function getSetupParking() {
+const getSetupParking = async () => {
     const [rows] = await pool.query("SELECT * FROM SetupParking");
     return rows;
-}
+};
 
 // Get User data
-export async function getUser() {
+const getUser = async () => {
     const [rows] = await pool.query("SELECT * FROM User");
     return rows;
-}
+};
 
 // Get Vehicle data
-export async function getVehicle() {
+const getVehicle = async () => {
     const [rows] = await pool.query("SELECT * FROM Vehicle");
     return rows;
-}
+};
 
 // Get Reservation data
-export async function getReservation() {
+const getReservation = async () => {
     const [rows] = await pool.query("SELECT * FROM Reservation");
     return rows;
-}
+};
 
 // Get TransactionHistory data
-export async function getTransactionHistory() {
+const getTransactionHistory = async () => {
     const [rows] = await pool.query("SELECT * FROM TransactionHistory");
     return rows;
-}
+};
 
 // Get Employee data
-export async function getEmployee() {
+const getEmployee = async () => {
     const [rows] = await pool.query("SELECT * FROM Employee");
     return rows;
-}
+};
 
 // Get ParkingLot by ID
-export async function getParkingLotWithId(lot_id) {
+const getParkingLotWithId = async (lot_id) => {
     const [rows] = await pool.query(`
         SELECT *
         FROM ParkingLot
@@ -60,10 +60,10 @@ export async function getParkingLotWithId(lot_id) {
     `, [lot_id]);
 
     return rows[0];
-}
+};
 
 // Get SetupParking by ID (replaces ParkingSpace)
-export async function getSetupParkingWithId(setup_parking_id) {
+const getSetupParkingWithId = async (setup_parking_id) => {
     const [rows] = await pool.query(`
         SELECT *
         FROM SetupParking
@@ -71,10 +71,10 @@ export async function getSetupParkingWithId(setup_parking_id) {
     `, [setup_parking_id]);
 
     return rows[0];
-}
+};
 
 // Get Vehicle by ID
-export async function getVehicleWithId(vehicle_id) {
+const getVehicleWithId = async (vehicle_id) => {
     const [rows] = await pool.query(`
         SELECT *
         FROM Vehicle
@@ -82,10 +82,10 @@ export async function getVehicleWithId(vehicle_id) {
     `, [vehicle_id]);
 
     return rows[0];
-}
+};
 
 // Get Reservation by ID
-export async function getReservationWithId(reservation_id) {
+const getReservationWithId = async (reservation_id) => {
     const [rows] = await pool.query(`
         SELECT *
         FROM Reservation
@@ -93,10 +93,10 @@ export async function getReservationWithId(reservation_id) {
     `, [reservation_id]);
 
     return rows[0];
-}
+};
 
 // Get TransactionHistory by ID
-export async function getTransactionHistoryWithId(transaction_id) {
+const getTransactionHistoryWithId = async (transaction_id) => {
     const [rows] = await pool.query(`
         SELECT *
         FROM TransactionHistory
@@ -104,10 +104,10 @@ export async function getTransactionHistoryWithId(transaction_id) {
     `, [transaction_id]);
 
     return rows[0];
-}
+};
 
 // Get Employee by ID
-export async function getEmployeeWithId(employee_id) {
+const getEmployeeWithId = async (employee_id) => {
     const [rows] = await pool.query(`
         SELECT *
         FROM Employee
@@ -115,14 +115,31 @@ export async function getEmployeeWithId(employee_id) {
     `, [employee_id]);
 
     return rows[0];
-}
+};
 
 // Create a new ParkingLot
-export async function createParkingLot(location, capacity, available_spaces) {
+const createParkingLot = async (location, capacity, available_spaces) => {
     const [result] = await pool.query(`
         INSERT INTO ParkingLot (location, capacity, available_spaces)
         VALUES (?, ?, ?)
     `, [location, capacity, available_spaces]);
     const lot_id = result.insertId;
     return getParkingLotWithId(lot_id);
-}
+};
+
+module.exports = {
+    getParkingLot,
+    getSetupParking,
+    getUser,
+    getVehicle,
+    getReservation,
+    getTransactionHistory,
+    getEmployee,
+    getParkingLotWithId,
+    getSetupParkingWithId,
+    getVehicleWithId,
+    getReservationWithId,
+    getTransactionHistoryWithId,
+    getEmployeeWithId,
+    createParkingLot
+};
