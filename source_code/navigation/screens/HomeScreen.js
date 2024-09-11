@@ -47,7 +47,7 @@ export default function HomeScreen({ navigation }) {
 
         try {
             // 
-            const response = await fetch('https://127.0.0.1:3306/save-parking', {
+            const response = await fetch('http://localhost:3000/save-parking', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
