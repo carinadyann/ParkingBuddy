@@ -1,118 +1,20 @@
-const express = require('express');
-const cors = require('cors');
-const { 
-  getParkingLot, 
-  getParkingLotWithId, 
-  createParkingLot, 
-  getSetupParking, 
-  getSetupParkingWithId, 
-  getUser, 
-  getVehicle, 
-  getVehicleWithId, 
-  getReservation, 
-  getReservationWithId, 
-  getTransactionHistory, 
-  getTransactionHistoryWithId, 
-  getEmployee, 
-  getEmployeeWithId 
-} = require('./database.js');
+const express = require("express");
+const bodyParser = require("body-parser");
+const { createSetupParking, createVehicle, getUser, getAllUsers, createUser, deleteUser } = require("./database");
 
 const app = express();
+const port = 3000;
 
-app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// General Query
-app.get("/ParkingLot", async (req, res) => {
-  const ParkingLot = await getParkingLot();
-  res.send(ParkingLot);
-});
-
-app.get("/SetupParking", async (req, res) => {
-  const SetupParking = await getSetupParking();
-  res.send(SetupParking);
-});
-
-app.get("/User", async (req, res) => {
-  const User = await getUser();
-  res.send(User);
-});
-
-app.get("/Vehicle", async (req, res) => {
-  const Vehicle = await getVehicle();
-  res.send(Vehicle);
-});
-
-app.get("/Reservation", async (req, res) => {
-  const Reservation = await getReservation();
-  res.send(Reservation);
-});
-
-app.get("/TransactionHistory", async (req, res) => {
-  const TransactionHistory = await getTransactionHistory();
-  res.send(TransactionHistory);
-});
-
-app.get("/Employee", async (req, res) => {
-  const Employee = await getEmployee();
-  res.send(Employee);
-});
-
-// Query with ID
-app.get("/ParkingLot/:id", async (req, res) => {
-  const lot_id = req.params.id;
-  const ParkingLot = await getParkingLotWithId(lot_id);
-  res.send(ParkingLot);
-});
-
-app.get("/SetupParking/:id", async (req, res) => {
-  const setup_parking_id = req.params.id;
-  const SetupParking = await getSetupParkingWithId(setup_parking_id);
-  res.send(SetupParking);
-});
-
-app.get("/User/:id", async (req, res) => {
-  // Implement if necessary based on your requirements
-});
-
-app.get("/Vehicle/:id", async (req, res) => {
-  const vehicle_id = req.params.id;
-  const Vehicle = await getVehicleWithId(vehicle_id);
-  res.send(Vehicle);
-});
-
-app.get("/Reservation/:id", async (req, res) => {
-  const reservation_id = req.params.id;
-  const Reservation = await getReservationWithId(reservation_id);
-  res.send(Reservation);
-});
-
-app.get("/TransactionHistory/:id", async (req, res) => {
-  const transaction_id = req.params.id;
-  const TransactionHistory = await getTransactionHistoryWithId(transaction_id);
-  res.send(TransactionHistory);
-});
-
-app.get("/Employee/:id", async (req, res) => {
-  const employee_id = req.params.id;
-  const Employee = await getEmployeeWithId(employee_id);
-  res.send(Employee);
-});
-
-// Create new Parking Lot
-app.post("/ParkingLot", async (req, res) => {
-  const { location, capacity, available_spaces } = req.body;
-  const ParkingLot = await createParkingLot(location, capacity, available_spaces);
-  res.status(201).send(ParkingLot);
-});
-
-// Add this new endpoint to handle saving parking setup data
+// POST /save-parking Endpoint to save parking setup data
 app.post("/save-parking", async (req, res) => {
   const { zone, parkingSpot, durationType, userId } = req.body;
 
   try {
     // Save the parking setup data to the database
-    const result = await getSetupParking({ zone, parkingSpot, durationType, userId });
+    const result = await createSetupParking({ zone, parkingSpot, durationType, userId });
 
     res.status(201).json({ message: 'Parking setup saved successfully', data: result });
   } catch (error) {
@@ -121,12 +23,74 @@ app.post("/save-parking", async (req, res) => {
   }
 });
 
-// Error Handling
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+// POST /api/vehicles Endpoint to save vehicle data
+app.post("/api/vehicles", async (req, res) => {
+  const { vehicleId, userId, ...otherFields } = req.body;
+
+  try {
+    // Save the vehicle data to the database
+    const result = await createVehicle({ vehicleId, userId, ...otherFields });
+
+    res.status(201).json({ message: 'Vehicle saved successfully', data: result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to save vehicle' });
+  }
 });
 
-app.listen(8080, () => {
-  console.log('Server is running on port 8080');
+// GET /users/:id Endpoint to get a specific user by ID
+app.get("/users/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await getUser(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to retrieve user' });
+  }
+});
+
+// GET /users Endpoint to get all users
+app.get("/users", async (req, res) => {
+  try {
+    const users = await getAllUsers();
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to retrieve users' });
+  }
+});
+
+// POST /users Endpoint to create a new user
+app.post("/users", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const user = await createUser({ name, email, password });
+    res.status(201).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to create user' });
+  }
+});
+
+// DELETE /users/:id Endpoint to delete a user by ID
+app.delete("/users/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await deleteUser(id);
+    res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to delete user' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

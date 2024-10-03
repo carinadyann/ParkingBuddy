@@ -10,13 +10,28 @@ const pool = mysql.createPool({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
-}).promise();
+
+}).promise(); //flag
 
 const app = express();
 const port = 3000;  // You can choose any available port
 
 app.use(cors());
 app.use(express.json());
+
+//test
+async function getSetupParking() {
+    const sql = `SELECT * FROM setup_parking`;
+    const result = await query(sql);
+    return result;
+  }
+//test
+  async function createSetupParking(zone, parkingSpot, durationType, userId) {
+    const sql = `INSERT INTO setup_parking (zone, parking_spot, duration_type, user_id) VALUES (?, ?, ?, ?)`;
+    const result = await query(sql, [zone, parkingSpot, durationType, userId]);
+    return result;
+  }
+  
 
 // Get ParkingLot data
 app.get('/parking-lot', async (req, res) => {
@@ -30,9 +45,17 @@ app.get('/parking-lot', async (req, res) => {
 });
 
 const getParkingLot = async () => {
-    const [rows] = await pool.query("SELECT * FROM ParkingLot");
-    return rows;
+    try {
+        console.log("getParkingLot function called");
+        const [rows] = await pool.query("SELECT * FROM ParkingLot");
+        console.log("Database query result:", rows);
+        return rows;
+    } catch (error) {
+        console.error("Error querying the database:", error);
+        throw error; // Rethrow the error after logging it
+    }
 };
+
 
 // Get SetupParking data (replaces ParkingSpace)
 app.get('/setup-parking', async (req, res) => {
@@ -264,6 +287,21 @@ app.post('/save-parking', async (req, res) => {
         res.status(200).json(result);
     } catch (error) {
         console.error('Error saving parking data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/vehicles', async (req, res) => {
+    const { plate, model, year, color } = req.body;
+
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO Vehicle (plate, model, year, color) VALUES (?, ?, ?, ?)',
+            [plate, model, year, color]
+        );
+        res.status(201).json({ id: result.insertId, plate, model, year, color });
+    } catch (error) {
+        console.error('Error inserting vehicle data:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
