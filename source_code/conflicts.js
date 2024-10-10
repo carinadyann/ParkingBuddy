@@ -1,96 +1,132 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const { createSetupParking, createVehicle, getUser, getAllUsers, createUser, deleteUser } = require("./database");
+import express from 'express'
 
-const app = express();
-const port = 3000;
+import { 
+  getParkingLot, 
+  getParkingLotWithId, 
+  createParkingLot, 
+  getParkingSpace, 
+  getParkingSpaceWithId, 
+  getUser, 
+  getUserWithId, 
+  getVehicle, 
+  getVehicleWithId, 
+  getReservation, 
+  getReservationWithId, 
+  getTransactionHistory, 
+  getTransactionHistoryWithId, 
+  getFeedback, 
+  getFeedbackWithId, 
+  getEmployee, 
+  getEmployeeWithId 
+} from './database.js'
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const app = express()
 
-// POST /save-parking Endpoint to save parking setup data
-app.post("/save-parking", async (req, res) => {
-  const { zone, parkingSpot, durationType, userId } = req.body;
+app.use(express.json())
 
-  try {
-    // Save the parking setup data to the database
-    const result = await createSetupParking({ zone, parkingSpot, durationType, userId });
+// General Query
+app.get("/ParkingLot", async (req, res) => {
+  const ParkingLot = await getParkingLot()
+  res.send(ParkingLot)
+})
 
-    res.status(201).json({ message: 'Parking setup saved successfully', data: result });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to save parking setup' });
-  }
-});
+app.get("/ParkingSpace", async (req, res) => {
+  const ParkingSpace = await getParkingSpace()
+  res.send(ParkingSpace)
+})
 
-// POST /api/vehicles Endpoint to save vehicle data
-app.post("/api/vehicles", async (req, res) => {
-  const { vehicleId, userId, ...otherFields } = req.body;
+app.get("/User", async (req, res) => {
+  const User = await getUser()
+  res.send(User)
+})
 
-  try {
-    // Save the vehicle data to the database
-    const result = await createVehicle({ vehicleId, userId, ...otherFields });
+app.get("/Vehicle", async (req, res) => {
+  const Vehicle = await getVehicle()
+  res.send(Vehicle)
+})
 
-    res.status(201).json({ message: 'Vehicle saved successfully', data: result });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to save vehicle' });
-  }
-});
+app.get("/Reservation", async (req, res) => {
+  const Reservation = await getReservation()
+  res.send(Reservation)
+})
 
-// GET /users/:id Endpoint to get a specific user by ID
-app.get("/users/:id", async (req, res) => {
-  const { id } = req.params;
+app.get("/TransactionHistory", async (req, res) => {
+  const TransactionHistory = await getTransactionHistory()
+  res.send(TransactionHistory)
+})
 
-  try {
-    const user = await getUser(id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to retrieve user' });
-  }
-});
+app.get("/Feedback", async (req, res) => {
+  const Feedback = await getFeedback()
+  res.send(Feedback)
+})
 
-// GET /users Endpoint to get all users
-app.get("/users", async (req, res) => {
-  try {
-    const users = await getAllUsers();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to retrieve users' });
-  }
-});
+app.get("/Employee", async (req, res) => {
+  const Employee = await getEmployee()
+  res.send(Feedback)
+})
 
-// POST /users Endpoint to create a new user
-app.post("/users", async (req, res) => {
-  const { name, email, password } = req.body;
+// Query with ID
+app.get("/ParkingLot/:id", async (req, res) => {
+  const lot_id = req.params.id
+  const ParkingLot = await getParkingLotWithId(lot_id)
+  res.send(ParkingLot)
+})
 
-  try {
-    const user = await createUser({ name, email, password });
-    res.status(201).json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to create user' });
-  }
-});
+app.get("/ParkingSpace/:id", async (req, res) => {
+  const space_id = req.params.id
+  const ParkingSpace = await getParkingSpaceWithId(space_id)
+  res.send(ParkingSpace)
+})
 
-// DELETE /users/:id Endpoint to delete a user by ID
-app.delete("/users/:id", async (req, res) => {
-  const { id } = req.params;
+app.get("/User/:id", async (req, res) => {
+  const user_id = req.params.id
+  const User = await getUserWithId(user_id)
+  res.send(User)
+})
 
-  try {
-    await deleteUser(id);
-    res.status(204).end();
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to delete user' });
-  }
-});
+app.get("/Vehicle/:id", async (req, res) => {
+  const vehicle_id = req.params.id
+  const Vehicle = await getVehicleWithId(vehicle_id)
+  res.send(Vehicle)
+})
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.get("/Reservation/:id", async (req, res) => {
+  const reservation_id = req.params.id
+  const Reservation = await getReservationWithId(reservation_id)
+  res.send(Reservation)
+})
+
+app.get("/TransactionHistory/:id", async (req, res) => {
+  const transaction_id = req.params.id
+  const TransactionHistory = await getTransactionHistoryWithId(transaction_id)
+  res.send(TransactionHistory)
+})
+
+app.get("/Feedback/:id", async (req, res) => {
+  const feedback_id = req.params.id
+  const Feedback = await getFeedbackWithId(feedback_id)
+  res.send(Feedback)
+})
+
+app.get("/Employee/:id", async (req, res) => {
+  const employee_id = req.params.id
+  const Employee = await getEmployeeWithId(employee_id)
+  res.send(Employee)
+})
+
+// Create new Parking Lot
+app.post("/ParkingLot", async (req, res) => {
+  const { location, capacity, available_spaces } = req.body
+  const ParkingLot = await createParkingLot(location, capacity, available_spaces)
+  res.status(201).send(ParkingLot)
+})
+
+// Error Handling
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+
+app.listen(8080, () => {
+  console.log('Server is running on port 8080')
+})
