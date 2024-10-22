@@ -10,28 +10,27 @@ const pool = mysql.createPool({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
-
-}).promise(); //flag
+}).promise();
 
 const app = express();
-const port = 3306;  // You can choose any available port
+const port = process.env.PORT || 3306;  // Use environment variable for port or default to 3306
 
 app.use(cors());
 app.use(express.json());
 
-//test
+// Test function to get setup parking
 async function getSetupParking() {
-    const sql = SELECT * FROM setup_parking;
-    const result = await query(sql);
+    const sql = 'SELECT * FROM setup_parking';
+    const [result] = await pool.query(sql);
     return result;
-  }
-//test
-  async function createSetupParking(zone, parkingSpot, durationType, userId) {
-    const sql = INSERT INTO setup_parking (zone, parking_spot, duration_type, user_id) VALUES (?, ?, ?, ?);
-    const result = await query(sql, [zone, parkingSpot, durationType, userId]);
+}
+
+// Test function to create setup parking
+async function createSetupParking(zone, parkingSpot, durationType, userId) {
+    const sql = 'INSERT INTO setup_parking (zone, parking_spot, duration_type, user_id) VALUES (?, ?, ?, ?)';
+    const [result] = await pool.query(sql, [zone, parkingSpot, durationType, userId]);
     return result;
-  }
-  
+}
 
 // Get ParkingLot data
 app.get('/parking-lot', async (req, res) => {
@@ -46,18 +45,15 @@ app.get('/parking-lot', async (req, res) => {
 
 const getParkingLot = async () => {
     try {
-        console.log("getParkingLot function called");
-        const [rows] = await pool.query("SELECT * FROM ParkingLot");
-        console.log("Database query result:", rows);
+        const [rows] = await pool.query('SELECT * FROM ParkingLot');
         return rows;
     } catch (error) {
-        console.error("Error querying the database:", error);
-        throw error; // Rethrow the error after logging it
+        console.error('Error querying the database:', error);
+        throw error;
     }
 };
 
-
-// Get SetupParking data (replaces ParkingSpace)
+// Get SetupParking data
 app.get('/setup-parking', async (req, res) => {
     try {
         const rows = await getSetupParking();
@@ -67,11 +63,6 @@ app.get('/setup-parking', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-const getSetupParking = async () => {
-    const [rows] = await pool.query("SELECT * FROM SetupParking");
-    return rows;
-};
 
 // Get User data
 app.get('/user', async (req, res) => {
@@ -85,7 +76,7 @@ app.get('/user', async (req, res) => {
 });
 
 const getUser = async () => {
-    const [rows] = await pool.query("SELECT * FROM User");
+    const [rows] = await pool.query('SELECT * FROM User');
     return rows;
 };
 
@@ -101,7 +92,7 @@ app.get('/vehicle', async (req, res) => {
 });
 
 const getVehicle = async () => {
-    const [rows] = await pool.query("SELECT * FROM Vehicle");
+    const [rows] = await pool.query('SELECT * FROM Vehicle');
     return rows;
 };
 
@@ -117,7 +108,7 @@ app.get('/reservation', async (req, res) => {
 });
 
 const getReservation = async () => {
-    const [rows] = await pool.query("SELECT * FROM Reservation");
+    const [rows] = await pool.query('SELECT * FROM Reservation');
     return rows;
 };
 
@@ -133,7 +124,7 @@ app.get('/transaction-history', async (req, res) => {
 });
 
 const getTransactionHistory = async () => {
-    const [rows] = await pool.query("SELECT * FROM TransactionHistory");
+    const [rows] = await pool.query('SELECT * FROM TransactionHistory');
     return rows;
 };
 
@@ -149,7 +140,7 @@ app.get('/employee', async (req, res) => {
 });
 
 const getEmployee = async () => {
-    const [rows] = await pool.query("SELECT * FROM Employee");
+    const [rows] = await pool.query('SELECT * FROM Employee');
     return rows;
 };
 
@@ -165,16 +156,11 @@ app.get('/parking-lot/:id', async (req, res) => {
 });
 
 const getParkingLotWithId = async (lot_id) => {
-    const [rows] = await pool.query(
-        SELECT *
-        FROM ParkingLot
-        WHERE lot_id = ?
-    , [lot_id]);
-
+    const [rows] = await pool.query('SELECT * FROM ParkingLot WHERE lot_id = ?', [lot_id]);
     return rows[0];
 };
 
-// Get SetupParking by ID (replaces ParkingSpace)
+// Get SetupParking by ID
 app.get('/setup-parking/:id', async (req, res) => {
     try {
         const rows = await getSetupParkingWithId(req.params.id);
@@ -186,12 +172,7 @@ app.get('/setup-parking/:id', async (req, res) => {
 });
 
 const getSetupParkingWithId = async (setup_parking_id) => {
-    const [rows] = await pool.query(
-        SELECT *
-        FROM SetupParking
-        WHERE setup_parking_id = ?
-    , [setup_parking_id]);
-
+    const [rows] = await pool.query('SELECT * FROM SetupParking WHERE setup_parking_id = ?', [setup_parking_id]);
     return rows[0];
 };
 
@@ -207,12 +188,7 @@ app.get('/vehicle/:id', async (req, res) => {
 });
 
 const getVehicleWithId = async (vehicle_id) => {
-    const [rows] = await pool.query(
-        SELECT *
-        FROM Vehicle
-        WHERE vehicle_id = ?
-    , [vehicle_id]);
-
+    const [rows] = await pool.query('SELECT * FROM Vehicle WHERE vehicle_id = ?', [vehicle_id]);
     return rows[0];
 };
 
@@ -228,12 +204,7 @@ app.get('/reservation/:id', async (req, res) => {
 });
 
 const getReservationWithId = async (reservation_id) => {
-    const [rows] = await pool.query(
-        SELECT *
-        FROM Reservation
-        WHERE reservation_id = ?
-    , [reservation_id]);
-
+    const [rows] = await pool.query('SELECT * FROM Reservation WHERE reservation_id = ?', [reservation_id]);
     return rows[0];
 };
 
@@ -249,12 +220,7 @@ app.get('/transaction-history/:id', async (req, res) => {
 });
 
 const getTransactionHistoryWithId = async (transaction_id) => {
-    const [rows] = await pool.query(
-        SELECT *
-        FROM TransactionHistory
-        WHERE transaction_id = ?
-    , [transaction_id]);
-
+    const [rows] = await pool.query('SELECT * FROM TransactionHistory WHERE transaction_id = ?', [transaction_id]);
     return rows[0];
 };
 
@@ -270,12 +236,7 @@ app.get('/employee/:id', async (req, res) => {
 });
 
 const getEmployeeWithId = async (employee_id) => {
-    const [rows] = await pool.query(
-        SELECT *
-        FROM Employee
-        WHERE employee_id = ?
-    , [employee_id]);
-
+    const [rows] = await pool.query('SELECT * FROM Employee WHERE employee_id = ?', [employee_id]);
     return rows[0];
 };
 
@@ -307,32 +268,10 @@ app.post('/api/vehicles', async (req, res) => {
 });
 
 const createParkingLot = async (location, capacity, available_spaces) => {
-    const [result] = await pool.query(
-        INSERT INTO ParkingLot (location, capacity, available_spaces)
-        VALUES (?, ?, ?)
-    , [location, capacity, available_spaces]);
-    const lot_id = result.insertId;
-    return getParkingLotWithId(lot_id);
+    const [result] = await pool.query('INSERT INTO ParkingLot (location, capacity, available_spaces) VALUES (?, ?, ?)', [location, capacity, available_spaces]);
+    return result.insertId;
 };
 
 app.listen(port, () => {
-    console.log(Server is running on http://localhost:3000);
+    console.log(`Server running on port ${port}`);
 });
-
-module.exports = {
-    getParkingLot,
-    getSetupParking,
-    getUser,
-    getVehicle,
-    getReservation,
-    getTransactionHistory,
-    getEmployee,
-    getParkingLotWithId,
-    getSetupParkingWithId,
-    getVehicleWithId,
-    getReservationWithId,
-    getTransactionHistoryWithId,
-    getEmployeeWithId,
-    createParkingLot,
-    saveParkingSetup // Add this line
-};
