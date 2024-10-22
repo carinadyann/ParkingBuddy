@@ -1,12 +1,3 @@
--- List of tables
--- ParkingLot
--- SetupParking
--- User
--- UserCredentials
--- Vehicle
--- TransactionHistory
--- Employee
-
 USE PB_DATABASE;
 
 CREATE TABLE ParkingLot (
@@ -30,6 +21,11 @@ CREATE TABLE User (
     saved_school_campus ENUM('Arizona State University', 'California State University Fullerton', 'San Diego State University') NOT NULL
 );
 
+-- Insert data into User table first
+INSERT INTO User (first_name, last_name, saved_school_campus) VALUES
+('Admin', 'User', 'California State University Fullerton'),
+('Anthony', 'Vences', 'California State University Fullerton');
+
 CREATE TABLE UserCredentials (
     credentials_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -38,11 +34,10 @@ CREATE TABLE UserCredentials (
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
--- Insert data into UserCredentials
+-- Now insert data into UserCredentials table
 INSERT INTO UserCredentials (user_id, username, password) VALUES
-(1, 'admin', 'password');
+(1, 'admin', 'password'),
 (2, 'anthony', 'password');
-
 
 CREATE TABLE Vehicle (
     vehicle_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,7 +53,6 @@ CREATE TABLE Vehicle (
                'Beige', 'Gold', 'Purple') NOT NULL,
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
-
 
 CREATE TABLE Reservation (
     reservation_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -82,13 +76,12 @@ CREATE TABLE TransactionHistory (
     FOREIGN KEY (setup_id) REFERENCES SetupParking(setup_id)
 );
 
--- Remove Feedback Table
-DROP TABLE IF EXISTS Feedback;
-
-
 CREATE TABLE Employee (
     employee_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role ENUM('admin', 'employee') NOT NULL
 );
+
+
+
