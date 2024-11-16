@@ -18,13 +18,13 @@ CREATE TABLE User (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    saved_school_campus ENUM('Arizona State University', 'California State University Fullerton', 'San Diego State University') NOT NULL
+    saved_school_campus ENUM('Arizona State University', 'California State University Los Angeles', 'San Diego State University') NOT NULL
 );
 
 -- Insert data into User table first
 INSERT INTO User (first_name, last_name, saved_school_campus) VALUES
-('Admin', 'User', 'California State University Fullerton'),
-('Anthony', 'Vences', 'California State University Fullerton');
+('Admin', 'User', 'California State University Los Angeles'),
+('Firstname', 'Last Name', 'California State University Los Angeles');
 
 CREATE TABLE UserCredentials (
     credentials_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -37,7 +37,7 @@ CREATE TABLE UserCredentials (
 -- Now insert data into UserCredentials table
 INSERT INTO UserCredentials (user_id, username, password) VALUES
 (1, 'admin', 'password'),
-(2, 'anthony', 'password');
+(2, 'admin2', 'password');
 
 CREATE TABLE Vehicle (
     vehicle_id INT PRIMARY KEY AUTO_INCREMENT,

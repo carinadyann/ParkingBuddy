@@ -9,7 +9,7 @@ const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
+    database: process.env.MYSQL_DATABASE,
 }).promise();
 
 const app = express();
@@ -25,12 +25,6 @@ async function getSetupParking() {
     return result;
 }
 
-// Test function to create setup parking
-async function createSetupParking(zone, parkingSpot, durationType, userId) {
-    const sql = 'INSERT INTO setup_parking (zone, parking_spot, duration_type, user_id) VALUES (?, ?, ?, ?)';
-    const [result] = await pool.query(sql, [zone, parkingSpot, durationType, userId]);
-    return result;
-}
 
 // Get ParkingLot data
 app.get('/parking-lot', async (req, res) => {
@@ -272,6 +266,39 @@ const createParkingLot = async (location, capacity, available_spaces) => {
     return result.insertId;
 };
 
-app.listen(port, () => {
+const createSetupParking = async (zone, parkingSpot, durationType) => {
+    try {
+        const sql = 'INSERT INTO SetupParking (zone, parking_spot, duration_type) VALUES (?, ?, ?)';
+        const [result] = await pool.query(sql, [zone, parkingSpot, durationType]);
+        
+        if (!result || !result.insertId) {
+            throw new Error('Insert operation did not return an insertId');
+        }
+
+        return result.insertId;
+    } catch (error) {
+        console.error('Error saving setup parking data:', error.message);
+        console.error('Stack trace:', error.stack);
+        throw error; // Re-throw the error for further handling
+    }
+}
+
+
+app.post('/save-parking-setup', async (req, res) => {
+
+    const { zone, parkingSpot, durationType } = req.body; // Extract required parameters
+    console.log(process.env.MYSQL_DATABASE, process.env.MYSQL_HOST, process.env.MYSQL_PASSWORD)
+    try {
+        const result = await createSetupParking(zone, parkingSpot, durationType); // Call the function to save the setup parking
+        res.status(201).json({ id: result.insertId }); // Respond with the inserted ID
+    } catch (error) {
+        console.error('Error saving setup parking data:', error);
+        res.status(500).json({ error: 'Internal Server Error' }); // Handle error
+    }
+  });
+  
+
+
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on port ${port}`);
 });

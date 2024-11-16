@@ -5,7 +5,7 @@ import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import { PrivateValueStore } from '@react-navigation/native';
-
+import { saveParkingSetup } from '../../api/api';
 export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
     const [stopwatchTime, setStopwatchTime] = React.useState({ h: 0, m: 0, s: 0, ms: 0 });
@@ -36,7 +36,6 @@ export default function HomeScreen({ navigation }) {
             Alert.alert('Error', 'Please fill in all the required fields.');
             return;
         }
-
         if (durationType === 'Day Pass') {
             setStopwatchTime({ h: 24, m: 0, s: 0 });
         } else {
@@ -46,18 +45,16 @@ export default function HomeScreen({ navigation }) {
         setStopwatchRunning(true);
         setFormData({ ...tempFormData });
         setModalVisible(false);
-
         try {
-            // Use saveParkingSetup function to save data to the database
             const result = await saveParkingSetup(zone, parkingSpot, durationType);
             console.log('Parking setup saved:', result);
-
+    
             // Navigate to Payment screen with necessary data
             navigation.navigate('Payment', {
                 parkingSpot: tempFormData.parkingSpot,
                 duration: tempFormData.durationType,
                 amount: calculateAmount(tempFormData.durationType),
-                isTimerFinished: isTimerFinished
+                isTimerFinished: isTimerFinished,
             });
         } catch (error) {
             console.error('Error saving parking setup:', error);
