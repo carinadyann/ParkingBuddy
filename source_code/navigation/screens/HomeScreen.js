@@ -5,7 +5,11 @@ import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import { PrivateValueStore } from '@react-navigation/native';
+<<<<<<< Updated upstream
 
+=======
+import { saveParkingSetup } from 'GitHub/ParkingBudddy/Unititled/source_code/api.js';
+>>>>>>> Stashed changes
 export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
     const [stopwatchTime, setStopwatchTime] = React.useState({ h: 0, m: 0, s: 0, ms: 0 });
