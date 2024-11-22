@@ -1,5 +1,6 @@
-const express = require('express');
-const { 
+import express from 'express'
+
+import { 
   getParkingLot, 
   getParkingLotWithId, 
   createParkingLot, 
@@ -16,9 +17,8 @@ const {
   getFeedback, 
   getFeedbackWithId, 
   getEmployee, 
-  getEmployeeWithId ,
-  createSetupParking
-} = require('./database.js');
+  getEmployeeWithId 
+} from './database.js'
 
 const app = express()
 
@@ -121,25 +121,12 @@ app.post("/ParkingLot", async (req, res) => {
   res.status(201).send(ParkingLot)
 })
 
-app.post('/save-parking-setup', async (req, res) => {
-  console.log(req)
-  const { zone, parkingSpot, durationType, userId } = req.body; // Extract required parameters
-
-  try {
-      const result = await createSetupParking(zone, parkingSpot, durationType, userId); // Call the function to save the setup parking
-      res.status(201).json({ id: result.insertId }); // Respond with the inserted ID
-  } catch (error) {
-      console.error('Error saving setup parking data:', error);
-      res.status(500).json({ error: 'Internal Server Error' }); // Handle error
-  }
-});
-
 // Error Handling
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(500).send('Something broke!')
 })
 
-app.listen(8080, '0.0.0.0',() => {
+app.listen(8080, () => {
   console.log('Server is running on port 8080')
 })
