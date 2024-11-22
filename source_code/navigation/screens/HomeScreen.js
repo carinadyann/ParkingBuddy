@@ -5,6 +5,8 @@ import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import { PrivateValueStore } from '@react-navigation/native';
+// Fixed the import path
+import { saveParkingSetup } from '../../api/api.js';
 
 export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
@@ -213,7 +215,6 @@ export default function HomeScreen({ navigation }) {
                             <Text style={styles.modalText}>Duration Type: </Text>
                             <RNPickerSelect
                                 value={tempFormData.durationType}
-                                // onValueChange={(itemValue) => handleChange('durationType', itemValue)}
                                 onValueChange={handleDurationTypeChange}
                                 placeholder={{
                                     label: "Select a Duration ...",
@@ -235,36 +236,36 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 </Modal>
 
-                {/* <Pressable style={styles.button} onPress={() => navigation.navigate('Payment', {
-                    parkingSpot: formData.parkingSpot,
-                    duration: formData.durationType,
-                    amount: calculateAmount(formData.durationType),
-                })}>
-                    <Text style={styles.text}>Submit</Text>
+                {/* <Pressable style={styles.button} onPress={() => navigation.navigate('Parking Setup')}>
+                    <Text style={styles.text}>Next Screen</Text>
                 </Pressable> */}
             </BoxContainer>
         </ScrollView>
     );
 }
 
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles = {
     inputIOS: {
-        backgroundColor: '#A9E2DF',
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
         color: 'black',
-        padding: 10,
-        borderRadius: 5,
+        paddingRight: 30,
+        backgroundColor: 'white',
     },
     inputAndroid: {
-        backgroundColor: '#A9E2DF',
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
         color: 'black',
-        padding: 10,
-        borderRadius: 5,
+        paddingRight: 30,
+        backgroundColor: 'white',
     },
-    placeholder: {
-        color: 'white',
-    },
-    iconContainer: {
-        top: 10,
-        right: 12,
-    },
-});
+};
+
