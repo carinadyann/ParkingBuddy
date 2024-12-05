@@ -1,4 +1,5 @@
 const API_URL = process.env.API_URL
+console.log('API_URL:', API_URL);
 
 export const saveParkingSetup = async (zone, parkingSpot, durationType) => {
     try {

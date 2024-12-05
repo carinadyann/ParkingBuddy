@@ -150,8 +150,25 @@ export async function createParkingLot(location, capacity, available_spaces) {
     return getParkingLotWithId(lot_id)
 }
 
-//const result = await createParkingLot('test location', 100, 50)
-//console.log(result)
-//const ParkingLot = await getParkingLotWithId(1)
-//console.log(ParkingLot)
+// Add this function to save parking setup
+export async function saveParkingSetup(zone, parkingSpot, durationType) {
+    const [result] = await pool.query(`
+    INSERT INTO SetupParking (zone, parking_spot, duration_type)
+    VALUES (?, ?, ?)
+    `, [zone, parkingSpot, durationType]);
+    const setup_id = result.insertId;
+    return getSetupParkingWithId(setup_id);
+}
+
+// Function to get SetupParking by ID
+export async function getSetupParkingWithId(setup_id) {
+    const [rows] = await pool.query(`
+    SELECT *
+    FROM SetupParking
+    WHERE setup_id = ?
+    `, [setup_id]);
+
+    return rows[0];
+}
+
 

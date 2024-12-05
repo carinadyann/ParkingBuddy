@@ -3,10 +3,9 @@ import { StyleSheet, ScrollView, View, Text, Pressable, Modal, TouchableOpacity,
 import RNPickerSelect from 'react-native-picker-select';
 import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
-import { styles } from '../style';
+import { styles as existingStyles } from '../style';
 import { PrivateValueStore } from '@react-navigation/native';
-// Fixed the import path
-import { saveParkingSetup } from '../../api/api.js';
+import { saveParkingSetup } from '../../api/api';
 
 export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
@@ -39,24 +38,41 @@ export default function HomeScreen({ navigation }) {
             return;
         }
     
-        if (durationType === 'Day Pass') {
-            setStopwatchTime({ h: 24, m: 0, s: 0 });
-        } else {
-            const [hours, minutes] = durationType.split(':');
-            setStopwatchTime({ h: parseInt(hours), m: parseInt(minutes), s: 0 });
-        }
+        const timeInMinutes = convertDurationToMinutes(durationType);
+        setStopwatchTime({ h: Math.floor(timeInMinutes / 60), m: timeInMinutes % 60, s: 0 });
         setStopwatchRunning(true);
         setFormData({ ...tempFormData });
         setModalVisible(false);
-
-        navigation.navigate('Payment', {
-            parkingSpot: tempFormData.parkingSpot,
-            duration: tempFormData.durationType,
-            amount: calculateAmount(tempFormData.durationType),
-            isTimerFinished: isTimerFinished
-        });
-    };
     
+        saveParkingSetup(tempFormData)
+            .then(() => {
+                navigation.navigate('Payment', {
+                    parkingSpot: tempFormData.parkingSpot,
+                    duration: tempFormData.durationType,
+                    amount: calculateAmount(tempFormData.durationType),
+                    isTimerFinished: isTimerFinished
+                });
+            })
+            .catch((error) => {
+                console.error('Error saving parking setup:', error);
+                Alert.alert('Error', 'There was a problem saving the parking setup. Please try again.');
+            });
+    };
+
+    const convertDurationToMinutes = (durationType) => {
+        switch(durationType) {
+            case "0:30":
+                return 30;
+            case "1:00":
+                return 60;
+            case "1:30":
+                return 90;
+            case "2:00":
+                return 120;
+            default:
+                return 0;
+        }
+    };
 
     const handleDurationTypeChange = (value) => {
         handleTempChange('durationType', value);
@@ -107,16 +123,12 @@ export default function HomeScreen({ navigation }) {
     };
 
     const generateTimeRange = () => {
-        const times = [];
-        const increments = ['00', '30'];
-        for (let hour = 0; hour <= 4; hour++) {
-            for (let minute of increments) {
-                let time = `${hour.toString().padStart(2, '0')}:${minute}`;
-                times.push({ label: `${time}`, value: time });
-            }
-        }
-        times.push({ label: "Day Pass", value: "Day Pass" });
-        return times;
+        return [
+            { label: "0:30", value: "0:30" },
+            { label: "1:00", value: "1:00" },
+            { label: "1:30", value: "1:30" },
+            { label: "2:00", value: "2:00" },
+        ];
     };
 
     const timeOptions = generateTimeRange();
@@ -124,121 +136,122 @@ export default function HomeScreen({ navigation }) {
     const calculateAmount = (durationType) => {
         if (!durationType || durationType === 'N/A') {
             return 0;
-        } else if (durationType === 'Day Pass') {
-            return 9;
         } else {
-            const index = timeOptions.findIndex(option => option.value === durationType);
-            if (index !== -1) {
-                return index;
-            } else {
-                return 0;
+            switch (durationType) {
+                case '0:30':
+                    return 1;
+                case '1:00':
+                    return 2;
+                case '1:30':
+                    return 3;
+                case '2:00':
+                    return 4;
+                default:
+                    return 0;
             }
         }
     };
 
     return (
-        <ScrollView style={styles.container}>
-        {/* Logo Here */}
-        <Image source={require('../../assets/logo.png')} style={styles.logoCenter} />
-            <BoxContainer style={styles.boxLight}>
+        <ScrollView style={existingStyles.container}>
+            <Image source={require('../../assets/logo.png')} style={existingStyles.logoCenter} />
+            <BoxContainer style={existingStyles.boxLight}>
                 <BoxContainer>
-                    {/* Ensure DisplayComponent is properly receiving props */}
-                    <Text style={styles.textT}>Stopwatch</Text>
-                    <Text style={styles.stopwatchText}>
+                    <Text style={existingStyles.textT}>Stopwatch</Text>
+                    <Text style={existingStyles.stopwatchText}>
                     {`${stopwatchTime.h.toString().padStart(2, '0')}:${stopwatchTime.m.toString().padStart(2, '0')}:${stopwatchTime.s.toString().padStart(2, '0')}`}
                     </Text>
                 </BoxContainer>
             </BoxContainer>
 
-            <BoxContainer style={styles.boxDark}>
-                <Text style={styles.textT}>Setup Parking</Text>
-                <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>Zone: <Text style={styles.formText}>{tempFormData.zone}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Parking Spot: <Text style={styles.formText}>{tempFormData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Duration Type: <Text style={styles.formText}>{tempFormData.durationType ? tempFormData.durationType: 'N/A' + ' Hours'}</Text>{'\n'}</Text>
+            <BoxContainer style={existingStyles.boxDark}>
+                <Text style={existingStyles.textT}>Setup Parking</Text>
+                <BoxContainer style={existingStyles.infoContainer}>
+                    <Text style={existingStyles.text}>Zone: <Text style={existingStyles.formText}>{tempFormData.zone}</Text>{'\n'}</Text>
+                    <Text style={existingStyles.text}>Parking Spot: <Text style={existingStyles.formText}>{tempFormData.parkingSpot}</Text>{'\n'}</Text>
+                    <Text style={existingStyles.text}>Duration Type: <Text style={existingStyles.formText}>{tempFormData.durationType ? tempFormData.durationType: 'N/A' + ' Hours'}</Text>{'\n'}</Text>
                 </BoxContainer>
 
-                <TouchableOpacity style={styles.buttonEdit} onPress={handleEditPress}>
-                    <Text style={styles.text}>Edit</Text>
+                <TouchableOpacity style={existingStyles.buttonEdit} onPress={handleEditPress}>
+                    <Text style={existingStyles.text}>Edit</Text>
                 </TouchableOpacity>
 
-                {/* Modal Component */}
                 <Modal 
                     animationType='none'
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => setModalVisible(false)}
                 >
-                    <View style={styles.modalContainer}>
-                        {/* Modal Content */}
-                        <ScrollView style={styles.modalContent}>
-                            <Text style={styles.textTDark}>Tap to Change Selection</Text>
+                    <View style={existingStyles.modalContainer}>
+                        <ScrollView style={existingStyles.modalContent}>
+                            <Text style={existingStyles.textTDark}>Tap to Change Selection</Text>
                             <Text>{'\n'}</Text>
                             
-                            {/* Dropdowns for Zone, Parking Spot, and Duration Type */}
-                            <Text style={styles.modalText}>Zone: </Text>
-                            <RNPickerSelect
-                                value={tempFormData.zone}
-                                onValueChange={(itemValue) => handleTempChange('zone', itemValue)}
-                                placeholder={{
-                                    label: "Select a Zone ...",
-                                    value: null,
-                                    color: 'white',
-                                }}
-                                style={pickerSelectStyles}
-                                items={[
-                                    { label: "Zone 1", value: "Zone 1" },
-                                    { label: "Zone 2", value: "Zone 2" },
-                                    // Add more options as needed
-                                ]}
-                            />
+                            <Text style={existingStyles.modalText}>Zone: </Text>
+                            <TouchableOpacity style={pickerSelectStyles}>
+                        <RNPickerSelect
+                            value={tempFormData.zone}
+                            onValueChange={(itemValue) => handleTempChange('zone', itemValue)}
+                            placeholder={{
+                                label: "Select a Zone ...",
+                                value: null,
+                                color: 'white',
+                            }}
+                            useNativeAndroidPickerStyle={false}
+                            style={pickerSelectStyles}
+                            items={[
+                                { label: "Zone 1", value: "Zone 1" },
+                                { label: "Zone 2", value: "Zone 2" },
+                            ]}
+                        />
+                    </TouchableOpacity>
+                            <Text>{'\n'}</Text>
+                            <Text style={existingStyles.modalText}>Parking Spot: </Text>
+                            <TouchableOpacity style={pickerSelectStyles}>
+    <RNPickerSelect
+        value={tempFormData.parkingSpot}
+        onValueChange={(itemValue) => handleTempChange('parkingSpot', itemValue)}
+        placeholder={{
+            label: "Select a Spot ...",
+            value: null,
+            color: 'white',
+        }}
+        useNativeAndroidPickerStyle={false}
+        style={pickerSelectStyles}
+        items={[
+            { label: "A1", value: "A1" },
+            { label: "A2", value: "A2" },
+        ]}
+    />
+</TouchableOpacity>
                             <Text>{'\n'}</Text>
 
-                            <Text style={styles.modalText}>Parking Spot: </Text>
-                            <RNPickerSelect
-                                value={tempFormData.parkingSpot}
-                                onValueChange={(itemValue) => handleTempChange('parkingSpot', itemValue)}
-                                placeholder={{
-                                    label: "Select a Spot ...",
-                                    value: null,
-                                    color: 'white',
-                                }}
-                                style={pickerSelectStyles}
-                                items={[
-                                    { label: "A1", value: "A1" },
-                                    { label: "A2", value: "A2" },
-                                    // Add more options as needed
-                                ]}
-                            />
+                            <Text style={existingStyles.modalText}>Duration Type: </Text>
+                            <TouchableOpacity style={pickerSelectStyles}>
+    <RNPickerSelect
+        value={tempFormData.durationType}
+        onValueChange={(itemValue) => handleDurationTypeChange(itemValue)}
+        placeholder={{
+            label: "Select a Duration ...",
+            value: null,
+            color: 'white',
+        }}
+        useNativeAndroidPickerStyle={false}
+        style={pickerSelectStyles}
+        items={timeOptions}
+    />
+</TouchableOpacity>
                             <Text>{'\n'}</Text>
-
-                            <Text style={styles.modalText}>Duration Type: </Text>
-                            <RNPickerSelect
-                                value={tempFormData.durationType}
-                                onValueChange={handleDurationTypeChange}
-                                placeholder={{
-                                    label: "Select a Duration ...",
-                                    value: null,
-                                    color: 'white',
-                                }}
-                                style={pickerSelectStyles}
-                                items={timeOptions}
-                            />
-                            <Text>{'\n'}</Text>
-                            <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
-                                <Text style={styles.text}>Submit</Text>
+                            <TouchableOpacity title="Submit" onPress={handleSubmit} style={existingStyles.button}>
+                                <Text style={existingStyles.text}>Submit</Text>
                             </TouchableOpacity>
                         </ScrollView>
                         
-                        <TouchableOpacity title="Cancel" onPress={handleCancel} style={styles.button}>
-                            <Text style={styles.text}>Cancel</Text>
+                        <TouchableOpacity title="Cancel" onPress={handleCancel} style={existingStyles.button}>
+                            <Text style={existingStyles.text}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>
-
-                {/* <Pressable style={styles.button} onPress={() => navigation.navigate('Parking Setup')}>
-                    <Text style={styles.text}>Next Screen</Text>
-                </Pressable> */}
             </BoxContainer>
         </ScrollView>
     );
@@ -253,8 +266,9 @@ const pickerSelectStyles = {
         borderColor: 'gray',
         borderRadius: 4,
         color: 'black',
-        paddingRight: 30,
+        paddingRight: 30, // to ensure the text is never behind the icon
         backgroundColor: 'white',
+        marginVertical: 10,
     },
     inputAndroid: {
         fontSize: 16,
@@ -264,8 +278,95 @@ const pickerSelectStyles = {
         borderColor: 'gray',
         borderRadius: 4,
         color: 'black',
-        paddingRight: 30,
+        paddingRight: 30, // to ensure the text is never behind the icon
         backgroundColor: 'white',
+        marginVertical: 10,
+    },
+    placeholder: {
+        color: 'gray',
     },
 };
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 20,
+    },
+    logoCenter: {
+        width: 200,
+        height: 200,
+        alignSelf: 'center',
+        marginBottom: 20,
+    },
+    textT: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        alignSelf: 'center',
+    },
+    stopwatchText: {
+        fontSize: 48,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+    },
+    text: {
+        fontSize: 18,
+        color: '#000',
+    },
+    textTDark: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    formText: {
+        fontSize: 18,
+        color: 'gray',
+    },
+    buttonEdit: {
+        backgroundColor: '#007BFF',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+        alignSelf: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+    },
+    modalText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    button: {
+        backgroundColor: '#007BFF',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+        alignSelf: 'center',
+    },
+    boxLight: {
+        backgroundColor: '#F0F0F0',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20,
+    },
+    boxDark: {
+        backgroundColor: '#D0D0D0',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20,
+    },
+    infoContainer: {
+        marginVertical: 10,
+    },
+});
