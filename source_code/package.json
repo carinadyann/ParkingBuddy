@@ -56,6 +56,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
     "expo-cli": "^4.0.17",
     "nodemon": "^3.1.3"
   },
