@@ -1,8 +1,11 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { 
+// Use require instead of import for CommonJS modules
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const dotenv = require('dotenv');
+
+// Use require to import functions from database.js
+const { 
   getParkingLot, 
   getParkingSpace, 
   getUser, 
@@ -21,9 +24,9 @@ import {
   createParkingLot, 
   saveParkingSetup, 
   getSetupParkingWithId 
-} from './database.mjs'; 
+} = require('./database.js'); // Change to require
 
-dotenv.config();
+dotenv.config(); // Load environment variables from .env
 
 const app = express();
 const port = process.env.PORT || 3000;
