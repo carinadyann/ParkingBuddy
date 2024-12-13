@@ -1,48 +1,42 @@
-// Use require instead of import for CommonJS modules
 const express = require('express');
+const mysql = require('mysql2/promise');
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const dotenv = require('dotenv');
 
-// Use require to import functions from database.js
-const { 
-  getParkingLot, 
-  getParkingSpace, 
-  getUser, 
-  getVehicle, 
-  getReservation, 
-  getTransactionHistory, 
-  getFeedback, 
-  getEmployee, 
-  getParkingLotWithId, 
-  getParkingSpaceWithId, 
-  getVehicleWithId, 
-  getReservationWithId, 
-  getTransactionHistoryWithId, 
-  getFeedbackWithId, 
-  getEmployeeWithId, 
-  createParkingLot, 
-  saveParkingSetup, 
-  getSetupParkingWithId 
-} = require('./database.js'); // Change to require
-
-dotenv.config(); // Load environment variables from .env
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(cors());
 app.use(bodyParser.json());
+app.use(cors());
 
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await getUser();
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+const PORT = process.env.PORT || 3000;
+
+app.post('/save-parking-setup', async (req, res) => {
+    const { zone, parkingSpot, durationType } = req.body;
+
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.MYSQL_HOST,
+            user: process.env.MYSQL_USER,
+            password: process.env.MYSQL_PASSWORD,
+            database: process.env.MYSQL_DATABASE
+        });
+
+        const [results] = await connection.execute(
+            'INSERT INTO ParkingSetup (zone, parkingSpot, durationType) VALUES (?, ?, ?)',
+            [zone, parkingSpot, durationType]
+        );
+
+        await connection.end();
+
+        res.json({ success: true, message: 'Parking setup saved successfully', results });
+    } catch (error) {
+        console.error('Error saving parking setup:', error);
+        res.status(500).json({ success: false, message: 'Error saving parking setup', error });
+    }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

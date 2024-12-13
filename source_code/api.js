@@ -1,6 +1,8 @@
-const API_URL = process.env.API_URL
+import { API_URL } from '@env';
+
 console.log('API_URL:', API_URL);
 
+// Function to save parking setup
 export const saveParkingSetup = async (zone, parkingSpot, durationType) => {
     try {
         const response = await fetch(`${API_URL}/save-parking-setup`, {
@@ -14,7 +16,6 @@ export const saveParkingSetup = async (zone, parkingSpot, durationType) => {
                 durationType,
             }),
         });
-        
 
         if (!response.ok) {
             throw new Error('Network response was not ok');

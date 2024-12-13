@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { View, StyleSheet, Button, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainContainer from './navigation/MainContainer';
 import LoginScreen from './navigation/screens/LoginScreen';
-import SettingsScreen from './navigation/screens/SettingsScreen.js';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-//import StackNav from './navigation/StackNav';
+import Constants from 'expo-constants';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  // Access environment variables
+  const API_URL = Constants.manifest?.extra?.API_URL;
 
   React.useEffect(() => {
     const checkLoginStatus = async () => {
@@ -41,7 +43,7 @@ function App() {
             {/* <Button title="Logout" onPress={handleLogout}/> */}
           </View>
         ) : (
-          <LoginScreen onLoginSuccess={handleLoginSuccess} /> // Ensure onLoginSuccess is passed here
+          <LoginScreen onLoginSuccess={handleLoginSuccess} />
         )}
       </SafeAreaProvider>
     </GestureHandlerRootView>

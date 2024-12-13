@@ -4,8 +4,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles as existingStyles } from '../style';
-import { PrivateValueStore } from '@react-navigation/native';
-import { saveParkingSetup } from '../../api/api';
+import { saveParkingSetup } from '../../api';
 
 export default function HomeScreen({ navigation }) {
     const [durationType, setDurationType] = React.useState(null);
@@ -32,18 +31,18 @@ export default function HomeScreen({ navigation }) {
 
     const handleSubmit = () => {
         const { zone, parkingSpot, durationType } = tempFormData;
-    
+
         if (!zone || !parkingSpot || !durationType) {
             Alert.alert('Error', 'Please fill in all the required fields.');
             return;
         }
-    
+
         const timeInMinutes = convertDurationToMinutes(durationType);
         setStopwatchTime({ h: Math.floor(timeInMinutes / 60), m: timeInMinutes % 60, s: 0 });
         setStopwatchRunning(true);
         setFormData({ ...tempFormData });
         setModalVisible(false);
-    
+
         saveParkingSetup(tempFormData)
             .then(() => {
                 navigation.navigate('Payment', {
@@ -153,6 +152,7 @@ export default function HomeScreen({ navigation }) {
     };
 
     return (
+             
         <ScrollView style={existingStyles.container}>
             <Image source={require('../../assets/logo.png')} style={existingStyles.logoCenter} />
             <BoxContainer style={existingStyles.boxLight}>
