@@ -139,88 +139,54 @@ export default function SettingsScreen({ onLogout }) {
                             />
                             <Text>{'\n'}</Text>
 
-                            {/* Dropdown for Year */}
                             <Text style={styles.modalText}>Year: </Text>
-                            <RNPickerSelect
-                                onValueChange={(value) => handleChange('year', value)}
-                                placeholder={{
-                                    label: "Select Year...",
-                                    value: null,
-                                    color: 'white',
-                                }}
-                                style={{
-                                    inputIOS: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
-                                        color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
-                                }}
-                                items={yearOptions}
-                            />
+<TouchableOpacity style={pickerSelectStyles}>
+    <RNPickerSelect
+        value={formData.year === 'N/A' ? null : formData.year} // Convert 'N/A' to null
+        onValueChange={(value) => handleChange('year', value)}
+        placeholder={{
+            label: "Select Year...",
+            value: null,
+            color: 'gray', // Match logic from HomeScreen.js where placeholder uses gray
+        }}
+        useNativeAndroidPickerStyle={false}
+        style={pickerSelectStyles}
+        items={yearOptions}
+    />
+</TouchableOpacity>
+
                             <Text>{'\n'}</Text>
 
-                            {/* Dropdown for Color */}
                             <Text style={styles.modalText}>Color: </Text>
-                            <RNPickerSelect
-                                onValueChange={(itemValue) => handleChange('color', itemValue)}
-                                placeholder={{
-                                label: "Select a Color ...",
-                                value: null,
-                                color: 'white', // Customize the placeholder color here
-                                }}
-                                style={{
-                                    inputIOS: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
-                                        color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
-                                }}
-                            
-                                items={[
-                                    { label: "White", value: "White" },
-                                    { label: "Black", value: "Black" },
-                                    { label: "Gray", value: "Gray" },
-                                    { label: "Silver", value: "Silver" },
-                                    { label: "Red", value: "Red" },
-                                    { label: "Blue", value: "Blue" },
-                                    { label: "Green", value: "Green" },
-                                    { label: "Yellow", value: "Yellow" },
-                                    { label: "Orange", value: "Orange" },
-                                    { label: "Brown", value: "Brown" },
-                                    { label: "Beige", value: "Beige" },
-                                    { label: "Gold", value: "Gold" },
-                                    { label: "Purple", value: "Purple" },
-                                ]}
-                                
-                            />
+<TouchableOpacity style={pickerSelectStyles}>
+    <RNPickerSelect
+        value={formData.color === 'N/A' ? null : formData.color} // Convert 'N/A' to null
+        onValueChange={(itemValue) => handleChange('color', itemValue)}
+        placeholder={{
+            label: "Select a Color ...",
+            value: null,
+            color: 'gray',
+        }}
+        useNativeAndroidPickerStyle={false}
+        style={pickerSelectStyles}
+        items={[
+            { label: "White", value: "White" },
+            { label: "Black", value: "Black" },
+            { label: "Gray", value: "Gray" },
+            { label: "Silver", value: "Silver" },
+            { label: "Red", value: "Red" },
+            { label: "Blue", value: "Blue" },
+            { label: "Green", value: "Green" },
+            { label: "Yellow", value: "Yellow" },
+            { label: "Orange", value: "Orange" },
+            { label: "Brown", value: "Brown" },
+            { label: "Beige", value: "Beige" },
+            { label: "Gold", value: "Gold" },
+            { label: "Purple", value: "Purple" },
+        ]}
+    />
+</TouchableOpacity>
+
                             <Text>{'\n'}</Text>
 
                             <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
@@ -414,3 +380,33 @@ If you have any questions about these Terms, please contact us at carinadyann@cs
         </ScrollView>
     );
 }
+
+const pickerSelectStyles = {
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30,
+        backgroundColor: 'white',
+        marginVertical: 10,
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30,
+        backgroundColor: 'white',
+        marginVertical: 10,
+    },
+    placeholder: {
+        color: 'gray',
+    },
+};

@@ -10,13 +10,10 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE
 });
 
+// Existing tables in your schema: ParkingLot, SetupParking, User, UserCredentials, Vehicle, Reservation, TransactionHistory, Employee
+
 async function getParkingLot() {
   const [rows] = await pool.query("SELECT * FROM ParkingLot");
-  return rows;
-}
-
-async function getParkingSpace() {
-  const [rows] = await pool.query("SELECT * FROM ParkingSpace");
   return rows;
 }
 
@@ -40,11 +37,6 @@ async function getTransactionHistory() {
   return rows;
 }
 
-async function getFeedback() {
-  const [rows] = await pool.query("SELECT * FROM Feedback");
-  return rows;
-}
-
 async function getEmployee() {
   const [rows] = await pool.query("SELECT * FROM Employee");
   return rows;
@@ -56,16 +48,6 @@ async function getParkingLotWithId(lot_id) {
     FROM ParkingLot
     WHERE lot_id = ?
   `, [lot_id]);
-
-  return rows[0];
-}
-
-async function getParkingSpaceWithId(space_id) {
-  const [rows] = await pool.query(`
-    SELECT *
-    FROM ParkingSpace
-    WHERE space_id = ?
-  `, [space_id]);
 
   return rows[0];
 }
@@ -96,16 +78,6 @@ async function getTransactionHistoryWithId(transaction_id) {
     FROM TransactionHistory
     WHERE transaction_id = ?
   `, [transaction_id]);
-
-  return rows[0];
-}
-
-async function getFeedbackWithId(feedback_id) {
-  const [rows] = await pool.query(`
-    SELECT *
-    FROM Feedback
-    WHERE feedback_id = ?
-  `, [feedback_id]);
 
   return rows[0];
 }
@@ -148,23 +120,42 @@ async function getSetupParkingWithId(setup_id) {
   return rows[0];
 }
 
+// New function: Save User Profile
+async function saveUserProfile(firstName, lastName, savedSchoolCampus) {
+  const [result] = await pool.query(`
+    INSERT INTO User (first_name, last_name, saved_school_campus)
+    VALUES (?, ?, ?)
+  `, [firstName, lastName, savedSchoolCampus]);
+  const user_id = result.insertId;
+  return getUserWithId(user_id);
+}
+
+// New function: Get User by ID
+async function getUserWithId(user_id) {
+  const [rows] = await pool.query(`
+    SELECT *
+    FROM User
+    WHERE user_id = ?
+  `, [user_id]);
+
+  return rows[0];
+}
+
 module.exports = {
   getParkingLot,
-  getParkingSpace,
   getUser,
   getVehicle,
   getReservation,
   getTransactionHistory,
-  getFeedback,
   getEmployee,
   getParkingLotWithId,
-  getParkingSpaceWithId,
   getVehicleWithId,
   getReservationWithId,
   getTransactionHistoryWithId,
-  getFeedbackWithId,
   getEmployeeWithId,
   createParkingLot,
   saveParkingSetup,
-  getSetupParkingWithId
+  getSetupParkingWithId,
+  saveUserProfile,    // Export the new function
+  getUserWithId        // Export the new function
 };

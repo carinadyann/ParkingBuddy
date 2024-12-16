@@ -1,46 +1,40 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text, Pressable, Image, Modal, TouchableOpacity, Button, TextInput } from 'react-native';
-//import { Picker } from '@react-native-picker/picker';
+import { StyleSheet, ScrollView, View, Text, Image, Modal, TouchableOpacity, TextInput, Alert } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import * as Font from 'expo-font';
 import BoxContainer from '../BoxContainer';
 import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
+import { saveUserProfile } from '../../api'; // Ensure this is implemented
 
-export default function ProfileScreen({navigation}) {
-    //for modal
+export default function ProfileScreen({ navigation }) {
+    // For modal
     const [modalVisible, setModalVisible] = React.useState(false);
 
-    //for form
+    // For form
+    // Using "N/A" for fname, lname, and school just like HomeScreen does for its fields.
     const [formData, setFormData] = React.useState({
-        fname: 'N/A', // first name
-        lname: 'N/A', // last name
-        payment: 'N/A', // take from other form
-        school: 'N/A', // school campus
-        membership: 'N/A', // may not use
-    });
-
-    // Temporary state for modal inputs
-    const [tempModalData, setTempModalData] = React.useState({
-        name: 'N/A', // first name
-        lname: 'N/A', // last name
-        payment: 'N/A', // take from other form
-        school: 'N/A', // school campus
-        membership: 'N/A', // may not use
+        fname: 'N/A', 
+        lname: 'N/A', 
+        school: 'N/A', 
     });
 
     const handleSubmit = () => {
-        setFormData(prevState => ({
-            ...prevState,
-        }));
-        setModalVisible(false);
-    };
+        const { fname, lname, school } = formData;
 
-    const handleCancel = () => {
-        setFormData(prevState => ({
-            ...tempModalData,
-        }));
-        setModalVisible(false);
+        if (!fname || fname === 'N/A' || !lname || lname === 'N/A' || !school || school === 'N/A') {
+            Alert.alert('Error', 'Please fill in all the required fields.');
+            return;
+        }
+
+        saveUserProfile(fname, lname, school)
+            .then(() => {
+                Alert.alert('Success', 'User profile saved successfully!');
+                setModalVisible(false);
+            })
+            .catch((error) => {
+                console.error('Error saving user profile:', error);
+                Alert.alert('Error', 'There was a problem saving the user profile. Please try again.');
+            });
     };
 
     const handleChange = (field, value) => {
@@ -50,41 +44,37 @@ export default function ProfileScreen({navigation}) {
         }));
     };
 
-    // Define your array of items with labels and values
+    // Define your array of items
+    // Must match the ENUM in the database: 
+    // ENUM('Arizona State University', 'California State University Los Angeles', 'San Diego State University')
     const schoolCampuses = [
-        { label: "California State University Fullerton", value: "CSUF" },
-        { label: "San Diego State University", value: "SDSU" },
-        { label: "Arizona State University", value: "ASU" },
-        // Add more items here
+        { label: "Arizona State University", value: "Arizona State University" },
+        { label: "California State University Los Angeles", value: "California State University Los Angeles" },
+        { label: "San Diego State University", value: "San Diego State University" },
     ];
 
-    // Function to sort the array  of items alphabetically by label
-    const sortItemsAlphabetically = (items) => {
-        return items.sort((a, b) => a.label.localeCompare(b.label));
-    };
-
-    // Sort the array of items alphabetically
+    // Sort the array of items alphabetically by label
+    const sortItemsAlphabetically = (items) => items.sort((a, b) => a.label.localeCompare(b.label));
     const sortedSchoolCampuses = sortItemsAlphabetically(schoolCampuses);
+    //console.log('School Campuses:', sortedSchoolCampuses);
 
     return (
         <ScrollView style={styles.container}>
-            {/* Logo Here */}
+            {/* Logo */}
             <Image source={require('../../assets/logo.png')} style={styles.logoCenter} />
 
             <BoxContainer style={styles.boxDark}>
-            <Text style={styles.textT}>My Profile</Text>
+                <Text style={styles.textT}>My Profile</Text>
                 <Text style={styles.break}>{'\n'}</Text>
-                
-                {/* Logo Here */}
+
+                {/* Profile Image */}
                 <Image source={require('../../assets/logo.png')} style={styles.profile} />
 
                 <Text style={styles.break}>{'\n'}</Text>
                 <BoxContainer style={styles.infoContainer}>
                     <Text style={styles.text}>First Name: <Text style={styles.formText}>{formData.fname}</Text>{'\n'}</Text>
                     <Text style={styles.text}>Last Name: <Text style={styles.formText}>{formData.lname}</Text>{'\n'}</Text>
-                    {/* <Text style={styles.text}>Preferred Payment: <Text>{formData.payment}</Text></Text> */}
                     <Text style={styles.text}>Saved School Campus: <Text style={styles.formText}>{formData.school}</Text>{'\n'}</Text>
-                    {/* <Text style={styles.text}>Membership: <Text>{formData.membership}</Text></Text> */}
                 </BoxContainer>
 
                 <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
@@ -92,19 +82,17 @@ export default function ProfileScreen({navigation}) {
                 </TouchableOpacity>
 
                 {/* Modal Component */}
-                <Modal 
+                <Modal
                     animationType='none'
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => setModalVisible(false)}
                 >
                     <View style={styles.modalContainer}>
-                        {/* Modal Content */}
                         <ScrollView style={styles.modalContent}>
                             <Text style={styles.textTDark}>Profile Details</Text>
                             <Text>{'\n'}</Text>
 
-                            {/* Text Input for First Name */}
                             <Text style={styles.modalText}>First Name: </Text>
                             <TextInput
                                 style={{
@@ -112,7 +100,6 @@ export default function ProfileScreen({navigation}) {
                                     color: 'black',
                                     padding: 10,
                                     borderRadius: 5,
-                                    placeholderTextColor: 'white',
                                 }}
                                 onChangeText={(text) => handleChange('fname', text)}
                                 placeholder="Enter your first name ..."
@@ -120,7 +107,6 @@ export default function ProfileScreen({navigation}) {
                             />
                             <Text>{'\n'}</Text>
 
-                            {/* Text Input for Last Name */}
                             <Text style={styles.modalText}>Last Name: </Text>
                             <TextInput
                                 style={{
@@ -135,58 +121,68 @@ export default function ProfileScreen({navigation}) {
                             />
                             <Text>{'\n'}</Text>
 
-                            {/* Dropdown for Saved School Campus */}
                             <Text style={styles.modalText}>Saved School Campus: </Text>
-                            <RNPickerSelect
-                                onValueChange={(itemValue) => handleChange('school', itemValue)}
-                                placeholder={{
-                                label: "Select a School ...",
-                                value: null,
-                                color: 'white', // Customize the placeholder color here
-                                }}
-                                style={{
-                                    inputIOS: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    inputAndroid: {
-                                        backgroundColor: '#A9E2DF',
-                                        color: 'black',
-                                        padding: 10,
-                                        borderRadius: 5,
-                                    },
-                                    placeholder: {
+                            {/* Using a TouchableOpacity wrapper as in HomeScreen.js */}
+                            <TouchableOpacity style={pickerSelectStyles}>
+                                <RNPickerSelect
+                                    value={formData.school}
+                                    onValueChange={(itemValue) => handleChange('school', itemValue)}
+                                    placeholder={{
+                                        label: "Select a School ...",
+                                        value: null,
                                         color: 'white',
-                                    },
-                                    iconContainer: {
-                                        top: 10,
-                                        right: 12,
-                                    },
-                                }}
-                            
-                                items={sortedSchoolCampuses} //sorted array
-                                
-                            />
+                                    }}
+                                    useNativeAndroidPickerStyle={false}
+                                    style={pickerSelectStyles}
+                                    items={sortedSchoolCampuses}
+                                />
+                            </TouchableOpacity>
                             <Text>{'\n'}</Text>
 
-                            <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
+                            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                                 <Text style={styles.text}>Submit</Text>
                             </TouchableOpacity>
                         </ScrollView>
 
                         <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button}>
-                                <Text style={styles.text}>Close</Text>
+                            <Text style={styles.text}>Close</Text>
                         </TouchableOpacity>
                     </View>
-
                 </Modal>
-
             </BoxContainer>
 
             <Text>{'\n'}{'\n'}{'\n'}</Text>
-            
         </ScrollView>
     );
 }
+
+// Replicating HomeScreen logic for pickerSelectStyles
+const pickerSelectStyles = {
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure text is never behind the icon
+        backgroundColor: 'white',
+        marginVertical: 10,
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30,
+        backgroundColor: 'white',
+        marginVertical: 10,
+    },
+    placeholder: {
+        color: 'gray',
+    },
+};

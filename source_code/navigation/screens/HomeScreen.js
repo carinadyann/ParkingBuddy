@@ -43,7 +43,8 @@ export default function HomeScreen({ navigation }) {
         setFormData({ ...tempFormData });
         setModalVisible(false);
 
-        saveParkingSetup(tempFormData)
+        // Call saveParkingSetup with separate arguments instead of passing tempFormData
+        saveParkingSetup(zone, parkingSpot, durationType)
             .then(() => {
                 navigation.navigate('Payment', {
                     parkingSpot: tempFormData.parkingSpot,
@@ -60,13 +61,13 @@ export default function HomeScreen({ navigation }) {
 
     const convertDurationToMinutes = (durationType) => {
         switch(durationType) {
-            case "0:30":
+            case "00:30":
                 return 30;
-            case "1:00":
+            case "01:00":
                 return 60;
-            case "1:30":
+            case "01:30":
                 return 90;
-            case "2:00":
+            case "02:00":
                 return 120;
             default:
                 return 0;
@@ -123,10 +124,10 @@ export default function HomeScreen({ navigation }) {
 
     const generateTimeRange = () => {
         return [
-            { label: "0:30", value: "0:30" },
-            { label: "1:00", value: "1:00" },
-            { label: "1:30", value: "1:30" },
-            { label: "2:00", value: "2:00" },
+            { label: "00:30", value: "00:30" },
+            { label: "01:00", value: "01:00" },
+            { label: "01:30", value: "01:30" },
+            { label: "02:00", value: "02:00" },
         ];
     };
 
@@ -137,13 +138,13 @@ export default function HomeScreen({ navigation }) {
             return 0;
         } else {
             switch (durationType) {
-                case '0:30':
+                case '00:30':
                     return 1;
-                case '1:00':
+                case '01:00':
                     return 2;
-                case '1:30':
+                case '01:30':
                     return 3;
-                case '2:00':
+                case '02:00':
                     return 4;
                 default:
                     return 0;
@@ -152,14 +153,13 @@ export default function HomeScreen({ navigation }) {
     };
 
     return (
-             
         <ScrollView style={existingStyles.container}>
             <Image source={require('../../assets/logo.png')} style={existingStyles.logoCenter} />
             <BoxContainer style={existingStyles.boxLight}>
                 <BoxContainer>
                     <Text style={existingStyles.textT}>Stopwatch</Text>
                     <Text style={existingStyles.stopwatchText}>
-                    {`${stopwatchTime.h.toString().padStart(2, '0')}:${stopwatchTime.m.toString().padStart(2, '0')}:${stopwatchTime.s.toString().padStart(2, '0')}`}
+                        {`${stopwatchTime.h.toString().padStart(2, '0')}:${stopwatchTime.m.toString().padStart(2, '0')}:${stopwatchTime.s.toString().padStart(2, '0')}`}
                     </Text>
                 </BoxContainer>
             </BoxContainer>
@@ -167,16 +167,22 @@ export default function HomeScreen({ navigation }) {
             <BoxContainer style={existingStyles.boxDark}>
                 <Text style={existingStyles.textT}>Setup Parking</Text>
                 <BoxContainer style={existingStyles.infoContainer}>
-                    <Text style={existingStyles.text}>Zone: <Text style={existingStyles.formText}>{tempFormData.zone}</Text>{'\n'}</Text>
-                    <Text style={existingStyles.text}>Parking Spot: <Text style={existingStyles.formText}>{tempFormData.parkingSpot}</Text>{'\n'}</Text>
-                    <Text style={existingStyles.text}>Duration Type: <Text style={existingStyles.formText}>{tempFormData.durationType ? tempFormData.durationType: 'N/A' + ' Hours'}</Text>{'\n'}</Text>
+                    <Text style={existingStyles.text}>
+                        Zone: <Text style={existingStyles.formText}>{tempFormData.zone}</Text>{'\n'}
+                    </Text>
+                    <Text style={existingStyles.text}>
+                        Parking Spot: <Text style={existingStyles.formText}>{tempFormData.parkingSpot}</Text>{'\n'}
+                    </Text>
+                    <Text style={existingStyles.text}>
+                        Duration Type: <Text style={existingStyles.formText}>{tempFormData.durationType ? tempFormData.durationType : 'N/A'}</Text>{'\n'}
+                    </Text>
                 </BoxContainer>
 
                 <TouchableOpacity style={existingStyles.buttonEdit} onPress={handleEditPress}>
                     <Text style={existingStyles.text}>Edit</Text>
                 </TouchableOpacity>
 
-                <Modal 
+                <Modal
                     animationType='none'
                     transparent={true}
                     visible={modalVisible}
@@ -186,67 +192,67 @@ export default function HomeScreen({ navigation }) {
                         <ScrollView style={existingStyles.modalContent}>
                             <Text style={existingStyles.textTDark}>Tap to Change Selection</Text>
                             <Text>{'\n'}</Text>
-                            
+
                             <Text style={existingStyles.modalText}>Zone: </Text>
                             <TouchableOpacity style={pickerSelectStyles}>
-                        <RNPickerSelect
-                            value={tempFormData.zone}
-                            onValueChange={(itemValue) => handleTempChange('zone', itemValue)}
-                            placeholder={{
-                                label: "Select a Zone ...",
-                                value: null,
-                                color: 'white',
-                            }}
-                            useNativeAndroidPickerStyle={false}
-                            style={pickerSelectStyles}
-                            items={[
-                                { label: "Zone 1", value: "Zone 1" },
-                                { label: "Zone 2", value: "Zone 2" },
-                            ]}
-                        />
-                    </TouchableOpacity>
+                                <RNPickerSelect
+                                    value={tempFormData.zone}
+                                    onValueChange={(itemValue) => handleTempChange('zone', itemValue)}
+                                    placeholder={{
+                                        label: "Select a Zone ...",
+                                        value: null,
+                                        color: 'white',
+                                    }}
+                                    useNativeAndroidPickerStyle={false}
+                                    style={pickerSelectStyles}
+                                    items={[
+                                        { label: "Zone 1", value: "Zone 1" },
+                                        { label: "Zone 2", value: "Zone 2" },
+                                    ]}
+                                />
+                            </TouchableOpacity>
                             <Text>{'\n'}</Text>
                             <Text style={existingStyles.modalText}>Parking Spot: </Text>
                             <TouchableOpacity style={pickerSelectStyles}>
-    <RNPickerSelect
-        value={tempFormData.parkingSpot}
-        onValueChange={(itemValue) => handleTempChange('parkingSpot', itemValue)}
-        placeholder={{
-            label: "Select a Spot ...",
-            value: null,
-            color: 'white',
-        }}
-        useNativeAndroidPickerStyle={false}
-        style={pickerSelectStyles}
-        items={[
-            { label: "A1", value: "A1" },
-            { label: "A2", value: "A2" },
-        ]}
-    />
-</TouchableOpacity>
+                                <RNPickerSelect
+                                    value={tempFormData.parkingSpot}
+                                    onValueChange={(itemValue) => handleTempChange('parkingSpot', itemValue)}
+                                    placeholder={{
+                                        label: "Select a Spot ...",
+                                        value: null,
+                                        color: 'white',
+                                    }}
+                                    useNativeAndroidPickerStyle={false}
+                                    style={pickerSelectStyles}
+                                    items={[
+                                        { label: "A1", value: "A1" },
+                                        { label: "A2", value: "A2" },
+                                    ]}
+                                />
+                            </TouchableOpacity>
                             <Text>{'\n'}</Text>
 
                             <Text style={existingStyles.modalText}>Duration Type: </Text>
                             <TouchableOpacity style={pickerSelectStyles}>
-    <RNPickerSelect
-        value={tempFormData.durationType}
-        onValueChange={(itemValue) => handleDurationTypeChange(itemValue)}
-        placeholder={{
-            label: "Select a Duration ...",
-            value: null,
-            color: 'white',
-        }}
-        useNativeAndroidPickerStyle={false}
-        style={pickerSelectStyles}
-        items={timeOptions}
-    />
-</TouchableOpacity>
+                                <RNPickerSelect
+                                    value={tempFormData.durationType}
+                                    onValueChange={(itemValue) => handleDurationTypeChange(itemValue)}
+                                    placeholder={{
+                                        label: "Select a Duration ...",
+                                        value: null,
+                                        color: 'white',
+                                    }}
+                                    useNativeAndroidPickerStyle={false}
+                                    style={pickerSelectStyles}
+                                    items={timeOptions}
+                                />
+                            </TouchableOpacity>
                             <Text>{'\n'}</Text>
                             <TouchableOpacity title="Submit" onPress={handleSubmit} style={existingStyles.button}>
                                 <Text style={existingStyles.text}>Submit</Text>
                             </TouchableOpacity>
                         </ScrollView>
-                        
+
                         <TouchableOpacity title="Cancel" onPress={handleCancel} style={existingStyles.button}>
                             <Text style={existingStyles.text}>Cancel</Text>
                         </TouchableOpacity>
@@ -256,6 +262,8 @@ export default function HomeScreen({ navigation }) {
         </ScrollView>
     );
 }
+
+// The styling part is omitted as requested
 
 const pickerSelectStyles = {
     inputIOS: {

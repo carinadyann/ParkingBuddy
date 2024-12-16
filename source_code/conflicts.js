@@ -1,5 +1,10 @@
 const express = require('express');
-const { testConnection } = require('./testConnection'); // Adjust the path as necessary
+const { 
+    testConnection,
+    getParkingLot, getUser, getVehicle, getReservation, getTransactionHistory, getEmployee,
+    getParkingLotWithId, getVehicleWithId, getReservationWithId, getTransactionHistoryWithId,
+    getEmployeeWithId
+} = require('./database'); // Adjust the path as necessary
 
 const app = express();
 
@@ -7,99 +12,105 @@ app.use(express.json());
 
 // General Query
 app.get("/ParkingLot", async (req, res) => {
-    const ParkingLot = await getParkingLot();
-    res.send(ParkingLot);
+    const ParkingLotData = await getParkingLot();
+    res.send(ParkingLotData);
 });
 
-app.get("/ParkingSpace", async (req, res) => {
-    const ParkingSpace = await getParkingSpace();
-    res.send(ParkingSpace);
-});
+// Remove /ParkingSpace since the table doesn't exist
+// app.get("/ParkingSpace", async (req, res) => {
+//     const ParkingSpace = await getParkingSpace();
+//     res.send(ParkingSpace);
+// });
 
 app.get("/User", async (req, res) => {
-    const User = await getUser();
-    res.send(User);
+    const UserData = await getUser();
+    res.send(UserData);
 });
 
 app.get("/Vehicle", async (req, res) => {
-    const Vehicle = await getVehicle();
-    res.send(Vehicle);
+    const VehicleData = await getVehicle();
+    res.send(VehicleData);
 });
 
 app.get("/Reservation", async (req, res) => {
-    const Reservation = await getReservation();
-    res.send(Reservation);
+    const ReservationData = await getReservation();
+    res.send(ReservationData);
 });
 
 app.get("/TransactionHistory", async (req, res) => {
-    const TransactionHistory = await getTransactionHistory();
-    res.send(TransactionHistory);
+    const TransactionHistoryData = await getTransactionHistory();
+    res.send(TransactionHistoryData);
 });
 
-app.get("/Feedback", async (req, res) => {
-    const Feedback = await getFeedback();
-    res.send(Feedback);
-});
+// Remove /Feedback routes since 'Feedback' table does not exist
+// app.get("/Feedback", async (req, res) => {
+//     const Feedback = await getFeedback();
+//     res.send(Feedback);
+// });
 
 app.get("/Employee", async (req, res) => {
-    const Employee = await getEmployee();
-    res.send(Feedback);
+    const EmployeeData = await getEmployee();
+    res.send(EmployeeData);
 });
 
 // Query with ID
 app.get("/ParkingLot/:id", async (req, res) => {
     const lot_id = req.params.id;
-    const ParkingLot = await getParkingLotWithId(lot_id);
-    res.send(ParkingLot);
+    const ParkingLotData = await getParkingLotWithId(lot_id);
+    res.send(ParkingLotData);
 });
 
-app.get("/ParkingSpace/:id", async (req, res) => {
-    const space_id = req.params.id;
-    const ParkingSpace = await getParkingSpaceWithId(space_id);
-    res.send(ParkingSpace);
-});
+// Remove getParkingSpaceWithId references since the table doesn't exist
+// app.get("/ParkingSpace/:id", async (req, res) => {
+//     const space_id = req.params.id;
+//     const ParkingSpace = await getParkingSpaceWithId(space_id);
+//     res.send(ParkingSpace);
+// });
 
 app.get("/User/:id", async (req, res) => {
     const user_id = req.params.id;
-    const User = await getUserWithId(user_id);
-    res.send(User);
+    // Make sure getUserWithId is implemented and imported if you want to fetch single user
+    // If not implemented, you can remove or implement it similarly to getVehicleWithId, etc.
+    const UserWithId = await getUserWithId(user_id);
+    res.send(UserWithId);
 });
 
 app.get("/Vehicle/:id", async (req, res) => {
     const vehicle_id = req.params.id;
-    const Vehicle = await getVehicleWithId(vehicle_id);
-    res.send(Vehicle);
+    const VehicleWithId = await getVehicleWithId(vehicle_id);
+    res.send(VehicleWithId);
 });
 
 app.get("/Reservation/:id", async (req, res) => {
     const reservation_id = req.params.id;
-    const Reservation = await getReservationWithId(reservation_id);
-    res.send(Reservation);
+    const ReservationWithId = await getReservationWithId(reservation_id);
+    res.send(ReservationWithId);
 });
 
 app.get("/TransactionHistory/:id", async (req, res) => {
     const transaction_id = req.params.id;
-    const TransactionHistory = await getTransactionHistoryWithId(transaction_id);
-    res.send(TransactionHistory);
+    const TransactionHistoryWithId = await getTransactionHistoryWithId(transaction_id);
+    res.send(TransactionHistoryWithId);
 });
 
-app.get("/Feedback/:id", async (req, res) => {
-    const feedback_id = req.params.id;
-    const Feedback = await getFeedbackWithId(feedback_id);
-    res.send(Feedback);
-});
+// Remove feedback routes since Feedback table doesn't exist
+// app.get("/Feedback/:id", async (req, res) => {
+//     const feedback_id = req.params.id;
+//     const FeedbackData = await getFeedbackWithId(feedback_id);
+//     res.send(FeedbackData);
+// });
 
 app.get("/Employee/:id", async (req, res) => {
     const employee_id = req.params.id;
-    const Employee = await getEmployeeWithId(employee_id);
-    res.send(Employee);
+    const EmployeeData = await getEmployeeWithId(employee_id);
+    res.send(EmployeeData);
 });
 
 // Create new Parking Lot
 app.post("/ParkingLot", async (req, res) => {
     const { location, capacity, available_spaces } = req.body;
-    const ParkingLot = await createParkingLot(location, capacity, available_spaces);
-    res.status(201).send(ParkingLot);
+    const ParkingLotData = await createParkingLot(location, capacity, available_spaces);
+    res.status(201).send(ParkingLotData);
 });
 
 // Test MySQL Connection

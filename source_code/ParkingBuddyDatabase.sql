@@ -1,5 +1,8 @@
+-- Switch to the PB_DATABASE database or create it if it doesn't exist
+CREATE DATABASE IF NOT EXISTS PB_DATABASE;
 USE PB_DATABASE;
 
+-- Create ParkingLot table
 CREATE TABLE ParkingLot (
     lot_id INT PRIMARY KEY AUTO_INCREMENT,
     location VARCHAR(255) NOT NULL,
@@ -7,6 +10,7 @@ CREATE TABLE ParkingLot (
     available_spaces INT NOT NULL
 );
 
+-- Create SetupParking table
 CREATE TABLE SetupParking (
     setup_id INT PRIMARY KEY AUTO_INCREMENT,
     zone ENUM('Zone 1', 'Zone 2') NOT NULL,
@@ -14,6 +18,7 @@ CREATE TABLE SetupParking (
     duration_type ENUM('00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', 'Day Pass') NOT NULL
 );
 
+-- Create User table
 CREATE TABLE User (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(255) NOT NULL,
@@ -21,11 +26,12 @@ CREATE TABLE User (
     saved_school_campus ENUM('Arizona State University', 'California State University Los Angeles', 'San Diego State University') NOT NULL
 );
 
--- Insert data into User table first
+-- Insert data into User table
 INSERT INTO User (first_name, last_name, saved_school_campus) VALUES
 ('Admin', 'User', 'California State University Los Angeles'),
 ('Firstname', 'Last Name', 'California State University Los Angeles');
 
+-- Create UserCredentials table
 CREATE TABLE UserCredentials (
     credentials_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -34,11 +40,12 @@ CREATE TABLE UserCredentials (
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
--- Now insert data into UserCredentials table
+-- Insert data into UserCredentials table
 INSERT INTO UserCredentials (user_id, username, password) VALUES
 (1, 'admin', 'password'),
 (2, 'admin2', 'password');
 
+-- Create Vehicle table
 CREATE TABLE Vehicle (
     vehicle_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -54,6 +61,7 @@ CREATE TABLE Vehicle (
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
+-- Create Reservation table
 CREATE TABLE Reservation (
     reservation_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -64,6 +72,7 @@ CREATE TABLE Reservation (
     FOREIGN KEY (setup_id) REFERENCES SetupParking(setup_id)
 );
 
+-- Create TransactionHistory table
 CREATE TABLE TransactionHistory (
     transaction_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -76,12 +85,10 @@ CREATE TABLE TransactionHistory (
     FOREIGN KEY (setup_id) REFERENCES SetupParking(setup_id)
 );
 
+-- Create Employee table
 CREATE TABLE Employee (
     employee_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role ENUM('admin', 'employee') NOT NULL
 );
-
-
-
