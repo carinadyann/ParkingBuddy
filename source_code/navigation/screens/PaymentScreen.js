@@ -8,6 +8,39 @@ import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import { GestureHandlerRefContext } from '@react-navigation/stack';
 import { RawButton, TextInput } from 'react-native-gesture-handler';
+import { savePaymentMethod } from '../../api'; // Import the API function
+
+
+const pickerSelectStyles = {
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // To ensure the text is never behind the icon
+        backgroundColor: 'white',
+        marginVertical: 10,
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // To ensure the text is never behind the icon
+        backgroundColor: 'white',
+        marginVertical: 10,
+    },
+    placeholder: {
+        color: 'gray',
+    },
+};
+
 
 export default function PaymentScreen({navigation, route}) {
     const { parkingSpot = 'N/A', duration = 'N/A', amount = 0, isTimerFinished = false } = route.params || {};
@@ -29,9 +62,10 @@ export default function PaymentScreen({navigation, route}) {
     const [newCardCvv, setNewCardCvv] = React.useState('');
 
     const [cardItems, setCardItems] = React.useState([
-        { label: "Card ending in 1234", value: "1234" },
-        { label: "Card ending in 5678", value: "5678" }
+        { label: "Placeholder: XXXX XXXX XXXX 1234", value: "placeholder_1234", placeholder: true },
+        { label: "Placeholder: XXXX XXXX XXXX 5678", value: "placeholder_5678", placeholder: true },
     ]);
+    
 
     //for form
     const [formData, setFormData] = React.useState({
@@ -74,7 +108,16 @@ export default function PaymentScreen({navigation, route}) {
 
     const handleSubmit = () => {
         //alert(`Card on File: ${formData.cardFile}, Payment Type: ${formData.cardType}`);
-        setModalVisible2(false);
+        if (
+            formData.cardFile === 'N/A' || // No card selected
+            formData.cardFile.startsWith('placeholder_') // Placeholder card selected
+        ) {
+            alert('Please select a valid card and payment type before proceeding.');
+            return;
+        }
+    
+        console.log('Submitting payment with:', formData);
+        // Proceed with payment processing...
     };
 
     const handleCancel = () => {
@@ -95,23 +138,60 @@ export default function PaymentScreen({navigation, route}) {
         }));
     };
 
-    const addNewCard = () => {
-        if (newCardLabel.trim() !== '' && newCardValue.trim() !== '' && newCardExpirationDate.trim() !== '' && newCardCvv.trim() !== '') {
-            const cardDetails = {
-                label: `Card ending in ${newCardValue.slice(-4)}`,
-                value: newCardValue
-            };
-            setCardItems(prevItems => [
-                ...prevItems,
-                cardDetails
-            ]);
-            setNewCardLabel('');
-            setNewCardValue('');
-            setNewCardExpirationDate('');
-            setNewCardCvv('');
-            setModalVisible1(false);
+    const addNewCard = async () => {
+        console.log('Adding a new card with:', {
+            cardholderName: newCardLabel,
+            cardNumber: newCardValue,
+            expirationDate: newCardExpirationDate,
+            cvv: newCardCvv,
+            cardType: formData.cardType,
+        });
+
+        if (
+            newCardLabel.trim() === '' ||
+            newCardValue.trim() === '' ||
+            newCardExpirationDate.trim() === '' ||
+            newCardCvv.trim() === '' ||
+            formData.cardType === 'N/A'
+        ) {
+            alert('Please fill all card details and select a valid payment type.');
+            return;
         }
+
+        try {
+            const userId = 1 // Replace with actual user ID
+            const response = await savePaymentMethod({
+                userId,
+                cardholderName: newCardLabel,
+                cardNumber: newCardValue,
+                expirationDate: newCardExpirationDate,
+                cvv: newCardCvv,
+                cardType: formData.cardType,
+            });
+
+            if (response.success) {
+                alert('Card added successfully.');
+                setFormData(prev => ({
+                    ...prev,
+                    cardFile: `Card ending in ${newCardValue.slice(-4)}`,
+                    cardType: formData.cardType,
+                }));
+            } else {
+                alert('Failed to add card.');
+            }
+        } catch (error) {
+            console.error('Error adding new card:', error);
+            alert('An error occurred while adding the card.');
+        }
+
+        setNewCardLabel('');
+        setNewCardValue('');
+        setNewCardExpirationDate('');
+        setNewCardCvv('');
+        setFormData(prev => ({ ...prev, cardType: 'N/A' }));
+        setModalVisible1(false);
     };
+    
 
     return (
         <ScrollView style={styles.container}>
@@ -211,10 +291,7 @@ export default function PaymentScreen({navigation, route}) {
                                 value: null,
                                 color: 'white', // Customize the placeholder color here
                                 }}
-                                style={{
-                                    inputIOS: styles.inputCustom,
-                                    inputAndroid: styles.inputCustom,
-                                }}
+                                style={pickerSelectStyles}
                                 items={[
                                     { label: "XXXX XXXX XXXX 1234", value: "XXXX XXXX XXXX 1234" },
                                     { label: "XXXX XXXX XXXX 5678", value: "XXXX XXXX XXXX 5678" },
@@ -234,10 +311,7 @@ export default function PaymentScreen({navigation, route}) {
                                 value: null,
                                 color: 'white', // Customize the placeholder color here
                                 }}
-                                style={{
-                                    inputIOS: styles.inputCustom,
-                                    inputAndroid: styles.inputCustom,
-                                }}
+                                style={pickerSelectStyles}
                                 items={[
                                     { label: "Mastercard", value: "Mastercard" },
                                     { label: "Visa", value: "Visa" },
@@ -271,85 +345,107 @@ export default function PaymentScreen({navigation, route}) {
                 </Modal>
 
                 {/* Add Card Modal */}
-                <Modal 
-                    animationType='none'
-                    transparent={true}
-                    visible={modalVisible1}
-                    onRequestClose={() => setModalVisible1(false)}
-                >
-                <View style={styles.modalContainer}>
-                {/* Modal Content */}
-                <ScrollView style={styles.modalContent}>
-                    <Text style={styles.textTDark}>Add a New Card</Text>
-                    <Text>{'\n'}</Text>
+<Modal 
+    animationType='none'
+    transparent={true}
+    visible={modalVisible1}
+    onRequestClose={() => setModalVisible1(false)}
+>
+    
+    <View style={styles.modalContainer}>
+        {/* Modal Content */}
+        <ScrollView style={styles.modalContent}>
+            <Text style={styles.textTDark}>Add a New Card</Text>
+            <Text>{'\n'}</Text>
 
-                    {/* Cardholder Name Input */}
-                    <Text style={styles.modalText}>Cardholder Name:</Text>
-                    <TextInput
-                        placeholder="Enter cardholder name"
-                        placeholderTextColor="#CBEEF7"
-                        style={[styles.inputCustom, { color: 'white' }]}
-                        value={newCardLabel}
-                        onChangeText={setNewCardLabel}
-                    />
-                    <Text>{'\n'}</Text>
+            {/* Cardholder Name Input */}
+            <Text style={styles.modalText}>Cardholder Name:</Text>
+            <TextInput
+                placeholder="Enter cardholder name"
+                placeholderTextColor="#CBEEF7"
+                style={[styles.inputCustom, { color: 'white' }]}
+                value={newCardLabel}
+                onChangeText={setNewCardLabel}
+            />
+            <Text>{'\n'}</Text>
 
-                    {/* Card Number */}
-                    <Text style={styles.modalText}>Card Number:</Text>
-                    <TextInput
-                        placeholder='Enter card number'
-                        placeholderTextColor="#CBEEF7"
-                        keyboardType='numeric'
-                        style={[styles.inputCustom, { color: 'white' }]}
-                        value={newCardValue}
-                        onChangeText={setNewCardValue}
-                    />
-                    <Text>{'\n'}</Text>
+            {/* Card Number */}
+            <Text style={styles.modalText}>Card Number:</Text>
+            <TextInput
+                placeholder='Enter card number'
+                placeholderTextColor="#CBEEF7"
+                keyboardType='numeric'
+                style={[styles.inputCustom, { color: 'white' }]}
+                value={newCardValue}
+                onChangeText={setNewCardValue}
+            />
+            <Text>{'\n'}</Text>
 
-                    {/* Expiration Date Input */}
-                    <Text style={styles.modalText}>Expiration Date:</Text>
-                    <TextInput
-                        placeholder='MM/YY'
-                        placeholderTextColor="#CBEEF7"
-                        style={[styles.inputCustom, { color: 'white' }]}
-                        value={newCardExpirationDate}
-                        onChangeText={setNewCardExpirationDate}
-                    />
-                    <Text>{'\n'}</Text>
+            {/* Expiration Date Input */}
+            <Text style={styles.modalText}>Expiration Date:</Text>
+            <TextInput
+                placeholder='MM/YY'
+                placeholderTextColor="#CBEEF7"
+                style={[styles.inputCustom, { color: 'white' }]}
+                value={newCardExpirationDate}
+                onChangeText={setNewCardExpirationDate}
+            />
+            <Text>{'\n'}</Text>
 
-                    {/* CVV Input */}
-                    <Text style={styles.modalText}>CVV:</Text>
-                    <TextInput
-                        placeholder='Enter CVV'
-                        placeholderTextColor="#CBEEF7"
-                        keyboardType='numberic'
-                        style={[styles.inputCustom, { color: 'white' }]}
-                        value={newCardValue}
-                        onChangeText={setNewCardExpirationDate}
-                    />
-                    <Text style={styles.break}>{'\n'}</Text>
+            {/* CVV Input */}
+            <Text style={styles.modalText}>CVV:</Text>
+            <TextInput
+                placeholder='Enter CVV'
+                placeholderTextColor="#CBEEF7"
+                keyboardType='numeric'
+                style={[styles.inputCustom, { color: 'white' }]}
+                value={newCardCvv}
+                onChangeText={setNewCardCvv}
+            />
+            <Text style={styles.break}>{'\n'}</Text>
 
-                    <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
-                        <Text style={styles.text}>Submit</Text>
-                    </TouchableOpacity>
-                    <Text>{'\n'}</Text>
-                    
-                </ScrollView>
-                <TouchableOpacity onPress={() => {
-                    setModalVisible1(false);
-                    setModalVisible2(true);
-                    }} 
-                    style={styles.button}
-                    >
-                    <Text style={styles.text}>Close</Text>
-                </TouchableOpacity>
-            </View>
-        </Modal>
+            {/* Payment Type Scroll Wheel */}
+            <Text style={styles.modalText}>Payment Type:</Text>
+            <TouchableOpacity style={pickerSelectStyles}>
+                <RNPickerSelect
+                    value={formData.cardType === 'N/A' ? null : formData.cardType}
+                    onValueChange={(itemValue) => setFormData(prev => ({ ...prev, cardType: itemValue }))}
+                    placeholder={{
+                        label: "Select a Payment Type ...",
+                        value: null,
+                        color: 'gray',
+                    }}
+                    useNativeAndroidPickerStyle={false}
+                    style={pickerSelectStyles}
+                    items={[
+                        { label: "Visa", value: "Visa" },
+                        { label: "Mastercard", value: "Mastercard" },
+                    ]}
+                />
+            </TouchableOpacity>
+            <Text>{'\n'}</Text>
 
+            <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
+                <Text style={styles.text}>Submit</Text>
+            </TouchableOpacity>
+            <Text>{'\n'}</Text>
+        </ScrollView>
+
+        <TouchableOpacity onPress={() => {
+            setModalVisible1(false);
+            setModalVisible2(true);
+        }} 
+        style={styles.button}
+        >
+            <Text style={styles.text}>Close</Text>
+        </TouchableOpacity>
+    </View>
+</Modal>
             </BoxContainer>
 
             <Text>{'\n'}{'\n'}{'\n'}</Text>
             
         </ScrollView>
     );
+    
 }

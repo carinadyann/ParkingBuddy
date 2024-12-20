@@ -36,7 +36,7 @@ app.post('/save-parking-setup', async (req, res) => {
         res.json({ success: true, message: 'Parking setup saved successfully', results });
     } catch (error) {
         console.error('Error saving parking setup:', error.message);
-        console.error(error); // Log the entire error object
+        console.error(error);
         res.status(500).json({ success: false, message: 'Error saving parking setup', error });
     }
 });
@@ -66,8 +66,74 @@ app.post('/save-user-profile', async (req, res) => {
         res.json({ success: true, message: 'User profile saved successfully', results });
     } catch (error) {
         console.error('Error saving user profile:', error.message);
-        console.error(error); // Log the entire error object
+        console.error(error);
         res.status(500).json({ success: false, message: 'Error saving user profile', error });
+    }
+});
+
+// New endpoint to save vehicle data
+app.post('/save-vehicle', async (req, res) => {
+    const { userId, licensePlate, makeModel, year, color } = req.body;
+    console.log('Attempting to save vehicle data:', { userId, licensePlate, makeModel, year, color });
+
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.MYSQL_HOST,
+            user: process.env.MYSQL_USER,
+            password: process.env.MYSQL_PASSWORD,
+            database: process.env.MYSQL_DATABASE
+        });
+
+        // Insert into Vehicle table
+        const [results] = await connection.execute(`
+            INSERT INTO Vehicle (user_id, license_plate, make_model, year, color)
+            VALUES (?, ?, ?, ?, ?)
+        `, [userId, licensePlate, makeModel, year, color]);
+
+        await connection.end();
+
+        console.log('Saved vehicle data successfully:', results);
+        res.json({ success: true, message: 'Vehicle data saved successfully', results });
+    } catch (error) {
+        console.error('Error saving vehicle data:', error.message);
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error saving vehicle data', error });
+    }
+});
+
+// New endpoint to save payment method
+app.post('/save-payment-method', async (req, res) => {
+    const { userId, cardholderName, cardNumber, cardType, expirationDate, cvv } = req.body;
+    console.log('Received POST /save-payment-method with data:', req.body);
+
+    // Validation: Ensure all required fields are present
+    if (!userId || !cardholderName || !cardNumber || !cardType || !expirationDate || !cvv) {
+        console.error('Missing required fields:', req.body);
+        return res.status(400).json({ success: false, message: 'All fields are required.' });
+    }
+
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.MYSQL_HOST,
+            user: process.env.MYSQL_USER,
+            password: process.env.MYSQL_PASSWORD,
+            database: process.env.MYSQL_DATABASE
+        });
+
+        // Insert into PaymentMethod table including cardholder_name
+        const [results] = await connection.execute(`
+            INSERT INTO PaymentMethod (user_id, cardholder_name, card_number, card_type, expiration_date, cvv)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `, [userId, cardholderName, cardNumber, cardType, expirationDate, cvv]);
+
+        await connection.end();
+
+        console.log('Saved payment method successfully:', results);
+        res.json({ success: true, message: 'Payment method saved successfully', results });
+    } catch (error) {
+        console.error('Error saving payment method:', error.message);
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error saving payment method', error });
     }
 });
 
