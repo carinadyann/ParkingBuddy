@@ -84,4 +84,17 @@ CREATE TABLE Employee (
 );
 
 
+<<<<<<< Updated upstream
 
+=======
+CREATE TABLE PaymentMethod (
+    payment_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    cardholder_name VARCHAR(255) NOT NULL,
+    card_number VARCHAR(20) NOT NULL,
+    card_type ENUM('Visa', 'Mastercard') NOT NULL,
+    expiration_date CHAR(5) NOT NULL,      -- For 'MM/YY' format
+    cvv VARCHAR(4) NOT NULL,               -- Store as a string
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+>>>>>>> Stashed changes

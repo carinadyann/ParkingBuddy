@@ -8,6 +8,8 @@ import DisplayComponent from '../DisplayComponent';
 import { styles } from '../style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { saveVehicleData } from '../../api';
+
 
 export default function SettingsScreen({ onLogout }) {
     // const navigation = useNavigation();
@@ -34,12 +36,31 @@ export default function SettingsScreen({ onLogout }) {
         color: 'N/A', // dropdown
     });
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setFormData(prevState => ({
             ...prevState,
         }));
+    
+        // After updating formData, call saveVehicleData
+        const userId = 1; // Replace with a real user ID when available
+        const { plate, model, year, color } = formData;
+    
+        // Ensure year and color match the ENUM values in the Vehicle table exactly
+        // For 'year', make sure the selected year is within '1980' to '2024'
+        // If your current code allows beyond 2024, limit the generation of yearOptions
+    
+        try {
+            console.log('Attempting to save vehicle data:', { userId, plate, model, year, color });
+            const result = await saveVehicleData(userId, plate, model, year, color);
+            console.log('Vehicle saved successfully!', result);
+        } catch (error) {
+            console.error('Error saving vehicle data:', error);
+            Alert.alert('Error', 'There was a problem saving the vehicle data. Please try again.');
+        }
+    
         setModalVisible1(false);
     };
+    
 
     const handleCancel = () => {
         setFormData(prevState => ({
@@ -67,14 +88,16 @@ export default function SettingsScreen({ onLogout }) {
     //   }, [navigation]);
     
     const generateYearRange = (startYear, endYear) => {
+        const maxYear = 2024; // The highest year allowed by the ENUM
         const years = [];
-        for (let year = startYear; year <= endYear; year++) {
-            years.push({ label: year.toString(), value: year.toString() });
+        for (let year = startYear; year <= Math.min(endYear, maxYear); year++) {
+          years.push({ label: year.toString(), value: year.toString() });
         }
         return years;
-    }
-
-    const yearOptions = generateYearRange(1980, new Date().getFullYear());
+      };
+      
+      const yearOptions = generateYearRange(1980, new Date().getFullYear());
+      
     
     return (
         <ScrollView style={styles.container}>

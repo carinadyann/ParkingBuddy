@@ -10,9 +10,17 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+<<<<<<< Updated upstream
 export async function getParkingLot(){
     const [rows] = await pool.query("SELECT * FROM ParkingLot")
     return rows
+=======
+// Existing tables in your schema: ParkingLot, SetupParking, User, UserCredentials, Vehicle, Reservation, TransactionHistory, Employee, PaymentMethod
+
+async function getParkingLot() {
+  const [rows] = await pool.query("SELECT * FROM ParkingLot");
+  return rows;
+>>>>>>> Stashed changes
 }
 
 export async function getParkingSpace(){
@@ -40,6 +48,7 @@ export async function getTransactionHistory(){
     return rows
 }
 
+<<<<<<< Updated upstream
 export async function getFeedback(){
     const [rows] = await pool.query("SELECT * FROM Feedback")
     return rows
@@ -54,6 +63,19 @@ export async function getEmployee(){
 //getParkingLotWithId Function
 export async function getParkingLotWithId(lot_id) {
     const [rows] = await pool.query(`
+=======
+async function getPaymentMethods(userId) {
+  const [rows] = await pool.query(`
+    SELECT *
+    FROM PaymentMethod
+    WHERE user_id = ?
+  `, [userId]);
+  return rows;
+}
+
+async function getParkingLotWithId(lot_id) {
+  const [rows] = await pool.query(`
+>>>>>>> Stashed changes
     SELECT *
     FROM ParkingLot
     WHERE lot_id = ?
@@ -155,3 +177,88 @@ export async function createParkingLot(location, capacity, available_spaces) {
 //const ParkingLot = await getParkingLotWithId(1)
 //console.log(ParkingLot)
 
+<<<<<<< Updated upstream
+=======
+async function getSetupParkingWithId(setup_id) {
+  const [rows] = await pool.query(`
+    SELECT *
+    FROM SetupParking
+    WHERE setup_id = ?
+  `, [setup_id]);
+
+  return rows[0];
+}
+
+// Save User Profile
+async function saveUserProfile(firstName, lastName, savedSchoolCampus) {
+  const [result] = await pool.query(`
+    INSERT INTO User (first_name, last_name, saved_school_campus)
+    VALUES (?, ?, ?)
+  `, [firstName, lastName, savedSchoolCampus]);
+  const user_id = result.insertId;
+  return getUserWithId(user_id);
+}
+
+// Get User by ID
+async function getUserWithId(user_id) {
+  const [rows] = await pool.query(`
+    SELECT *
+    FROM User
+    WHERE user_id = ?
+  `, [user_id]);
+
+  return rows[0];
+}
+
+// Save Vehicle Data
+async function saveVehicleData(userId, licensePlate, makeModel, year, color) {
+  const [result] = await pool.query(`
+    INSERT INTO Vehicle (user_id, license_plate, make_model, year, color)
+    VALUES (?, ?, ?, ?, ?)
+  `, [userId, licensePlate, makeModel, year, color]);
+  const vehicle_id = result.insertId;
+  return getVehicleWithId(vehicle_id);
+}
+
+// Save Payment Method
+async function savePaymentMethod(userId, cardNumber, cardType, expirationDate, cvv) {
+  const [result] = await pool.query(`
+    INSERT INTO PaymentMethod (user_id, card_number, card_type, expiration_date, cvv)
+    VALUES (?, ?, ?, ?, ?)
+  `, [userId, cardNumber, cardType, expirationDate, cvv]);
+  const payment_id = result.insertId;
+  return getPaymentMethodById(payment_id);
+}
+
+async function getPaymentMethodById(payment_id) {
+  const [rows] = await pool.query(`
+    SELECT *
+    FROM PaymentMethod
+    WHERE payment_id = ?
+  `, [payment_id]);
+  return rows[0];
+}
+
+module.exports = {
+  getParkingLot,
+  getUser,
+  getVehicle,
+  getReservation,
+  getTransactionHistory,
+  getEmployee,
+  getPaymentMethods,
+  getParkingLotWithId,
+  getVehicleWithId,
+  getReservationWithId,
+  getTransactionHistoryWithId,
+  getEmployeeWithId,
+  createParkingLot,
+  saveParkingSetup,
+  getSetupParkingWithId,
+  saveUserProfile,
+  getUserWithId,
+  saveVehicleData,
+  savePaymentMethod,
+  getPaymentMethodById
+};
+>>>>>>> Stashed changes

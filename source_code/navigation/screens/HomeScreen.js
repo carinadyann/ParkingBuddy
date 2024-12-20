@@ -49,12 +49,58 @@ export default function HomeScreen({ navigation }) {
         setFormData({ ...tempFormData });
         setModalVisible(false);
 
+<<<<<<< Updated upstream
         navigation.navigate('Payment', {
             parkingSpot: tempFormData.parkingSpot,
             duration: tempFormData.durationType,
             amount: calculateAmount(tempFormData.durationType),
             isTimerFinished: isTimerFinished
         });
+=======
+        // Call saveParkingSetup with separate arguments instead of passing tempFormData
+        saveParkingSetup(zone, parkingSpot, durationType)
+            .then(() => {
+                navigation.navigate('Payment', {
+                    parkingSpot: tempFormData.parkingSpot,
+                    duration: tempFormData.durationType,
+                    amount: calculateAmount(tempFormData.durationType),
+                    isTimerFinished: isTimerFinished
+                });
+            })
+            .catch((error) => {
+                console.error('Error saving parking setup:', error);
+                Alert.alert('Error', 'There was a problem saving the parking setup. Please try again.');
+            });
+    };
+
+    const convertDurationToMinutes = (durationType) => {
+        switch(durationType) {
+            case "00:00":
+                return 0;
+            case "00:30":
+                return 30;
+            case "01:00":
+                return 60;
+            case "01:30":
+                return 90;
+            case "02:00":
+                return 120;
+            case "02:30":
+                return 150;
+            case "03:00":
+                return 180;
+            case "03:30":
+                return 210;
+            case "04:00":
+                return 240;
+            case "04:30":
+                return 270;
+            case "Day Pass":
+                return 1440; // 24 hours in minutes
+            default:
+                return 0;
+        }
+>>>>>>> Stashed changes
     };
     
 
@@ -107,6 +153,7 @@ export default function HomeScreen({ navigation }) {
     };
 
     const generateTimeRange = () => {
+<<<<<<< Updated upstream
         const times = [];
         const increments = ['00', '30'];
         for (let hour = 0; hour <= 4; hour++) {
@@ -117,7 +164,23 @@ export default function HomeScreen({ navigation }) {
         }
         times.push({ label: "Day Pass", value: "Day Pass" });
         return times;
+=======
+        return [
+            { label: "00:00", value: "00:00" },
+            { label: "00:30", value: "00:30" },
+            { label: "01:00", value: "01:00" },
+            { label: "01:30", value: "01:30" },
+            { label: "02:00", value: "02:00" },
+            { label: "02:30", value: "02:30" },
+            { label: "03:00", value: "03:00" },
+            { label: "03:30", value: "03:30" },
+            { label: "04:00", value: "04:00" },
+            { label: "04:30", value: "04:30" },
+            { label: "Day Pass", value: "Day Pass" },
+        ];
+>>>>>>> Stashed changes
     };
+    
 
     const timeOptions = generateTimeRange();
 
@@ -127,14 +190,43 @@ export default function HomeScreen({ navigation }) {
         } else if (durationType === 'Day Pass') {
             return 9;
         } else {
+<<<<<<< Updated upstream
             const index = timeOptions.findIndex(option => option.value === durationType);
             if (index !== -1) {
                 return index;
             } else {
                 return 0;
+=======
+            switch (durationType) {
+                case '00:00':
+                    return 0; // Maybe no charge for 0 minutes?
+                case '00:30':
+                    return 1;
+                case '01:00':
+                    return 2;
+                case '01:30':
+                    return 3;
+                case '02:00':
+                    return 4;
+                case '02:30':
+                    return 5;
+                case '03:00':
+                    return 6;
+                case '03:30':
+                    return 7;
+                case '04:00':
+                    return 8;
+                case '04:30':
+                    return 9;
+                case 'Day Pass':
+                    return 10; // Assign a flat rate for Day Pass
+                default:
+                    return 0;
+>>>>>>> Stashed changes
             }
         }
     };
+    
 
     return (
         <ScrollView style={styles.container}>
