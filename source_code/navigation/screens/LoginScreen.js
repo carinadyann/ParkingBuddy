@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 import { styles } from '../style';
 import BoxContainer from '../BoxContainer';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = ({ onLoginSuccess }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Replace with actual authentication logic
-    if (username === 'admin' && password === 'password') {
-      onLoginSuccess(); // Call this function to indicate successful login
-    } else {
-      alert('Invalid credentials');
+  const handleLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      onLoginSuccess();
+    } catch (error) {
+      Alert.alert('Login Failed', error.message);
     }
   };
 
@@ -23,10 +25,10 @@ const LoginScreen = ({ onLoginSuccess }) => {
         <BoxContainer style={styles.boxDark}>
             <Text style={styles.break}>{'\n'}</Text>
             <TextInput
-                placeholder="Username"
+                placeholder="Email"
                 placeholderTextColor="#CBEEF7"
-                value={username}
-                onChangeText={setUsername}
+                value={email}
+                onChangeText={setEmail}
                 style={[styles.input, { color: 'white' }]}
             />
             <Text style={styles.break}>{'\n'}</Text>
