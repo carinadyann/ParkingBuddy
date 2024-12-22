@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 import { styles } from '../style';
 import BoxContainer from '../BoxContainer';
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
+import { firebaseConfig } from "../../firebase";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = ({ onLoginSuccess }) => {
