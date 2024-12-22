@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, View } from 'react-native';
+import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, View, Alert} from 'react-native';
 import { styles } from '../style';
 import BoxContainer from '../BoxContainer';
 import { auth } from '../../firebase';
