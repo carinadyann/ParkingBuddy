@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { ScrollView, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 import { styles } from '../style';
 import BoxContainer from '../BoxContainer';
-import auth from '@react-native-firebase/auth';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
@@ -10,7 +11,7 @@ const LoginScreen = ({ onLoginSuccess }) => {
 
   const handleLogin = async () => {
     try {
-      await auth().signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       onLoginSuccess();
     } catch (error) {
       Alert.alert('Login Failed', error.message);
