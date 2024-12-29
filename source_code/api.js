@@ -111,9 +111,9 @@ export const saveVehicleData = async (userId, licensePlate, makeModel, year, col
 };
 
 // Function to save payment method
-export const savePaymentMethod = async (userId, cardNumber, cardType, expirationDate, cvv) => {
+export const savePaymentMethod = async ({ userId, cardholderName, cardNumber, cardType, expirationDate, cvv }) => {
     try {
-        console.log('Saving payment method with:', { userId, cardNumber, cardType, expirationDate, cvv });
+        console.log('Saving payment method with:', { userId, cardholderName, cardNumber, cardType, expirationDate, cvv });
 
         if (!API_URL) {
             throw new Error('API_URL is not defined');
@@ -124,7 +124,7 @@ export const savePaymentMethod = async (userId, cardNumber, cardType, expiration
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId, cardNumber, cardType, expirationDate, cvv }),
+            body: JSON.stringify({ userId, cardholderName, cardNumber, cardType, expirationDate, cvv }),
         });
 
         if (!response.ok) {
@@ -145,3 +145,4 @@ export const savePaymentMethod = async (userId, cardNumber, cardType, expiration
         throw error;
     }
 };
+

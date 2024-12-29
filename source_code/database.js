@@ -161,7 +161,8 @@ async function saveVehicleData(userId, licensePlate, makeModel, year, color) {
 }
 
 // Save Payment Method
-async function savePaymentMethod(userId, cardNumber, cardType, expirationDate, cvv) {
+async function savePaymentMethod(userId, cardNumber, cardType, expirationDate, cvv) 
+{
   const [result] = await pool.query(`
     INSERT INTO PaymentMethod (user_id, card_number, card_type, expiration_date, cvv)
     VALUES (?, ?, ?, ?, ?)

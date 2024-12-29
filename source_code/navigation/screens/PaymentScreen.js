@@ -9,6 +9,8 @@ import { styles } from '../style';
 import { GestureHandlerRefContext } from '@react-navigation/stack';
 import { RawButton, TextInput } from 'react-native-gesture-handler';
 import { savePaymentMethod } from '../../api'; // Import the API function
+import { Alert } from 'react-native';
+
 
 
 const pickerSelectStyles = {
@@ -49,7 +51,7 @@ export default function PaymentScreen({navigation, route}) {
 
     //for modal
     const [modalVisible1, setModalVisible1] = React.useState(false);
-    const [modalVisible2, setModalVisible2] = React.useState(false);
+    //const [modalVisible2, setModalVisible2] = React.useState(false);
     const [modalVisible3, setModalVisible3] = React.useState(false);
 
     //for card payment
@@ -61,43 +63,45 @@ export default function PaymentScreen({navigation, route}) {
     const [newCardExpirationDate, setNewCardExpirationDate] = React.useState('');
     const [newCardCvv, setNewCardCvv] = React.useState('');
 
-    const [cardItems, setCardItems] = React.useState([
-        { label: "Placeholder: XXXX XXXX XXXX 1234", value: "placeholder_1234", placeholder: true },
-        { label: "Placeholder: XXXX XXXX XXXX 5678", value: "placeholder_5678", placeholder: true },
-    ]);
+    // const [cardItems, setCardItems] = React.useState([
+    //     { label: "Placeholder: XXXX XXXX XXXX 1234", value: "placeholder_1234", placeholder: true },
+    //     { label: "Placeholder: XXXX XXXX XXXX 5678", value: "placeholder_5678", placeholder: true },
+    // ]);
     
 
     //for form
     const [formData, setFormData] = React.useState({
-        cardFile: 'N/A', // according to database
-        cardType: 'N/A', // pick random from database
+        //cardFile: 'N/A', // according to database
+        cardType: 'N/A',
+        cardLastFour: 'N/A' // pick random from database
     });
 
     const handlePayment = () => {
-        alert(`Payment made using card ending in ${formData.cardFile}`);
+        const lastFour = newCardValue.slice(-4);
+        alert(`Payment made using ${formData.cardType} card ending in ${lastFour}`);
         setPaymentModalVisible(false);
     };
+    
 
     const handleNewCard = () => {
         alert(`New Payment Method Added`);
         setPaymentModalVisible(false);
     };
 
-    const addCard = (newCard) => {
-        setCardItems(prevItems => [...prevItems, newCard]);
-    };
+    // const addCard = (newCard) => {
+    //     setCardItems(prevItems => [...prevItems, newCard]);
+    // };
 
-    const deleteCard = (cardValue) => {
-        setCardItems(prevItems => prevItems.filter(card => card.value !== cardValue));
-    };
+    // const deleteCard = (cardValue) => {
+    //     setCardItems(prevItems => prevItems.filter(card => card.value !== cardValue));
+    // };
 
     const handleAddCard = () => {
         addNewCard();
         setModalVisible1(false);
-        setModalVisible2(true);
+        //setModalVisible2(true);
         if (newCardLabel.trim() !== '' && newCardValue.trim() !== '') {
             addCard({  label: newCardLabel, value: newCardValue });
-            setNewCardValue('');
             setNewCardValue('');
         }
     };
@@ -107,22 +111,67 @@ export default function PaymentScreen({navigation, route}) {
     };
 
     const handleSubmit = () => {
-        //alert(`Card on File: ${formData.cardFile}, Payment Type: ${formData.cardType}`);
-        if (
-            formData.cardFile === 'N/A' || // No card selected
-            formData.cardFile.startsWith('placeholder_') // Placeholder card selected
-        ) {
-            alert('Please select a valid card and payment type before proceeding.');
+        // Extract the necessary fields from formData and/or your component state
+        // Assuming you now store these details in your state similar to how fname/lname/school are stored in ProfileScreen.
+        const cardholderName = newCardLabel;
+        const cardNumber = newCardValue;
+        const expirationDate = newCardExpirationDate;
+        const cvv = newCardCvv;
+        const cardType = formData.cardType;
+    
+        // Also ensure you have a userId. If userId is known (e.g., from props, route params, or global state), retrieve it.
+        const userId = 1; // Replace with the actual userId logic
+    
+        // Validate all fields, similar to ProfileScreen.js
+        if (!cardholderName || cardholderName.trim() === '' ||
+            !cardNumber || cardNumber.trim() === '' ||
+            !expirationDate || expirationDate.trim() === '' ||
+            !cvv || cvv.trim() === '' ||
+            !cardType || cardType === 'N/A') {
+            
+            Alert.alert('Error', 'Please fill in all the required fields.');
             return;
         }
     
-        console.log('Submitting payment with:', formData);
-        // Proceed with payment processing...
-    };
+        // Call the savePaymentMethod function (or whatever function you have to save the new card)
+        savePaymentMethod({ 
+            userId, 
+            cardholderName, 
+            cardNumber, 
+            expirationDate, 
+            cvv, 
+            cardType 
+        })
+        .then(() => {
+            Alert.alert('Success', 'Card added successfully!');
+            // If you're using a modal for adding a card, close it here, e.g.:
+            setFormData(prev => ({
+                ...prev,
+                cardLastFour: newCardValue.slice(-4),
 
-    const handleCancel = () => {
-        setModalVisible2(false);
+                // cardType is already set when the user selects it from the dropdown
+            }));
+            
+            // Reset fields if needed
+            setNewCardLabel('');
+            setNewCardValue('');
+            setNewCardExpirationDate('');
+            setNewCardCvv('');
+            //setFormData(prev => ({ ...prev, cardType: 'N/A' }));
+
+            setModalVisible1(false);
+        })
+        .catch((error) => {
+            console.error('Error adding new card:', error);
+            Alert.alert('Error', 'There was a problem adding the card. Please try again.');
+        });
     };
+    
+    
+
+    //const handleCancel = () => {
+        //setModalVisible2(false);
+    //};
 
     const handleChange = (field, value) => {
         setFormData(prevState => ({
@@ -171,11 +220,11 @@ export default function PaymentScreen({navigation, route}) {
 
             if (response.success) {
                 alert('Card added successfully.');
-                setFormData(prev => ({
-                    ...prev,
-                    cardFile: `Card ending in ${newCardValue.slice(-4)}`,
-                    cardType: formData.cardType,
-                }));
+                // setFormData(prev => ({
+                //     ...prev,
+                //     cardLastFour: formDatacardLastFour,
+                //     cardType: formData.cardType,
+                // }));
             } else {
                 alert('Failed to add card.');
             }
@@ -208,13 +257,13 @@ export default function PaymentScreen({navigation, route}) {
                 <Pressable 
                     style={styles.button}
                     onPress={() => {
-                        if (isTimerFinished) {
-                            if (formData.cardFile === 'N/A') {
-                                alert("Please select a card before preceeding to payment.");
-                            } else {
-                                setPaymentModalVisible(true);
-                            }
-                        } else {
+                         if (isTimerFinished) {
+                        //     if (formData.cardFile === 'N/A') {
+                        //         alert("Please select a card before preceeding to payment.");
+                        //     } else {
+                        //         setPaymentModalVisible(true);
+                        //     }
+                        // } else {
                             alert('Please wait until the timer is finished before making a payment.');
                         }
                     }}
@@ -227,11 +276,13 @@ export default function PaymentScreen({navigation, route}) {
             <BoxContainer style={styles.boxDark}>
                 <Text style={styles.textT}>Card Information</Text>
                 <BoxContainer style={styles.infoContainer}>
-                    <Text style={styles.text}>Card on File: <Text style={styles.formText}>{formData.cardFile}</Text>{'\n'}</Text>
-                    <Text style={styles.text}>Payment Type: <Text style={styles.formText}>{formData.cardType}</Text>{'\n'}</Text>
-                </BoxContainer>
+    <Text style={styles.text}>Card: <Text style={styles.formText}>
+        {formData.cardLastFour !== 'N/A' ? `**** **** **** ${formData.cardLastFour}` : 'N/A'}
+    </Text>{'\n'}</Text>
+    <Text style={styles.text}>Payment Type: <Text style={styles.formText}>{formData.cardType !== 'N/A' ? formData.cardType: 'N/A'}</Text>{'\n'}</Text>
+</BoxContainer>
 
-                <Pressable style={styles.button} onPress={() => setModalVisible2(true)}>
+                <Pressable style={styles.button} onPress={() => setModalVisible1(true)}>
                     <Text style={styles.text}>Change Payment Method</Text>
                 </Pressable>
 
@@ -246,7 +297,7 @@ export default function PaymentScreen({navigation, route}) {
                             <Text style={styles.textTDark}>Confirm Payment</Text>
                             <Text>{'\n'}</Text>
                             
-                            <Text style={styles.modalText}>Card on File: <Text style={styles.modalUserData}>{formData.cardFile}</Text></Text>
+                            <Text style={styles.modalText}>Card on File: <Text style={styles.modalUserData}>{formData.cardLastFour}</Text></Text>
                             <Text>{'\n'}</Text>
 
                             <Text style={styles.modalText}>Card Type: <Text style={styles.modalUserData}>{formData.cardType}</Text></Text>
@@ -268,81 +319,7 @@ export default function PaymentScreen({navigation, route}) {
                     </View>
                 </Modal>
 
-                {/* Modal Component 2 */}
-                <Modal 
-                    animationType='none'
-                    transparent={true}
-                    visible={modalVisible2}
-                    onRequestClose={() => setModalVisible2(false)}
-                >
-                    <View style={styles.modalContainer}>
-                        {/* Modal Content */}
-                        <ScrollView style={styles.modalContent}>
-                            <Text style={styles.textTDark}>Change Payment</Text>
-                            <Text>{'\n'}</Text>
-
-                            {/* Dropdown for Card */}
-                            <Text style={styles.modalText}>Card on File: </Text>
-                            <RNPickerSelect
-                                value={formData.cardFile}
-                                onValueChange={(itemValue) => handleChange('cardFile', itemValue)}
-                                placeholder={{
-                                label: "Select a Card ...",
-                                value: null,
-                                color: 'white', // Customize the placeholder color here
-                                }}
-                                style={pickerSelectStyles}
-                                items={[
-                                    { label: "XXXX XXXX XXXX 1234", value: "XXXX XXXX XXXX 1234" },
-                                    { label: "XXXX XXXX XXXX 5678", value: "XXXX XXXX XXXX 5678" },
-                                    // Add more options here
-                                ]}
-                            />
-
-                            <Text>{'\n'}</Text>
-
-                            {/* Dropdown for Payment Type */}
-                            <Text style={styles.modalText}>Payment Type: </Text>
-                            <RNPickerSelect
-                                value={formData.cardType}
-                                onValueChange={(itemValue) => handleChange('cardType', itemValue)}
-                                placeholder={{
-                                label: "Select a Type ...",
-                                value: null,
-                                color: 'white', // Customize the placeholder color here
-                                }}
-                                style={pickerSelectStyles}
-                                items={[
-                                    { label: "Mastercard", value: "Mastercard" },
-                                    { label: "Visa", value: "Visa" },
-                                    // Add more options here
-                                ]}
-                            />
-
-                            <Text>{'\n'}</Text>
-
-                            <Pressable style={styles.buttonLink} onPress={() => {
-                                setModalVisible2(false);
-                                setModalVisible1(true);
-                                }}
-                            >
-                                <Text style={styles.buttonLink}>Add a Card +</Text>
-                            </Pressable>
-
-
-                            <Text>{'\n'}</Text>
-
-                            <TouchableOpacity title="Submit" onPress={handleSubmit} style={styles.button}>
-                                <Text style={styles.text}>Submit</Text>
-                            </TouchableOpacity>
-
-                        </ScrollView>
-
-                        <TouchableOpacity onPress={() => setModalVisible2(false)} style={styles.button}>
-                            <Text style={styles.text}>Close</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Modal>
+                {/* Modal Component 2 , erased for simplicity*/}
 
                 {/* Add Card Modal */}
 <Modal 
@@ -433,7 +410,7 @@ export default function PaymentScreen({navigation, route}) {
 
         <TouchableOpacity onPress={() => {
             setModalVisible1(false);
-            setModalVisible2(true);
+            //setModalVisible2(true);
         }} 
         style={styles.button}
         >
