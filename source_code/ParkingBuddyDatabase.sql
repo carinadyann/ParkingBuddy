@@ -23,7 +23,17 @@ CREATE TABLE User (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    saved_school_campus ENUM('Arizona State University', 'California State University Los Angeles', 'San Diego State University') NOT NULL
+    saved_school_campus ENUM('Arizona State University',
+    'California State Polytechnic University Pomona',
+    'California State University Dominguez Hills',
+    'California State University Fullerton',
+    'California State University Long Beach',
+    'California State University Los Angeles',
+    'California State University Northridge',
+    'California State University San Bernardino',
+    'San Diego State University',
+    'University of California Irvine',
+    'University of California Riverside') NOT NULL
 );
 
 -- Insert data into User table

@@ -29,12 +29,14 @@ export default function ProfileScreen({ navigation }) {
         saveUserProfile(fname, lname, school)
             .then(() => {
                 Alert.alert('Success', 'User profile saved successfully!');
-                setModalVisible(false);
+                // Now navigate to the Locator screen, passing the chosen campus
+                navigation.navigate('Locator', { selectedSchool: school });
             })
             .catch((error) => {
                 console.error('Error saving user profile:', error);
                 Alert.alert('Error', 'There was a problem saving the user profile. Please try again.');
             });
+
     };
 
     const handleChange = (field, value) => {
@@ -49,8 +51,16 @@ export default function ProfileScreen({ navigation }) {
     // ENUM('Arizona State University', 'California State University Los Angeles', 'San Diego State University')
     const schoolCampuses = [
         { label: "Arizona State University", value: "Arizona State University" },
+        { label: "California State Polytechnic University Pomona", value: "California State Polytechnic University Pomona" },
+        { label: "California State University Dominguez Hills", value: "California State University Dominguez Hills" },
+        { label: "California State University Fullerton", value: "California State University Fullerton" },
+        { label: "California State University Long Beach", value: "California State University Long Beach" },
         { label: "California State University Los Angeles", value: "California State University Los Angeles" },
+        { label: "California State University Northridge", value: "California State University Northridge" },
+        { label: "California State University San Bernardino", value: "California State University San Bernardino" },
         { label: "San Diego State University", value: "San Diego State University" },
+        { label: "University of California Irvine", value: "University of California Irvine" },
+        { label: "University of California Riverside", value: "University of California Riverside" },
     ];
 
     // Sort the array of items alphabetically by label
