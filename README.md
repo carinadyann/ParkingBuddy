@@ -14,7 +14,7 @@ https://trello.com/invite/b/VxKd19LM/ATTI5839fd5e2a881b25a59882bfc7204c7758F6376
 ## Proposal Documents
 https://docs.google.com/document/d/16g6h8SOXVcYT-o_dQczisKakOoAZ6FkCRCWzh5uwXsY/edit?usp=sharing
 
-##Firebase Link
+## Firebase Link
 https://console.firebase.google.com/u/0/project/parkingbuddy-45506/overview
 
 ## Discord Link
